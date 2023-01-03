@@ -1,8 +1,13 @@
 // ignore_for_file: file_names
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:curnect/src/customException/unsuccessfulRequestException.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
 
 import '../../services/user.dart';
 import '../../style/animation/loading_gif.dart';
@@ -15,10 +20,10 @@ class EnterEmail extends StatefulWidget {
   State<EnterEmail> createState() => _EnterEmailState();
 }
 
-class _EnterEmailState extends State<EnterEmail> {
+class _EnterEmailState extends State<EnterEmail> with ErrorSnackBar {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _verifyEmailController = TextEditingController();
-  Future<Map<String, dynamic>>? _checkEmail;
+  Future<void>? _checkEmail;
   int? connectionDone;
   String? userId;
 
@@ -86,18 +91,28 @@ class _EnterEmailState extends State<EnterEmail> {
     ]);
   }
 
-  Future<Map<String, dynamic>> checkEmail() async {
+  Future<void> checkEmail() async {
     try {
       var user =
           User(email: _verifyEmailController.text, password: '', token: '');
       final response = await user.checkResetPasswordEmailAPI(
           {'email': user.email.toString()},
           'https://curnect.com/curnect-api/public/api/checkforgetemail');
-      return response;
-    } on UnsuccessfulRequestException catch (e) {
-      return {"statusCode": 406, 'error': e.cause};
+      http.Response.fromStream(response).then((res) {
+        if (res.statusCode == 200) {
+          context.push('/getyourcode', extra: {
+            "email": _verifyEmailController.text.toString(),
+            "userId": json.decode(res.body)["userid"]
+          });
+        } else {
+          sendErrorMessage('❕', 'check email', context);
+        }
+      });
+    } on SocketException catch (_) {
+      sendErrorMessage(
+          '❕Network Error', 'Please check your internet connection', context);
     } catch (e) {
-      return {"statusCode": 401, 'error': e};
+      print(e);
     }
   }
 
@@ -155,31 +170,11 @@ class _EnterEmailState extends State<EnterEmail> {
               onPressed: (_verifyEmailController.text.isNotEmpty &&
                       _formKey.currentState!.validate())
                   ? () async {
-                      if (_formKey.currentState!.validate()) {
-                        // ScaffoldMessenger.of(context).showSnackBar(
-                        //     const SnackBar(content: Text('Processing Data')));
-
-                      }
+                      if (_formKey.currentState!.validate()) {}
                       setState(() {
                         _checkEmail = checkEmail();
                       });
-                      _checkEmail!.then((value) {
-                        setState(() {
-                          connectionDone = value['statusCode'];
-                          userId = value["userId"].toString();
-                        });
-                      }).whenComplete(() {
-                        if (connectionDone == 200) {
-                          // ignore: use_build_context_synchronously
-                          context.replace('/getyourcode', extra: {
-                            "email": _verifyEmailController.text.toString(),
-                            "userId": userId
-                          });
-                        } else {
-                          // ignore: use_build_context_synchronously
-                          return;
-                        }
-                      });
+                      _checkEmail;
                     }
                   : null,
               child: const Text(

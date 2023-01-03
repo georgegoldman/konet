@@ -36,39 +36,18 @@ class BaseService {
         headers: {HttpHeaders.authorizationHeader: conf['token']}, body: conf);
   }
 
-  Future<Map<String, dynamic>> checkResetPasswordEmail(body, url) async {
+  Future<http.StreamedResponse> checkResetPasswordEmail(body, url) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.fields.addAll(body);
 
-    http.StreamedResponse response = await request.send();
-    return http.Response.fromStream(response).then((value) {
-      if (value.statusCode == 200) {
-        return {
-          "statusCode": value.statusCode,
-          "userId": json.decode(value.body)["userid"]
-        };
-      } else {
-        return {"error": value.reasonPhrase};
-      }
-    });
+    return await request.send();
   }
 
-  Future<Map<String, dynamic>> ResetPincode(body, url) async {
+  Future<http.StreamedResponse> ResetPincode(body, url) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.fields.addAll(body);
 
-    http.StreamedResponse response = await request.send();
-    return http.Response.fromStream(response).then((value) {
-      if (value.statusCode == 202) {
-        return {
-          "statusCode": value.statusCode,
-          "userId": json.decode(value.body)
-        };
-      } else {
-        print(value.body);
-        return {"error": value.reasonPhrase};
-      }
-    });
+    return await request.send();
   }
 
   Future<Map<String, dynamic>> ResetTonewPasswordAPI(body, url) async {

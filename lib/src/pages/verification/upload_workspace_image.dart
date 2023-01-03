@@ -76,48 +76,44 @@ class _UploadWorkspaceImageState extends State<UploadWorkspaceImage> {
                     )
                   : const Text(''),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.01,
-                  bottom: MediaQuery.of(context).size.height * 0.01),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // <-- Radius
-                  ),
-                  backgroundColor: Colors.black,
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                onPressed: _pickedFile == null
-                    ? null
-                    : () async {
-                        setState(() {
-                          _uploadImageFuture = uploadImageRequest();
-                        });
-                        _uploadImageFuture!.then((value) {
-                          setState(() {
-                            successful = value;
-                          });
-                        }).whenComplete(() {
-                          if (successful) {
-                            // ignore: use_build_context_synchronously
-                            Navigator.of(context).push(
-                                RouteAnimation(Screen: AddService())
-                                    .createRoute());
-                          } else {}
-                        });
-                      },
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.white),
-                ),
-              ),
-            )
           ],
         )),
+        persistentFooterButtons: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12), // <-- Radius
+              ),
+              backgroundColor: Colors.black,
+              minimumSize: const Size.fromHeight(50),
+            ),
+            onPressed: _pickedFile == null
+                ? null
+                : () async {
+                    setState(() {
+                      _uploadImageFuture = uploadImageRequest();
+                    });
+                    _uploadImageFuture!.then((value) {
+                      setState(() {
+                        successful = value;
+                      });
+                    }).whenComplete(() {
+                      if (successful) {
+                        // ignore: use_build_context_synchronously
+                        Navigator.of(context).push(
+                            RouteAnimation(Screen: AddService()).createRoute());
+                      } else {}
+                    });
+                  },
+            child: const Text(
+              'Continue',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                  color: Colors.white),
+            ),
+          )
+        ],
       ),
       FutureBuilder(
           future: _uploadImageFuture,

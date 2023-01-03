@@ -45,6 +45,46 @@ class _AddServiceState extends State<AddService> {
         appBar: UnauthenticatedAppBar(context: context, screeenInfo: title)
             .preferredSize(),
         body: addServeicWidget(),
+        persistentFooterButtons: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                ),
+                backgroundColor: Colors.black,
+                minimumSize: const Size.fromHeight(50)),
+            onPressed:
+                Provider.of<AddServiceManipulator>(context, listen: false)
+                        .addedService
+                        .isNotEmpty
+                    ? () async {
+                        setState(() {
+                          _adderviceFutureFunction = addServiceRequest();
+                        });
+                        _adderviceFutureFunction!.then((value) {
+                          //checking every request response if true
+
+                          if (value['successful']) {
+                            setState(() {
+                              successful = !successful;
+                            });
+                          }
+                        }).whenComplete(() {
+                          if (successful) {
+                            // ignore: use_build_context_synchronously
+                            Navigator.of(context).push(
+                                RouteAnimation(Screen: const Verification())
+                                    .createRoute());
+                          }
+                        });
+                      }
+                    : null,
+            child: const Text(
+              'Continue',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            ),
+          )
+        ],
       ),
       FutureBuilder(
           future: _adderviceFutureFunction,
@@ -147,49 +187,6 @@ class _AddServiceState extends State<AddService> {
                     ))
                 .toList(),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.25,
-                bottom: MediaQuery.of(context).size.height * 0.01),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // <-- Radius
-                  ),
-                  backgroundColor: Colors.black,
-                  minimumSize: const Size.fromHeight(50)),
-              onPressed:
-                  Provider.of<AddServiceManipulator>(context, listen: false)
-                          .addedService
-                          .isNotEmpty
-                      ? () async {
-                          setState(() {
-                            _adderviceFutureFunction = addServiceRequest();
-                          });
-                          _adderviceFutureFunction!.then((value) {
-                            //checking every request response if true
-
-                            if (value['successful']) {
-                              setState(() {
-                                successful = !successful;
-                              });
-                            }
-                          }).whenComplete(() {
-                            if (successful) {
-                              // ignore: use_build_context_synchronously
-                              Navigator.of(context).push(
-                                  RouteAnimation(Screen: const Verification())
-                                      .createRoute());
-                            }
-                          });
-                        }
-                      : null,
-              child: const Text(
-                'Continue',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-              ),
-            ),
-          )
         ],
       ),
     );

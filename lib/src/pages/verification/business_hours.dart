@@ -102,6 +102,49 @@ class _BusinessHoursState extends State<BusinessHours> {
         appBar: UnauthenticatedAppBar(context: context, screeenInfo: title)
             .preferredSize(),
         body: businessHourWidget(),
+        persistentFooterButtons: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                ),
+                backgroundColor: Colors.black,
+                minimumSize: const Size.fromHeight(50)),
+            onPressed: days['sunday']!['on'] ||
+                    days['monday']!['on'] ||
+                    days['tuesday']!['on'] ||
+                    days['wednesday']!['on'] ||
+                    days['thursday']!['on'] ||
+                    days['friday']!['on'] ||
+                    days['saturday']!['on']
+                ? () async {
+                    setState(() {
+                      _businessHour = businessHourRequest();
+                    });
+                    _businessHour!.then((value) {
+                      setState(() {
+                        successful = value["successful"];
+                      });
+                    }).whenComplete(() {
+                      if (successful) {
+                        // ignore: use_build_context_synchronously
+                        Navigator.of(context).push(
+                            RouteAnimation(Screen: const UploadWorkspaceImage())
+                                .createRoute());
+                      } else {
+                        null;
+                      }
+                    });
+                    // debugPrint("this is the ouput of the program");
+                    // debugPrint(successful.toString());
+                  }
+                : null,
+            child: const Text(
+              'Continue',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            ),
+          )
+        ],
       ),
       FutureBuilder(
         future: _businessHour,
@@ -312,8 +355,7 @@ class _BusinessHoursState extends State<BusinessHours> {
                               ? () async {
                                   TimeOfDay? newTime = await showTimePicker(
                                       context: context,
-                                      initialTime: days['tuesday']!['on']
-                                          ['endtime']);
+                                      initialTime: days['tuesday']!['endtime']);
 
                                   if (newTime == null) return;
                                   setState(() {
@@ -607,52 +649,6 @@ class _BusinessHoursState extends State<BusinessHours> {
             Divider(
               height: MediaQuery.of(context).size.height * 0.00010,
               thickness: 2,
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.035,
-                  bottom: MediaQuery.of(context).size.height * 0.01),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
-                    ),
-                    backgroundColor: Colors.black,
-                    minimumSize: const Size.fromHeight(50)),
-                onPressed: days['sunday']!['on'] ||
-                        days['monday']!['on'] ||
-                        days['tuesday']!['on'] ||
-                        days['wednesday']!['on'] ||
-                        days['thursday']!['on'] ||
-                        days['friday']!['on'] ||
-                        days['saturday']!['on']
-                    ? () async {
-                        setState(() {
-                          _businessHour = businessHourRequest();
-                        });
-                        _businessHour!.then((value) {
-                          setState(() {
-                            successful = value["successful"];
-                          });
-                        }).whenComplete(() {
-                          if (successful) {
-                            // ignore: use_build_context_synchronously
-                            Navigator.of(context).push(RouteAnimation(
-                                    Screen: const UploadWorkspaceImage())
-                                .createRoute());
-                          } else {
-                            null;
-                          }
-                        });
-                        // debugPrint("this is the ouput of the program");
-                        // debugPrint(successful.toString());
-                      }
-                    : null,
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
-              ),
             ),
           ],
         )

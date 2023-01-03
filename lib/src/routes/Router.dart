@@ -75,7 +75,7 @@ class Routing {
               Map<String, dynamic> sample = state.extra as Map<String, dynamic>;
               return SlideInAnimation(
                   key: state.pageKey,
-                  child: ResetPassword(id: sample!["userId"]));
+                  child: ResetPassword(id: sample["userId"]));
             },
           )
         ])

@@ -15,7 +15,7 @@ class UnauthenticatedPageheader extends StatelessWidget {
       child: Column(
         children: <Widget>[
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.04,
+            height: MediaQuery.of(context).size.height * 0.01,
           ),
           Text(
             title,

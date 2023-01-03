@@ -1,6 +1,10 @@
 // ignore_for_file: file_names, empty_catches
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:curnect/src/widgets/emptyLoader.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +15,7 @@ import '../../state_manager/add_service_manipulator.dart';
 import '../../style/animation/loading_gif.dart';
 import '../../widgets/appbar.dart';
 import '../../widgets/unauthenticatedPageHeader.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpFormThree extends StatefulWidget {
   final Map<String, String> aboutYouFields;
@@ -20,7 +25,7 @@ class SignUpFormThree extends StatefulWidget {
   State<SignUpFormThree> createState() => _SignUpFormThreeState();
 }
 
-class _SignUpFormThreeState extends State<SignUpFormThree> {
+class _SignUpFormThreeState extends State<SignUpFormThree> with ErrorSnackBar {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
@@ -104,6 +109,31 @@ class _SignUpFormThreeState extends State<SignUpFormThree> {
             registerForm(),
           ],
         )),
+        persistentFooterButtons: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                ),
+                backgroundColor: Colors.black,
+                minimumSize: const Size.fromHeight(50)),
+            onPressed: () async {
+              _strength < 1 / 2 ? null : () {};
+              if (_formKey.currentState!.validate() &&
+                  (_confirmPasswordController.text ==
+                      _passwordController.text)) {
+                setState(() {
+                  _register = registerRequest();
+                });
+                _register;
+              }
+            },
+            child: const Text(
+              'Continue',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            ),
+          )
+        ],
       ),
       FutureBuilder(
           future: _register,
@@ -140,24 +170,30 @@ class _SignUpFormThreeState extends State<SignUpFormThree> {
     };
   }
 
-  Future<Map<String, dynamic>> registerRequest() async {
+  Future<void> registerRequest() async {
     debugPrint(getUserDetail().toString());
     try {
       var response = await user.register(
           "https://curnect.com/curnect-api/public/api/registerpartone",
           getUserDetail());
 
-      // ignore: use_build_context_synchronously
-      Provider.of<AddServiceManipulator>(context, listen: false).loginUser({
-        'user_token': response['token'],
-        'user_id': response['id'],
-        'loggedIn': response['loggedIn']
+      http.Response.fromStream(response).then((res) {
+        if (res.statusCode == 201) {
+          Provider.of<AddServiceManipulator>(context, listen: false).loginUser({
+            'user_token': json.decode(res.body)['success']['token'],
+            'user_id': json.decode(res.body)['success']['token'],
+          });
+          context.replace('/verify');
+        } else {
+          sendErrorMessage(
+              'Sever', 'The email has already been taken.', context);
+        }
       });
-      return response;
+    } on SocketException catch (_) {
+      sendErrorMessage('Network failure', 'Pleasecheck your internet', context);
     } catch (e) {
-      // print(e);
+      print(e);
     }
-    return {};
   }
 
   Widget registerForm() {
@@ -275,50 +311,6 @@ class _SignUpFormThreeState extends State<SignUpFormThree> {
                             ? Colors.blue
                             : Colors.green,
                 minHeight: 15,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                  0,
-                  MediaQuery.of(context).size.height * 0.38,
-                  0,
-                  MediaQuery.of(context).size.height * 0.01),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
-                    ),
-                    backgroundColor: Colors.black,
-                    minimumSize: const Size.fromHeight(50)),
-                onPressed: () async {
-                  _strength < 1 / 2 ? null : () {};
-                  if (_formKey.currentState!.validate() &&
-                      (_confirmPasswordController.text ==
-                          _passwordController.text)) {
-                    setState(() {
-                      _register = registerRequest();
-                    });
-                    _register!.then((value) {
-                      setState(() {
-                        sign_done = value;
-                      });
-                    }).whenComplete(() {
-                      if (sign_done!['signUpSuccessfull'] ?? false) {
-                        context.replace('/verify');
-                      } else {
-                        setState(() {
-                          notSuccessfullMessage =
-                              'The email has already been taken.';
-                        });
-                      }
-                    });
-                    // context.go('/verify');
-                  }
-                },
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
               ),
             ),
           ],

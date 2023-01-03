@@ -43,21 +43,10 @@ class User extends BaseService {
     return response;
   }
 
-  Future<Map<String, dynamic>> checkEmail(url, conf) async {
-    try {
-      final response = await this.post(url, conf);
+  Future<Response> checkEmail(url, conf) async {
+    final response = await this.post(url, conf);
 
-      if (response.statusCode == 200) {
-        return {
-          'statusCode': response.statusCode,
-        };
-      } else {
-        // print("getting to the exception");
-        throw UnsuccessfulRequestException();
-      }
-    } catch (e) {
-      rethrow;
-    }
+    return response;
   }
 
   Future<Map<String, dynamic>> homeServiceAPIFunction(body, url) async {
@@ -68,20 +57,12 @@ class User extends BaseService {
     }
   }
 
-  Future<Map<String, dynamic>> checkResetPasswordEmailAPI(body, url) async {
-    try {
-      return await checkResetPasswordEmail(body, url);
-    } catch (e) {
-      return {"error": e};
-    }
+  Future<http.StreamedResponse> checkResetPasswordEmailAPI(body, url) async {
+    return await checkResetPasswordEmail(body, url);
   }
 
-  Future<Map<String, dynamic>> checkResetPasswordPincodeAPI(body, url) async {
-    try {
-      return await ResetPincode(body, url);
-    } catch (e) {
-      return {"error": e};
-    }
+  Future<http.StreamedResponse> checkResetPasswordPincodeAPI(body, url) async {
+    return await ResetPincode(body, url);
   }
 
   Future<Map<String, dynamic>> resetToNewPassword(body, url) async {
@@ -154,20 +135,9 @@ class User extends BaseService {
     return res;
   }
 
-  Future<Map<String, dynamic>> register(url, conf) async {
+  Future<http.StreamedResponse> register(url, conf) async {
     final response = await registration(url, conf);
-    final res = http.Response.fromStream(response).then((res) {
-      if (res.statusCode == 201) {
-        return {
-          'token': User.fromJson(jsonDecode(res.body)).token,
-          'signUpSuccessfull': true,
-          'id': User.fromJson(jsonDecode(res.body)).id
-        };
-      } else {
-        throw Exception(response.statusCode.toString());
-      }
-    });
-    return res;
+    return response;
   }
 
   Future<Map<String, dynamic>> idVerificationController(

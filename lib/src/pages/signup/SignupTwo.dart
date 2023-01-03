@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:curnect/src/routes/route_animation.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_input_formatter/mask_input_formatter.dart';
@@ -17,7 +18,7 @@ class SignupPageTwo extends StatefulWidget {
   State<SignupPageTwo> createState() => _SignupPageTwoState();
 }
 
-class _SignupPageTwoState extends State<SignupPageTwo> {
+class _SignupPageTwoState extends State<SignupPageTwo> with ErrorSnackBar {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _businessNameController = TextEditingController();
@@ -218,50 +219,43 @@ class _SignupPageTwoState extends State<SignupPageTwo> {
                         );
                       }),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).size.height * 0.01,
-                          top: MediaQuery.of(context).size.height * 0.19),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(12), // <-- Radius
-                            ),
-                            backgroundColor: Colors.black,
-                            minimumSize: const Size.fromHeight(50)),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.of(context).push(RouteAnimation(
-                                Screen: SignUpFormThree(
-                              aboutYouFields: {
-                                "email": widget.email,
-                                "fullName": _fullNameController.text,
-                                "businesName": _businessNameController.text,
-                                "phone":
-                                    "${countryCode.dialCode}${_phoneController.text.replaceAll('-', '')}",
-                                "referralCode": _referalCodeController.text
-                              },
-                            )).createRoute());
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Please fill in the required fields')));
-                          }
-                        },
-                        child: const Text(
-                          'Continue',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20.0),
-                        ),
-                      ),
-                    ),
                   ],
                 )),
           ],
         ),
       ),
+      persistentFooterButtons: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12), // <-- Radius
+              ),
+              backgroundColor: Colors.black,
+              minimumSize: const Size.fromHeight(50)),
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              Navigator.of(context).push(RouteAnimation(
+                  Screen: SignUpFormThree(
+                aboutYouFields: {
+                  "email": widget.email,
+                  "fullName": _fullNameController.text,
+                  "businesName": _businessNameController.text,
+                  "phone":
+                      "${countryCode.dialCode}${_phoneController.text.replaceAll('-', '')}",
+                  "referralCode": _referalCodeController.text
+                },
+              )).createRoute());
+            } else {
+              fieldValidationErrorMessage(
+                  'Please fill in the required fields', context);
+            }
+          },
+          child: const Text(
+            'Continue',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          ),
+        )
+      ],
     );
   }
 }

@@ -52,6 +52,41 @@ class _HowToLocateYouState extends State<HowToLocateYou> {
                       "Verify customer IDs with AI-powered biometric recognition service. Ensure quality identity verification with iDenfy's team that manually reviews every audit.")
               .preferredSize(),
           body: _body(),
+          persistentFooterButtons: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                  ),
+                  backgroundColor: Colors.black,
+                  minimumSize: const Size.fromHeight(50)),
+              //check if the validation is successful
+              onPressed: ((_homeservice) || (_myplace))
+                  ? () async {
+                      setState(() {
+                        _howtoLocateYouFuture = howTolocateYouRequest();
+                      });
+                      _howtoLocateYouFuture!.then((value) {
+                        print(value);
+                        setState(() {
+                          successful = value['statusCode'];
+                        });
+                      }).whenComplete(() {
+                        if (successful == 202) {
+                          // ignore: use_build_context_synchronously
+                          Navigator.of(context).push(
+                              RouteAnimation(Screen: const SearchPlacesScreen())
+                                  .createRoute());
+                        }
+                      });
+                    }
+                  : null,
+              child: const Text(
+                'Continue',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            )
+          ],
         ),
         FutureBuilder(
           future: _howtoLocateYouFuture,
@@ -124,42 +159,6 @@ class _HowToLocateYouState extends State<HowToLocateYou> {
             checkColor: Colors.black,
           ),
         ),
-        Padding(
-            padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.225),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // <-- Radius
-                  ),
-                  backgroundColor: Colors.black,
-                  minimumSize: const Size.fromHeight(50)),
-              //check if the validation is successful
-              onPressed: ((_homeservice) || (_myplace))
-                  ? () async {
-                      setState(() {
-                        _howtoLocateYouFuture = howTolocateYouRequest();
-                      });
-                      _howtoLocateYouFuture!.then((value) {
-                        print(value);
-                        setState(() {
-                          successful = value['statusCode'];
-                        });
-                      }).whenComplete(() {
-                        if (successful == 202) {
-                          // ignore: use_build_context_synchronously
-                          Navigator.of(context).push(
-                              RouteAnimation(Screen: const SearchPlacesScreen())
-                                  .createRoute());
-                        }
-                      });
-                    }
-                  : null,
-              child: const Text(
-                'Continue',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-              ),
-            ))
       ],
     ));
   }

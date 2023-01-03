@@ -181,52 +181,47 @@ class _VerificationState extends State<Verification> {
                         height: 15.0,
                       ),
                       _body(),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.04,
-                            bottom: MediaQuery.of(context).size.height * 0.01),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(12), // <-- Radius
-                              ),
-                              backgroundColor: Colors.black,
-                              minimumSize: const Size.fromHeight(50)),
-                          //check if the validation is successful
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              setState(() {
-                                _verificationFUture = verificationFunc();
-                              });
-                              _verificationFUture!.then((value) {
-                                setState(() {
-                                  successful = value['resCode'];
-                                });
-                              }).whenComplete(() {
-                                if (successful == 202) {
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.of(context).push(RouteAnimation(
-                                          Screen: const PublishProfile())
-                                      .createRoute());
-                                }
-                              });
-                            } else {
-                              return;
-                            }
-                          },
-                          child: const Text(
-                            'Continue',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20.0),
-                          ),
-                        ),
-                      ),
                     ],
                   )),
             ],
           ),
         ),
+        persistentFooterButtons: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                ),
+                backgroundColor: Colors.black,
+                minimumSize: const Size.fromHeight(50)),
+            //check if the validation is successful
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                setState(() {
+                  _verificationFUture = verificationFunc();
+                });
+                _verificationFUture!.then((value) {
+                  setState(() {
+                    successful = value['resCode'];
+                  });
+                }).whenComplete(() {
+                  if (successful == 202) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).push(
+                        RouteAnimation(Screen: const PublishProfile())
+                            .createRoute());
+                  }
+                });
+              } else {
+                return;
+              }
+            },
+            child: const Text(
+              'Continue',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            ),
+          )
+        ],
       ),
       FutureBuilder(
           future: _verificationFUture,

@@ -249,53 +249,46 @@ class _GetHomeServiceFeeState extends State<GetHomeServiceFee> {
                           },
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(
-                            0,
-                            MediaQuery.of(context).size.height * 0.02,
-                            0,
-                            MediaQuery.of(context).size.height * 0.01),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(12), // <-- Radius
-                              ),
-                              backgroundColor: Colors.black,
-                              minimumSize: const Size.fromHeight(50)),
-                          onPressed: (_priceType != 'Enter price type' &&
-                                  _maxTraveledDist != 'Select a mile distance')
-                              ? () {
-                                  setState(() {
-                                    _homeServiceFuction = homeServiceAPI();
-                                  });
-                                  _homeServiceFuction!.then((value) {
-                                    print(value);
-                                    setState(() {
-                                      successful = value["statusCode"];
-                                    });
-                                  }).whenComplete(() {
-                                    if (successful == 202) {
-                                      Navigator.of(context).push(RouteAnimation(
-                                              Screen: const BusinessHours())
-                                          .createRoute());
-                                    }
-                                  });
-                                }
-                              : null,
-                          child: const Text(
-                            'Continue',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20.0),
-                          ),
-                        ),
-                      ),
                     ],
                   ))
             ],
           )
         ],
       )),
+      persistentFooterButtons: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12), // <-- Radius
+              ),
+              backgroundColor: Colors.black,
+              minimumSize: const Size.fromHeight(50)),
+          onPressed: (_priceType != 'Enter price type' &&
+                  _maxTraveledDist != 'Select a mile distance')
+              ? () {
+                  setState(() {
+                    _homeServiceFuction = homeServiceAPI();
+                  });
+                  _homeServiceFuction!.then((value) {
+                    print(value);
+                    setState(() {
+                      successful = value["statusCode"];
+                    });
+                  }).whenComplete(() {
+                    if (successful == 202) {
+                      Navigator.of(context).push(
+                          RouteAnimation(Screen: const BusinessHours())
+                              .createRoute());
+                    }
+                  });
+                }
+              : null,
+          child: const Text(
+            'Continue',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          ),
+        )
+      ],
     );
   }
 }

@@ -2,12 +2,10 @@
 
 import 'package:curnect/src/widgets/emptyLoader.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../services/user.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../state_manager/add_service_manipulator.dart';
 import '../../style/animation/loading_gif.dart';
 import '../../widgets/appbar.dart';
 import '../../widgets/unauthenticatedPageHeader.dart';
@@ -105,6 +103,47 @@ class _ResetPasswordState extends State<ResetPassword> {
               // ),
             ],
           )),
+          persistentFooterButtons: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                  ),
+                  backgroundColor: Colors.black,
+                  minimumSize: const Size.fromHeight(50)),
+              onPressed: () async {
+                _strength < 1 / 2 ? null : () {};
+                if (_formKey.currentState!.validate() &&
+                    (_confirmPasswordController.text ==
+                        _passwordController.text)) {
+                  setState(() {
+                    _register = registerRequest();
+                  });
+                  _register!.then((value) {
+                    setState(() {
+                      sign_done = value["statusCode"];
+                    });
+                  }).whenComplete(() {
+                    if (sign_done == 202) {
+                      context.pop();
+                      context.pop();
+                      context.replace('/signin');
+                    } else {
+                      setState(() {
+                        notSuccessfullMessage =
+                            'The email has already been taken.';
+                      });
+                    }
+                  });
+                  // context.go('/verify');
+                }
+              },
+              child: const Text(
+                'Continue',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            )
+          ],
         ),
         FutureBuilder(
             future: _register,
@@ -273,50 +312,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                             ? Colors.blue
                             : Colors.green,
                 minHeight: 15,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                  0,
-                  MediaQuery.of(context).size.height * 0.38,
-                  0,
-                  MediaQuery.of(context).size.height * 0.01),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
-                    ),
-                    backgroundColor: Colors.black,
-                    minimumSize: const Size.fromHeight(50)),
-                onPressed: () async {
-                  _strength < 1 / 2 ? null : () {};
-                  if (_formKey.currentState!.validate() &&
-                      (_confirmPasswordController.text ==
-                          _passwordController.text)) {
-                    setState(() {
-                      _register = registerRequest();
-                    });
-                    _register!.then((value) {
-                      setState(() {
-                        sign_done = value["statusCode"];
-                      });
-                    }).whenComplete(() {
-                      if (sign_done == 202) {
-                        context.replace('/signin');
-                      } else {
-                        setState(() {
-                          notSuccessfullMessage =
-                              'The email has already been taken.';
-                        });
-                      }
-                    });
-                    // context.go('/verify');
-                  }
-                },
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
               ),
             ),
           ],

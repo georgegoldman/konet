@@ -129,12 +129,22 @@ class _PublishProfileState extends State<PublishProfile> with RestorationMixin {
                 return;
               }),
         ),
-        Padding(
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.337,
-            bottom: MediaQuery.of(context).size.height * 0.01,
-          ),
-          child: ElevatedButton(
+      ],
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(children: [
+      Scaffold(
+        appBar: UnauthenticatedAppBar(
+                context: context,
+                screeenInfo:
+                    'To alleviate the nuisance of re-entering publishing options you may want to always use (such as backing up the database before publish, for instance), you can save publish profiles and refer to them every time you want to publish. These profiles are XML based files that reside in the root folder of your project.')
+            .preferredSize(),
+        body: _body(),
+        persistentFooterButtons: [
+          ElevatedButton(
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12), // <-- Radius
@@ -168,22 +178,8 @@ class _PublishProfileState extends State<PublishProfile> with RestorationMixin {
                 fontSize: 20.0,
               ),
             ),
-          ),
-        )
-      ],
-    ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(children: [
-      Scaffold(
-        appBar: UnauthenticatedAppBar(
-                context: context,
-                screeenInfo:
-                    'To alleviate the nuisance of re-entering publishing options you may want to always use (such as backing up the database before publish, for instance), you can save publish profiles and refer to them every time you want to publish. These profiles are XML based files that reside in the root folder of your project.')
-            .preferredSize(),
-        body: _body(),
+          )
+        ],
       ),
       FutureBuilder(
         future: _publish_future,

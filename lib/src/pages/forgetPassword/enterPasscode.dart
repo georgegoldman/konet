@@ -1,10 +1,15 @@
 // ignore_for_file: file_names
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:curnect/src/services/base_service.dart';
 import 'package:curnect/src/services/user.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
+import 'package:http/http.dart' as http;
 
 import '../../customException/unsuccessfulRequestException.dart';
 import '../../style/animation/loading_gif.dart';
@@ -18,26 +23,48 @@ class GetYourCode extends StatefulWidget {
   State<GetYourCode> createState() => _GetYourCodeState();
 }
 
-class _GetYourCodeState extends State<GetYourCode> {
+class _GetYourCodeState extends State<GetYourCode> with ErrorSnackBar {
   final _formKey = GlobalKey<FormState>();
-  Future<Map<String, dynamic>>? _sendCodeFuture;
+  Future<void>? _sendCodeFuture;
   String? pinCode;
   int? successCode;
 
-  Future<Map<String, dynamic>> pinCodeAPI() async {
+  Future<void> pinCodeAPI() async {
     try {
       var user = User(email: '', password: '', token: '');
-      print(pinCode);
       var response = await user.checkResetPasswordPincodeAPI({
         "_method": "patch",
         "userid": widget.userData!["userId"].toString(),
         "token": pinCode!.toString()
       }, 'https://curnect.com/curnect-api/public/api/checktoken');
-      return response;
-    } on UnsuccessfulRequestException catch (e) {
-      return {"statusCode": 406, 'error': e.cause};
+
+      http.Response.fromStream(response).then((res) {
+        if (res.statusCode == 202) {
+          context.push('/resetpasword',
+              extra: {"userId": widget.userData!["userId"].toString()});
+        } else {
+          print('hi');
+          switch (res.statusCode) {
+            case 401:
+              sendErrorMessage('Pin Error', 'Please check your pin', context);
+              break;
+            case 500:
+              sendErrorMessage('Error',
+                  "An Error occured but it is not your fault", context);
+              break;
+            default:
+              sendErrorMessage('Pin Error', 'Please check your pin', context);
+              break;
+          }
+          ;
+        }
+      });
+    } on SocketException catch (_) {
+      sendErrorMessage(
+          'Network Error', "Please check your internet connection", context);
     } catch (e) {
-      return {"statusCode": 401, 'error': e};
+      sendErrorMessage(
+          'Error', "An Error occured but it is not your fault", context);
     }
   }
 
@@ -167,16 +194,7 @@ class _GetYourCodeState extends State<GetYourCode> {
           _sendCodeFuture = pinCodeAPI();
         });
 
-        _sendCodeFuture!.then((value) {
-          setState(() {
-            successCode = value["statusCode"];
-          });
-        }).whenComplete(() {
-          if (successCode == 202) {
-            context.replace('/resetpasword',
-                extra: {"userId": widget.userData!["userId"]});
-          }
-        });
+        _sendCodeFuture;
       },
     );
   }

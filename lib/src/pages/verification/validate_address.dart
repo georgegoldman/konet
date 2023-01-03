@@ -42,6 +42,50 @@ class _ValidateAddressState extends State<ValidateAddress> {
                     "With our postal address verification and cleansing service you can easily verify if an address exists and is deliverable. Whether you want to clean up the addresses in your customer database or verify addresses directly on your website, we have exactly the right solution for you.")
             .preferredSize(),
         body: validateAddressForm(),
+        persistentFooterButtons: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                ),
+                backgroundColor: Colors.black,
+                minimumSize: const Size.fromHeight(50)),
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                changeFutureBuilderState();
+                // var validatingAddressFromMap =
+                //     await validateAddressRequest();
+                // debugPrint('the truth');
+                // debugPrint(validatingAddressFromMap.toString());
+                setState(() {
+                  _validateAddress = verifyAddresss();
+                });
+                _validateAddress!.then((value) {
+                  setState(() {
+                    success = value;
+                  });
+                }).whenComplete(() {
+                  if (success) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).push(
+                        RouteAnimation(Screen: const GetHomeServiceFee())
+                            .createRoute());
+                  } else {
+                    setState(() {
+                      errorMessage = 'An error occurred please retry';
+                    });
+                  }
+                });
+              } else {
+                null;
+              }
+            },
+            child: const Text(
+              'Continue',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            ),
+          )
+        ],
       ),
       FutureBuilder(
         future: _validateAddress,
@@ -298,55 +342,6 @@ class _ValidateAddressState extends State<ValidateAddress> {
                         })),
                   ],
                 )),
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                  0,
-                  MediaQuery.of(context).size.height * 0.00,
-                  0,
-                  MediaQuery.of(context).size.height * 0.001),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
-                    ),
-                    backgroundColor: Colors.black,
-                    minimumSize: const Size.fromHeight(50)),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    changeFutureBuilderState();
-                    // var validatingAddressFromMap =
-                    //     await validateAddressRequest();
-                    // debugPrint('the truth');
-                    // debugPrint(validatingAddressFromMap.toString());
-                    setState(() {
-                      _validateAddress = verifyAddresss();
-                    });
-                    _validateAddress!.then((value) {
-                      setState(() {
-                        success = value;
-                      });
-                    }).whenComplete(() {
-                      if (success) {
-                        // ignore: use_build_context_synchronously
-                        Navigator.of(context).push(
-                            RouteAnimation(Screen: const GetHomeServiceFee())
-                                .createRoute());
-                      } else {
-                        setState(() {
-                          errorMessage = 'An error occurred please retry';
-                        });
-                      }
-                    });
-                  } else {
-                    null;
-                  }
-                },
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
-              ),
-            ),
             Text(
               errorMessage.toString(),
               style: const TextStyle(color: Colors.redAccent),

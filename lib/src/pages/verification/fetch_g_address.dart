@@ -34,157 +34,151 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: UnauthenticatedAppBar(context: context, screeenInfo: title)
-            .preferredSize(),
-        key: homeScaffoldKey,
-        body: SafeArea(
-            child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.14,
-                width: MediaQuery.of(context).size.width * 0.1,
-                child: const UnauthenticatedPageheader(
-                  subTitle:
-                      'Do your clients come to you, do you go to them, or both',
-                  title: 'Your Address',
-                ),
+      appBar: UnauthenticatedAppBar(context: context, screeenInfo: title)
+          .preferredSize(),
+      key: homeScaffoldKey,
+      body: SafeArea(
+          child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.14,
+              width: MediaQuery.of(context).size.width * 0.1,
+              child: const UnauthenticatedPageheader(
+                subTitle:
+                    'Do your clients come to you, do you go to them, or both',
+                title: 'Your Address',
               ),
-              Column(children: <Widget>[
-                SizedBox(
-                    width: MediaQuery.of(context).size.width * 1,
-                    child: InkWell(
-                      onTap: () async {
-                        var place = await PlacesAutocomplete.show(
-                            context: context,
+            ),
+            Column(children: <Widget>[
+              SizedBox(
+                  width: MediaQuery.of(context).size.width * 1,
+                  child: InkWell(
+                    onTap: () async {
+                      var place = await PlacesAutocomplete.show(
+                          context: context,
+                          apiKey: googleApiKey,
+                          mode: Mode.overlay,
+                          logo: const Text(""),
+                          types: [],
+                          strictbounds: false,
+                          components: [],
+                          onError: (err) {
+                            debugPrint("$err");
+                          });
+                      if (place != null) {
+                        setState(() {
+                          location = place.description.toString();
+                        });
+                        final plist = GoogleMapsPlaces(
                             apiKey: googleApiKey,
-                            mode: Mode.overlay,
-                            logo: const Text(""),
-                            types: [],
-                            strictbounds: false,
-                            components: [],
-                            onError: (err) {
-                              debugPrint("$err");
+                            apiHeaders:
+                                await const GoogleApiHeaders().getHeaders());
+                        String placeid = place.placeId ?? "0";
+                        final detail = await plist.getDetailsByPlaceId(placeid);
+                        var a = detail.result.adrAddress!.replaceAll(",", '');
+                        var b = a.replaceAll("<span class=", '');
+                        var c = b.split("</span>");
+                        for (var element in c) {
+                          var lastSplit = element.split(">");
+                          debugPrint("$lastSplit");
+                          if (lastSplit.length >= 2) {
+                            setState(() {
+                              address[lastSplit
+                                      .toString()
+                                      .contains('street-address')
+                                  ? 'street-adress'
+                                  : lastSplit[0]
+                                      .toString()
+                                      .replaceAll("\"", "")
+                                      .replaceFirst(" ", "")] = lastSplit[1];
                             });
-                        if (place != null) {
-                          setState(() {
-                            location = place.description.toString();
-                          });
-                          final plist = GoogleMapsPlaces(
-                              apiKey: googleApiKey,
-                              apiHeaders:
-                                  await const GoogleApiHeaders().getHeaders());
-                          String placeid = place.placeId ?? "0";
-                          final detail =
-                              await plist.getDetailsByPlaceId(placeid);
-                          var a = detail.result.adrAddress!.replaceAll(",", '');
-                          var b = a.replaceAll("<span class=", '');
-                          var c = b.split("</span>");
-                          for (var element in c) {
-                            var lastSplit = element.split(">");
-                            debugPrint("$lastSplit");
-                            if (lastSplit.length >= 2) {
-                              setState(() {
-                                address[lastSplit
-                                        .toString()
-                                        .contains('street-address')
-                                    ? 'street-adress'
-                                    : lastSplit[0]
-                                        .toString()
-                                        .replaceAll("\"", "")
-                                        .replaceFirst(" ", "")] = lastSplit[1];
-                              });
-                            }
                           }
-                          setState(() {
-                            unformattedAddres = detail.result.formattedAddress!;
-                          });
-                          // debugPrint("$address");
-                          final geometry = detail.result.geometry;
-                          final lat = geometry?.location.lat;
-                          final lang = geometry?.location.lng;
-                          var newlatlang = LatLng(lat!, lang!);
-
-                          mapController
-                              ?.animateCamera(CameraUpdate.newCameraPosition(
-                                  CameraPosition(target: newlatlang, zoom: 17)))
-                              .whenComplete(() {
-                            if (detail.isNotFound) {
-                              navEnable = false;
-                            } else {
-                              navEnable = true;
-                            }
-                          });
-                          // ignore: use_build_context_synchronously
                         }
-                      },
-                      child: Card(
-                        child: Container(
-                          padding: const EdgeInsets.all(0),
-                          width: MediaQuery.of(context).size.width - 40,
-                          child: ListTile(
-                            title: Text(
-                              location,
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                            trailing: const Icon(Icons.search),
-                            dense: true,
+                        setState(() {
+                          unformattedAddres = detail.result.formattedAddress!;
+                        });
+                        // debugPrint("$address");
+                        final geometry = detail.result.geometry;
+                        final lat = geometry?.location.lat;
+                        final lang = geometry?.location.lng;
+                        var newlatlang = LatLng(lat!, lang!);
+
+                        mapController
+                            ?.animateCamera(CameraUpdate.newCameraPosition(
+                                CameraPosition(target: newlatlang, zoom: 17)))
+                            .whenComplete(() {
+                          if (detail.isNotFound) {
+                            navEnable = false;
+                          } else {
+                            navEnable = true;
+                          }
+                        });
+                        // ignore: use_build_context_synchronously
+                      }
+                    },
+                    child: Card(
+                      child: Container(
+                        padding: const EdgeInsets.all(0),
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: ListTile(
+                          title: Text(
+                            location,
+                            style: const TextStyle(fontSize: 18),
                           ),
+                          trailing: const Icon(Icons.search),
+                          dense: true,
                         ),
                       ),
-                    )),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.52,
-                  child: GoogleMap(
-                    zoomGesturesEnabled: true,
-                    myLocationButtonEnabled: true,
-                    myLocationEnabled: true,
-                    scrollGesturesEnabled: true,
-                    initialCameraPosition:
-                        CameraPosition(target: startLocation, zoom: 14.0),
-                    mapType: MapType.normal,
-                    onMapCreated: (controller) {
-                      setState(() {
-                        mapController = controller;
-                      });
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0,
-                      MediaQuery.of(context).size.height * 0.015,
-                      0,
-                      MediaQuery.of(context).size.height * 0.01),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // <-- Radius
-                        ),
-                        backgroundColor: Colors.black,
-                        minimumSize: const Size.fromHeight(50)),
-                    onPressed: navEnable
-                        ? () {
-                            setState(() {
-                              navEnable = !navEnable;
-                              // Provider.of<AddServiceManipulator>(context,
-                              //         listen: false)
-                              //     .createLocation(address);
-                            });
-                            Navigator.of(context).push(RouteAnimation(
-                                Screen: ValidateAddress(
-                              addresses: address,
-                            )).createRoute());
-                          }
-                        : null,
-                    child: const Text(
-                      'Continue',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20.0),
                     ),
-                  ),
+                  )),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.52,
+                child: GoogleMap(
+                  zoomGesturesEnabled: true,
+                  myLocationButtonEnabled: true,
+                  myLocationEnabled: true,
+                  scrollGesturesEnabled: true,
+                  initialCameraPosition:
+                      CameraPosition(target: startLocation, zoom: 14.0),
+                  mapType: MapType.normal,
+                  onMapCreated: (controller) {
+                    setState(() {
+                      mapController = controller;
+                    });
+                  },
                 ),
-              ]),
-            ])));
+              ),
+            ]),
+          ])),
+      persistentFooterButtons: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12), // <-- Radius
+              ),
+              backgroundColor: Colors.black,
+              minimumSize: const Size.fromHeight(50)),
+          onPressed: navEnable
+              ? () {
+                  setState(() {
+                    navEnable = !navEnable;
+                    // Provider.of<AddServiceManipulator>(context,
+                    //         listen: false)
+                    //     .createLocation(address);
+                  });
+                  Navigator.of(context).push(RouteAnimation(
+                      Screen: ValidateAddress(
+                    addresses: address,
+                  )).createRoute());
+                }
+              : null,
+          child: const Text(
+            'Continue',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          ),
+        )
+      ],
+    );
   }
 }

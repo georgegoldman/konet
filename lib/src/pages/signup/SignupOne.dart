@@ -1,10 +1,11 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, use_build_context_synchronously
 
 import 'dart:io';
 
 import 'package:curnect/src/customException/unsuccessfulRequestException.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/widgets/appbar.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -20,11 +21,11 @@ class SignupPageOne extends StatefulWidget {
   State<SignupPageOne> createState() => _SignupPageOneState();
 }
 
-class _SignupPageOneState extends State<SignupPageOne> {
+class _SignupPageOneState extends State<SignupPageOne> with ErrorSnackBar {
   final _formKey = GlobalKey<FormState>();
   bool isChecked = false;
   final TextEditingController _emailController = TextEditingController();
-  Future<Map<String, dynamic>>? _checkEmail;
+  Future<void>? _checkEmail;
   int? connectionDone;
 
   @override
@@ -82,17 +83,24 @@ class _SignupPageOneState extends State<SignupPageOne> {
     ]);
   }
 
-  Future<Map<String, dynamic>> checkEmail() async {
+  Future<void> checkEmail() async {
     try {
       var user = User(email: _emailController.text, password: '', token: '');
       final response = await user.checkEmail(
           'https://curnect.com/curnect-api/public/api/checkemail',
           {'email': user.email, 'token': ''});
-      return response;
-    } on UnsuccessfulRequestException catch (e) {
-      return {"statusCode": 406, 'error': e.cause};
+      if (response.statusCode == 200) {
+        context.replace('/signin');
+      } else {
+        Navigator.of(context).push(RouteAnimation(
+            Screen: SignupPageTwo(
+          email: _emailController.text,
+        )).createRoute());
+      }
+    } on SocketException catch (_) {
+      sendErrorMessage('Network failure', 'Pleasecheck your internet', context);
     } catch (e) {
-      return {"statusCode": 401, 'error': e};
+      return;
     }
   }
 
@@ -211,32 +219,10 @@ class _SignupPageOneState extends State<SignupPageOne> {
                             .hasMatch(_emailController.text.toString()))
                     ? () async {
                         if (_formKey.currentState!.validate()) {
-                          try {
-                            final ping =
-                                await InternetAddress.lookup('curnect.com');
-                            if (ping.isNotEmpty &&
-                                ping[0].rawAddress.isNotEmpty) {
-                              setState(() {
-                                _checkEmail = checkEmail();
-                              });
-                              checkEmail().then((value) {
-                                setState(() {
-                                  connectionDone = value['statusCode'];
-                                });
-                              }).whenComplete(() {
-                                if (connectionDone == 200) {
-                                  context.replace('/signin');
-                                } else {
-                                  Navigator.of(context).push(RouteAnimation(
-                                      Screen: SignupPageTwo(
-                                    email: _emailController.text,
-                                  )).createRoute());
-                                }
-                              });
-                            }
-                          } on SocketException catch (_) {
-                            print('not connected');
-                          }
+                          setState(() {
+                            _checkEmail = checkEmail();
+                          });
+                          _checkEmail;
                         }
                       }
                     : null,

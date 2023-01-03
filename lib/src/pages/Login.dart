@@ -1,6 +1,7 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:curnect/src/widgets/appbar.dart';
 import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
@@ -32,7 +33,7 @@ class _LoginPageState extends State<LoginPage> with ErrorSnackBar {
   bool _isHidden = true;
   bool showMessageError = false;
   User user = User(email: '', password: '', logIn: false);
-  Future<Response>? _login;
+  Future<void>? _login;
 
   void _togglePasswordView() {
     setState(() {
@@ -40,18 +41,51 @@ class _LoginPageState extends State<LoginPage> with ErrorSnackBar {
     });
   }
 
-  Future<Response> loginRequest() async {
+  Future<void> loginRequest() async {
     // final userToken = getUserToken();
-    final response = await user.login(
-        'https://curnect.com/curnect-api/public/api/login',
-        {"email": user.email, "password": user.password, "token": ''});
-    // ignore: use_build_context_synchronously
-    Provider.of<AddServiceManipulator>(context, listen: false).loginUser({
-      'user_token': json.decode(response.body)['token'],
-      'user_id': json.decode(response.body)['success']['userId'],
-      'loggedIn': response.statusCode,
-    });
-    return response;
+
+    try {
+      final response = await user.login(
+          'https://curnect.com/curnect-api/public/api/login',
+          {"email": user.email, "password": user.password, "token": ''});
+      // ignore: use_build_context_synchronously
+      Provider.of<AddServiceManipulator>(context, listen: false).loginUser({
+        'user_token': json.decode(response.body)['token'],
+        'user_id': json.decode(response.body)['success']['userId'],
+        'loggedIn': response.statusCode,
+      });
+
+      if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        context.replace('/verify');
+      } else {
+        switch (response.statusCode) {
+          case 401:
+            sendErrorMessage(
+                "System Error",
+                json.decode(response.body)['error'] ??
+                    'Something went wrong but it\'s not you.',
+                context);
+
+            break;
+          case 500:
+            sendErrorMessage(
+                "System Error",
+                response.reasonPhrase ??
+                    'Something went wrong but it\'s not you.',
+                context);
+            break;
+          default:
+            sendErrorMessage("System Error",
+                'Something went wrong but it\'s not you.', context);
+        }
+      }
+    } on SocketException catch (_) {
+      sendErrorMessage(
+          "Network failure", "Please check your internet connection", context);
+    } catch (e) {
+      print("an error occured");
+    }
 
     // debugPrint(Provider.of<AddServiceManipulator>(context, listen: false)
     //     .user['user_id']
@@ -253,42 +287,7 @@ class _LoginPageState extends State<LoginPage> with ErrorSnackBar {
                         setState(() {
                           _login = loginRequest();
                         });
-                        // Future.delayed(const Duration(milliseconds: 2000));
-                        // debugPrint("$optionalErrorMessage");
-
-                        _login!.then((res) {
-                          if (res.statusCode == 200) {
-                            context.replace('/verify');
-                          } else {
-                            switch (res.statusCode) {
-                              case 401:
-                                ScaffoldMessenger.of(context)
-                                    .hideCurrentSnackBar();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  sendErrorMessage(
-                                      "System Error",
-                                      json.decode(res.body)['error'] ??
-                                          'Something went wrong but it\'s not you.'),
-                                );
-                                break;
-                              case 500:
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  sendErrorMessage(
-                                      "System Error",
-                                      res.reasonPhrase ??
-                                          'Something went wrong but it\'s not you.'),
-                                );
-                                break;
-                              default:
-                                ScaffoldMessenger.of(context)
-                                    .hideCurrentSnackBar();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  sendErrorMessage("System Error",
-                                      'Something went wrong but it\'s not you.'),
-                                );
-                            }
-                          }
-                        });
+                        _login;
                       }
                     : null,
                 child: const Text(
