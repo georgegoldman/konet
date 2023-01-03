@@ -1,8 +1,10 @@
 import 'package:curnect/src/services/user.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../routes/route_animation.dart';
 import '../../state_manager/add_service_manipulator.dart';
@@ -19,26 +21,36 @@ class HowToLocateYou extends StatefulWidget {
   State<HowToLocateYou> createState() => _HowToLocateYouState();
 }
 
-class _HowToLocateYouState extends State<HowToLocateYou> {
-  Future<Map<String, dynamic>>? _howtoLocateYouFuture;
+class _HowToLocateYouState extends State<HowToLocateYou> with ErrorSnackBar {
+  Future<void>? _howtoLocateYouFuture;
 
   bool _myplace = false;
   bool _homeservice = false;
   int? successful;
 
-  Future<Map<String, dynamic>> howTolocateYouRequest() async {
-    User user = User(email: '', password: '');
-    String userId = Provider.of<AddServiceManipulator>(context, listen: false)
-        .user['user_id']
-        .toString();
-    Map<String, String> body = {
-      "_method": "patch",
-      "userid": userId,
-      'myplace': _myplace == false ? 0.toString() : 1.toString(),
-      'homeservice': _homeservice == false ? 0.toString() : 1.toString()
-    };
-    return await user.locateUser(body,
-        "https://curnect.com/curnect-api/public/api/registerservicelocation");
+  Future<void> howTolocateYouRequest() async {
+    try {
+      User user = User(email: '', password: '');
+      String userId = Provider.of<AddServiceManipulator>(context, listen: false)
+          .user['user_id']
+          .toString();
+      Map<String, String> body = {
+        "_method": "patch",
+        "userid": userId,
+        'myplace': _myplace == false ? 0.toString() : 1.toString(),
+        'homeservice': _homeservice == false ? 0.toString() : 1.toString()
+      };
+      final response = await user.locateUser(body,
+          "https://curnect.com/curnect-api/public/api/registerservicelocation");
+      http.Response.fromStream(response).then((res) {
+        if (res.statusCode == 202) {
+          Navigator.of(context).push(
+              RouteAnimation(Screen: const SearchPlacesScreen()).createRoute());
+        } else {
+          sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+        }
+      });
+    } catch (e) {}
   }
 
   @override
@@ -66,19 +78,7 @@ class _HowToLocateYouState extends State<HowToLocateYou> {
                       setState(() {
                         _howtoLocateYouFuture = howTolocateYouRequest();
                       });
-                      _howtoLocateYouFuture!.then((value) {
-                        print(value);
-                        setState(() {
-                          successful = value['statusCode'];
-                        });
-                      }).whenComplete(() {
-                        if (successful == 202) {
-                          // ignore: use_build_context_synchronously
-                          Navigator.of(context).push(
-                              RouteAnimation(Screen: const SearchPlacesScreen())
-                                  .createRoute());
-                        }
-                      });
+                      _howtoLocateYouFuture;
                     }
                   : null,
               child: const Text(

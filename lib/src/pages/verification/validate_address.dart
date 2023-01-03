@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:curnect/src/pages/verification/home_service_fee.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
 import 'package:curnect/src/widgets/emptyLoader.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../state_manager/add_service_manipulator.dart';
 import '../../widgets/appbar.dart';
@@ -18,7 +22,7 @@ class ValidateAddress extends StatefulWidget {
   State<ValidateAddress> createState() => _ValidateAddressState();
 }
 
-class _ValidateAddressState extends State<ValidateAddress> {
+class _ValidateAddressState extends State<ValidateAddress> with ErrorSnackBar {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _streetOneController = TextEditingController();
   final TextEditingController _streetTwoController = TextEditingController();
@@ -26,7 +30,7 @@ class _ValidateAddressState extends State<ValidateAddress> {
   final TextEditingController _zipController = TextEditingController();
   final TextEditingController _stateMarkController = TextEditingController();
   final TextEditingController _countryController = TextEditingController();
-  Future<bool>? _validateAddress;
+  Future<void>? _validateAddress;
   bool success = false;
   User user = User(email: '', password: '');
 
@@ -60,22 +64,7 @@ class _ValidateAddressState extends State<ValidateAddress> {
                 setState(() {
                   _validateAddress = verifyAddresss();
                 });
-                _validateAddress!.then((value) {
-                  setState(() {
-                    success = value;
-                  });
-                }).whenComplete(() {
-                  if (success) {
-                    // ignore: use_build_context_synchronously
-                    Navigator.of(context).push(
-                        RouteAnimation(Screen: const GetHomeServiceFee())
-                            .createRoute());
-                  } else {
-                    setState(() {
-                      errorMessage = 'An error occurred please retry';
-                    });
-                  }
-                });
+                _validateAddress;
               } else {
                 null;
               }
@@ -113,21 +102,34 @@ class _ValidateAddressState extends State<ValidateAddress> {
     ]);
   }
 
-  Future<bool> verifyAddresss() async {
-    User user = User(email: '', password: '');
-    int userId = Provider.of<AddServiceManipulator>(context, listen: false)
-        .user['user_id'];
-    Map<String, String> body = {
-      '_method': 'patch',
-      'id': userId.toString(),
-      'address':
-          "${_streetOneController.text.toString()} ${_zipController.text.toString()} ${_cityController.text.toString()} ${_stateMarkController.text.toString()} ${_countryController.text}"
-    };
+  Future<void> verifyAddresss() async {
+    try {
+      User user = User(email: '', password: '');
+      int userId = Provider.of<AddServiceManipulator>(context, listen: false)
+          .user['user_id'];
+      Map<String, String> body = {
+        '_method': 'patch',
+        'id': userId.toString(),
+        'address':
+            "${_streetOneController.text.toString()} ${_zipController.text.toString()} ${_cityController.text.toString()} ${_stateMarkController.text.toString()} ${_countryController.text}"
+      };
 
-    bool response = await user.validateAddressController(
-        body, 'https://curnect.com/curnect-api/public/api/registeraddress');
-
-    return response;
+      http.StreamedResponse response = await user.validateAddressController(
+          body, 'https://curnect.com/curnect-api/public/api/registeraddress');
+      http.Response.fromStream(response).then((res) {
+        if (res.statusCode == 202) {
+          Navigator.of(context).push(
+              RouteAnimation(Screen: const GetHomeServiceFee()).createRoute());
+        } else {
+          sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+        }
+      });
+    } on SocketException catch (_) {
+      sendErrorMessage(
+          'Network error', 'Please check you internet connection', context);
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override

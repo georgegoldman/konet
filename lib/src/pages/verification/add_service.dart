@@ -1,12 +1,16 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:io';
+
 import 'package:curnect/src/pages/verification/verification.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:curnect/src/widgets/verificatoin/add_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../state_manager/add_service_manipulator.dart';
 import '../../widgets/appbar.dart';
@@ -23,10 +27,10 @@ class AddService extends StatefulWidget {
   State<AddService> createState() => _AddServiceState();
 }
 
-class _AddServiceState extends State<AddService> {
+class _AddServiceState extends State<AddService> with ErrorSnackBar {
   bool successful = false;
 
-  Future<Map<String, dynamic>>? _adderviceFutureFunction;
+  Future<void>? _adderviceFutureFunction;
   void _checkIsServiceAdded() {
     if (widget.addedService.isEmpty) {
     } else {}
@@ -61,22 +65,7 @@ class _AddServiceState extends State<AddService> {
                         setState(() {
                           _adderviceFutureFunction = addServiceRequest();
                         });
-                        _adderviceFutureFunction!.then((value) {
-                          //checking every request response if true
-
-                          if (value['successful']) {
-                            setState(() {
-                              successful = !successful;
-                            });
-                          }
-                        }).whenComplete(() {
-                          if (successful) {
-                            // ignore: use_build_context_synchronously
-                            Navigator.of(context).push(
-                                RouteAnimation(Screen: const Verification())
-                                    .createRoute());
-                          }
-                        });
+                        _adderviceFutureFunction;
                       }
                     : null,
             child: const Text(
@@ -109,22 +98,38 @@ class _AddServiceState extends State<AddService> {
     ]);
   }
 
-  Future<Map<String, dynamic>> addServiceRequest() async {
-    List allAddedService =
-        Provider.of<AddServiceManipulator>(context, listen: false).addedService;
-    User user = User(email: '', password: '');
-    Map<String, dynamic> body = {
-      "_method": "patch",
-      "services": allAddedService
-    };
-    final response = await user.addService(
-        body, 'https://curnect.com/curnect-api/public/api/registerservice');
-    // for (var i in allAddedService) {
-    //   final response = await user.addService(
-    //       i, 'https://curnect.com/curnect-api/public/api/registerservice');
-    //   allRequest.add(response);
-    // }
-    return response;
+  Future<void> addServiceRequest() async {
+    try {
+      List allAddedService =
+          Provider.of<AddServiceManipulator>(context, listen: false)
+              .addedService;
+      User user = User(email: '', password: '');
+      Map<String, dynamic> body = {
+        "_method": "patch",
+        "services": allAddedService
+      };
+      http.StreamedResponse response = await user.addService(
+          body, 'https://curnect.com/curnect-api/public/api/registerservice');
+      // for (var i in allAddedService) {
+      //   final response = await user.addService(
+      //       i, 'https://curnect.com/curnect-api/public/api/registerservice');
+      //   allRequest.add(response);
+      // }
+      http.Response.fromStream(response).then((res) {
+        if (res.statusCode == 202) {
+          Navigator.of(context)
+              .push(RouteAnimation(Screen: const Verification()).createRoute());
+        } else {
+          sendErrorMessage('Opps!',
+              'Something wrong occured but it is not your fault', context);
+        }
+      });
+    } on SocketException catch (_) {
+      sendErrorMessage(
+          'Network Error', 'Please check your internet connection', context);
+    } catch (e) {
+      print(e);
+    }
   }
 
   Widget addServeicWidget() {

@@ -1,15 +1,21 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/state_manager/add_service_manipulator.dart';
 import 'package:curnect/src/widgets/emptyLoader.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../style/animation/loading_gif.dart';
 import '../../widgets/appbar.dart';
 import '../../widgets/unauthenticatedPageHeader.dart';
-import 'fetch_g_address.dart';
 import 'howToLocateYou.dart';
 
 String title =
@@ -29,10 +35,10 @@ class SelectCategory extends StatefulWidget {
   State<SelectCategory> createState() => _SelectCategoryState();
 }
 
-class _SelectCategoryState extends State<SelectCategory> {
+class _SelectCategoryState extends State<SelectCategory> with ErrorSnackBar {
   final _formKey = GlobalKey<FormState>();
   List<String> _selected = [];
-  Future<Map<String, dynamic>>? _selectCategory;
+  Future<void>? _selectCategory;
   User user = User(email: '', password: '');
   int? successful;
   Map<String, int> categoryMap = {
@@ -83,7 +89,7 @@ class _SelectCategoryState extends State<SelectCategory> {
     "Event Planner": 45
   };
 
-  Future<Map<String, dynamic>> selectCategoryRequest() async {
+  Future<void> selectCategoryRequest() async {
     try {
       String userId = Provider.of<AddServiceManipulator>(context, listen: false)
           .user['user_id']
@@ -109,12 +115,21 @@ class _SelectCategoryState extends State<SelectCategory> {
         final response = await user.patchWithJson(
             'https://curnect.com/curnect-api/public/api/registerbusinesscategory',
             body);
-        return response;
+        http.Response.fromStream(response).then((res) {
+          if (res.statusCode == 202) {
+            Navigator.of(context).push(
+                RouteAnimation(Screen: const HowToLocateYou()).createRoute());
+          } else {
+            sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+          }
+        });
       } else {
-        throw Exception("empty service category");
+        fieldValidationErrorMessage('Please select an item', context);
       }
+    } on SocketException catch (_) {
+      sendErrorMessage('Network Error', 'Please check your colour', context);
     } catch (e) {
-      return {};
+      print(e);
     }
   }
 
@@ -137,19 +152,7 @@ class _SelectCategoryState extends State<SelectCategory> {
               setState(() {
                 _selectCategory = selectCategoryRequest();
               });
-              _selectCategory!.then((value) {
-                setState(() {
-                  successful = value["statusCode"];
-                });
-              }).whenComplete(() {
-                // ignore: unrelated_type_equality_checks
-                if (successful == 202) {
-                  // ignore: use_build_context_synchronously
-                  Navigator.of(context).push(
-                      RouteAnimation(Screen: const HowToLocateYou())
-                          .createRoute());
-                }
-              });
+              _selectCategory;
             },
             child: const Text(
               'Continue',

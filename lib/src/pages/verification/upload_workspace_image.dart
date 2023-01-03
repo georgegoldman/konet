@@ -5,11 +5,13 @@ import 'package:curnect/src/pages/verification/add_service.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
 import 'package:curnect/src/widgets/emptyLoader.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:curnect/src/state_manager/add_service_manipulator.dart';
+import 'package:http/http.dart' as http;
 
 import '../../widgets/appbar.dart';
 import '../../widgets/unauthenticatedPageHeader.dart';
@@ -21,27 +23,53 @@ class UploadWorkspaceImage extends StatefulWidget {
   State<UploadWorkspaceImage> createState() => _UploadWorkspaceImageState();
 }
 
-class _UploadWorkspaceImageState extends State<UploadWorkspaceImage> {
+class _UploadWorkspaceImageState extends State<UploadWorkspaceImage>
+    with ErrorSnackBar {
   XFile? _pickedFile;
   CroppedFile? _croppedFile;
-  Future<bool>? _uploadImageFuture;
+  Future<void>? _uploadImageFuture;
   bool showError = false;
   bool successful = true;
 
-  Future<bool> uploadImageRequest() async {
-    String userId = Provider.of<AddServiceManipulator>(context, listen: false)
-        .user['user_id']
-        .toString();
-    Map<String, String> data = {"_method": "patch", "id": userId};
-    User user = User(email: '', password: '');
-    if (_croppedFile != null) {
-      var response = await user.uploadImage(_croppedFile!.path, data,
-          'https://curnect.com/curnect-api/public/api/registerbusinessimage');
-      return response;
-    } else {
-      var response = await user.uploadImage(_pickedFile!.path, data,
-          'https://curnect.com/curnect-api/public/api/registerbusinessimage');
-      return response;
+  Future<void> uploadImageRequest() async {
+    try {
+      String userId = Provider.of<AddServiceManipulator>(context, listen: false)
+          .user['user_id']
+          .toString();
+      Map<String, String> data = {"_method": "patch", "id": userId};
+      User user = User(email: '', password: '');
+      if (_croppedFile != null) {
+        http.StreamedResponse response = await user.uploadImage(
+            _croppedFile!.path,
+            data,
+            'https://curnect.com/curnect-api/public/api/registerbusinessimage');
+        http.Response.fromStream(response).then((res) {
+          if (res.statusCode == 202) {
+            Navigator.of(context)
+                .push(RouteAnimation(Screen: AddService()).createRoute());
+          } else {
+            sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+          }
+        });
+      } else {
+        http.StreamedResponse response = await user.uploadImage(
+            _pickedFile!.path,
+            data,
+            'https://curnect.com/curnect-api/public/api/registerbusinessimage');
+        http.Response.fromStream(response).then((res) {
+          if (res.statusCode == 202) {
+            Navigator.of(context)
+                .push(RouteAnimation(Screen: AddService()).createRoute());
+          } else {
+            sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+          }
+        });
+      }
+    } on SocketException catch (_) {
+      sendErrorMessage(
+          'Network Error', 'Please check your internet connection', context);
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -93,17 +121,7 @@ class _UploadWorkspaceImageState extends State<UploadWorkspaceImage> {
                     setState(() {
                       _uploadImageFuture = uploadImageRequest();
                     });
-                    _uploadImageFuture!.then((value) {
-                      setState(() {
-                        successful = value;
-                      });
-                    }).whenComplete(() {
-                      if (successful) {
-                        // ignore: use_build_context_synchronously
-                        Navigator.of(context).push(
-                            RouteAnimation(Screen: AddService()).createRoute());
-                      } else {}
-                    });
+                    _uploadImageFuture;
                   },
             child: const Text(
               'Continue',

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:curnect/src/pages/verification/validate_address.dart';
 import 'package:curnect/src/routes/route_animation.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -21,7 +24,8 @@ class SearchPlacesScreen extends StatefulWidget {
 
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
-class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
+class _SearchPlacesScreenState extends State<SearchPlacesScreen>
+    with ErrorSnackBar {
   String googleApiKey = "AIzaSyBmmJDKJshf79zx5eh71HwC7DaXep7s1LI";
   GoogleMapController? mapController;
   CameraPosition? cameraPosition;
@@ -55,66 +59,74 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                   width: MediaQuery.of(context).size.width * 1,
                   child: InkWell(
                     onTap: () async {
-                      var place = await PlacesAutocomplete.show(
-                          context: context,
-                          apiKey: googleApiKey,
-                          mode: Mode.overlay,
-                          logo: const Text(""),
-                          types: [],
-                          strictbounds: false,
-                          components: [],
-                          onError: (err) {
-                            debugPrint("$err");
-                          });
-                      if (place != null) {
-                        setState(() {
-                          location = place.description.toString();
-                        });
-                        final plist = GoogleMapsPlaces(
+                      try {
+                        var place = await PlacesAutocomplete.show(
+                            context: context,
                             apiKey: googleApiKey,
-                            apiHeaders:
-                                await const GoogleApiHeaders().getHeaders());
-                        String placeid = place.placeId ?? "0";
-                        final detail = await plist.getDetailsByPlaceId(placeid);
-                        var a = detail.result.adrAddress!.replaceAll(",", '');
-                        var b = a.replaceAll("<span class=", '');
-                        var c = b.split("</span>");
-                        for (var element in c) {
-                          var lastSplit = element.split(">");
-                          debugPrint("$lastSplit");
-                          if (lastSplit.length >= 2) {
-                            setState(() {
-                              address[lastSplit
-                                      .toString()
-                                      .contains('street-address')
-                                  ? 'street-adress'
-                                  : lastSplit[0]
-                                      .toString()
-                                      .replaceAll("\"", "")
-                                      .replaceFirst(" ", "")] = lastSplit[1];
+                            mode: Mode.overlay,
+                            logo: const Text(""),
+                            types: [],
+                            strictbounds: false,
+                            components: [],
+                            onError: (err) {
+                              debugPrint("$err");
                             });
+                        if (place != null) {
+                          setState(() {
+                            location = place.description.toString();
+                          });
+                          final plist = GoogleMapsPlaces(
+                              apiKey: googleApiKey,
+                              apiHeaders:
+                                  await const GoogleApiHeaders().getHeaders());
+                          String placeid = place.placeId ?? "0";
+                          final detail =
+                              await plist.getDetailsByPlaceId(placeid);
+                          var a = detail.result.adrAddress!.replaceAll(",", '');
+                          var b = a.replaceAll("<span class=", '');
+                          var c = b.split("</span>");
+                          for (var element in c) {
+                            var lastSplit = element.split(">");
+                            debugPrint("$lastSplit");
+                            if (lastSplit.length >= 2) {
+                              setState(() {
+                                address[lastSplit
+                                        .toString()
+                                        .contains('street-address')
+                                    ? 'street-adress'
+                                    : lastSplit[0]
+                                        .toString()
+                                        .replaceAll("\"", "")
+                                        .replaceFirst(" ", "")] = lastSplit[1];
+                              });
+                            }
                           }
-                        }
-                        setState(() {
-                          unformattedAddres = detail.result.formattedAddress!;
-                        });
-                        // debugPrint("$address");
-                        final geometry = detail.result.geometry;
-                        final lat = geometry?.location.lat;
-                        final lang = geometry?.location.lng;
-                        var newlatlang = LatLng(lat!, lang!);
+                          setState(() {
+                            unformattedAddres = detail.result.formattedAddress!;
+                          });
+                          // debugPrint("$address");
+                          final geometry = detail.result.geometry;
+                          final lat = geometry?.location.lat;
+                          final lang = geometry?.location.lng;
+                          var newlatlang = LatLng(lat!, lang!);
 
-                        mapController
-                            ?.animateCamera(CameraUpdate.newCameraPosition(
-                                CameraPosition(target: newlatlang, zoom: 17)))
-                            .whenComplete(() {
-                          if (detail.isNotFound) {
-                            navEnable = false;
-                          } else {
-                            navEnable = true;
-                          }
-                        });
-                        // ignore: use_build_context_synchronously
+                          mapController
+                              ?.animateCamera(CameraUpdate.newCameraPosition(
+                                  CameraPosition(target: newlatlang, zoom: 17)))
+                              .whenComplete(() {
+                            if (detail.isNotFound) {
+                              navEnable = false;
+                            } else {
+                              navEnable = true;
+                            }
+                          });
+                          // ignore: use_build_context_synchronously
+                        }
+                      } on SocketException catch (_) {
+                        sendErrorMessage('Network error',
+                            'Please check your internet connection', context);
+                      } catch (e) {
+                        print(e);
                       }
                     },
                     child: Card(

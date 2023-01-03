@@ -5,10 +5,12 @@ import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
 import 'package:curnect/src/widgets/emptyLoader.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../state_manager/add_service_manipulator.dart';
 import '../../widgets/appbar.dart';
@@ -21,7 +23,7 @@ class Verification extends StatefulWidget {
   State<Verification> createState() => _VerificationState();
 }
 
-class _VerificationState extends State<Verification> {
+class _VerificationState extends State<Verification> with ErrorSnackBar {
   final _formKey = GlobalKey<FormState>();
   bool isChecked = false;
   final TextEditingController _ninController = TextEditingController();
@@ -29,29 +31,50 @@ class _VerificationState extends State<Verification> {
   String _chosenValue = "Select Id type";
   XFile? _pickedFile;
   CroppedFile? _croppedFile;
-  Future<Map<String, dynamic>>? _verificationFUture;
+  Future<void>? _verificationFUture;
   int? successful;
 
-  Future<Map<String, dynamic>> verificationFunc() async {
-    User user = User(email: '', password: '');
-    int userId = Provider.of<AddServiceManipulator>(context, listen: false)
-        .user['user_id'];
-    Map<String, String> body = {
-      '_method': 'patch',
-      'id': userId.toString(),
-      'id_name': _chosenValue.toString(),
-      'reg_no': _businessRegController.text.toString(),
-      'nin_number': _ninController.text.toString(),
-    };
-    if (_croppedFile != null) {
-      var response = await user.idVerificationController(_croppedFile!.path,
-          body, 'https://curnect.com/curnect-api/public/api/registerid');
-      return response;
-    } else {
-      var response = await user.idVerificationController(_pickedFile!.path,
-          body, 'https://curnect.com/curnect-api/public/api/registerid');
-      return response;
-    }
+  Future<void> verificationFunc() async {
+    try {
+      User user = User(email: '', password: '');
+      int userId = Provider.of<AddServiceManipulator>(context, listen: false)
+          .user['user_id'];
+      Map<String, String> body = {
+        '_method': 'patch',
+        'id': userId.toString(),
+        'id_name': _chosenValue.toString(),
+        'reg_no': _businessRegController.text.toString(),
+        'nin_number': _ninController.text.toString(),
+      };
+      if (_croppedFile != null) {
+        http.StreamedResponse response = await user.idVerificationController(
+            _croppedFile!.path,
+            body,
+            'https://curnect.com/curnect-api/public/api/registerid');
+
+        http.Response.fromStream(response).then((res) {
+          if (res.statusCode == 202) {
+            Navigator.of(context).push(
+                RouteAnimation(Screen: const PublishProfile()).createRoute());
+          } else {
+            sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+          }
+        });
+      } else {
+        http.StreamedResponse response = await user.idVerificationController(
+            _pickedFile!.path,
+            body,
+            'https://curnect.com/curnect-api/public/api/registerid');
+        http.Response.fromStream(response).then((res) {
+          if (res.statusCode == 202) {
+            Navigator.of(context).push(
+                RouteAnimation(Screen: const PublishProfile()).createRoute());
+          } else {
+            sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+          }
+        });
+      }
+    } catch (e) {}
   }
 
   @override
@@ -200,18 +223,7 @@ class _VerificationState extends State<Verification> {
                 setState(() {
                   _verificationFUture = verificationFunc();
                 });
-                _verificationFUture!.then((value) {
-                  setState(() {
-                    successful = value['resCode'];
-                  });
-                }).whenComplete(() {
-                  if (successful == 202) {
-                    // ignore: use_build_context_synchronously
-                    Navigator.of(context).push(
-                        RouteAnimation(Screen: const PublishProfile())
-                            .createRoute());
-                  }
-                });
+                _verificationFUture;
               } else {
                 return;
               }

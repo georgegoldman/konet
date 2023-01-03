@@ -51,30 +51,28 @@ class Hurray extends StatelessWidget {
                 )
               ],
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.00),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
-                    ),
-                    backgroundColor: Colors.black,
-                    minimumSize: const Size.fromHeight(50)),
-                //check if the validation is successful
-                onPressed: () => debugPrint("moivng on"),
-                child: const Text(
-                  'Explore',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                  ),
-                ),
-              ),
-            )
           ],
         )),
       ]),
+      persistentFooterButtons: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12), // <-- Radius
+              ),
+              backgroundColor: Colors.black,
+              minimumSize: const Size.fromHeight(50)),
+          //check if the validation is successful
+          onPressed: () => debugPrint("moivng on"),
+          child: const Text(
+            'Explore',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
+            ),
+          ),
+        )
+      ],
     );
   }
 }

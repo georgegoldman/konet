@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:curnect/src/pages/verification/upload_workspace_image.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/state_manager/add_service_manipulator.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
 import 'package:curnect/src/widgets/emptyLoader.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../widgets/appbar.dart';
 import '../../widgets/unauthenticatedPageHeader.dart';
@@ -20,7 +24,7 @@ class BusinessHours extends StatefulWidget {
   State<BusinessHours> createState() => _BusinessHoursState();
 }
 
-class _BusinessHoursState extends State<BusinessHours> {
+class _BusinessHoursState extends State<BusinessHours> with ErrorSnackBar {
   final Map<String, Map<String, dynamic>> days = {
     'sunday': {
       'on': false,
@@ -60,13 +64,13 @@ class _BusinessHoursState extends State<BusinessHours> {
     }
   };
 
-  Future<Map<String, dynamic>>? _businessHour;
+  Future<void>? _businessHour;
   User user = User(email: '', password: '');
   bool successful = false;
   Map<String, dynamic> body = {};
   List<Map<String, dynamic>> businessHours = [];
 
-  Future<Map<String, dynamic>> businessHourRequest() async {
+  Future<void> businessHourRequest() async {
     int userId = Provider.of<AddServiceManipulator>(context, listen: false)
         .user['user_id'];
     // String token = Provider.of<AddServiceManipulator>(context, listen: false)
@@ -86,13 +90,26 @@ class _BusinessHoursState extends State<BusinessHours> {
                 : "${days[day]!['endtime'].hour.toString().padLeft(2, '0')}:${days[day]!['endtime'].minute.toString().padLeft(2, '0')}",
       });
     }
-    body["businessHours"] = businessHours;
-    var response = await user.businessHour(
-        'https://curnect.com/curnect-api/public/api/registerbusinesshour',
-        body);
-    // debugPrint(response.toString());
+    try {
+      body["businessHours"] = businessHours;
+      http.StreamedResponse response = await user.businessHour(
+          'https://curnect.com/curnect-api/public/api/registerbusinesshour',
+          body);
 
-    return response;
+      http.Response.fromStream(response).then((res) {
+        if (res.statusCode == 202) {
+          Navigator.of(context).push(
+              RouteAnimation(Screen: const UploadWorkspaceImage())
+                  .createRoute());
+        } else {
+          sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+        }
+      });
+    } on SocketException catch (_) {
+      sendErrorMessage(
+          'Network error', 'Please check your networkconnection', context);
+    } catch (e) {}
+    // debugPrint(response.toString());
   }
 
   @override
@@ -121,20 +138,7 @@ class _BusinessHoursState extends State<BusinessHours> {
                     setState(() {
                       _businessHour = businessHourRequest();
                     });
-                    _businessHour!.then((value) {
-                      setState(() {
-                        successful = value["successful"];
-                      });
-                    }).whenComplete(() {
-                      if (successful) {
-                        // ignore: use_build_context_synchronously
-                        Navigator.of(context).push(
-                            RouteAnimation(Screen: const UploadWorkspaceImage())
-                                .createRoute());
-                      } else {
-                        null;
-                      }
-                    });
+                    _businessHour;
                     // debugPrint("this is the ouput of the program");
                     // debugPrint(successful.toString());
                   }

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:curnect/src/customException/unsuccessfulRequestException.dart';
 import 'package:curnect/src/services/base_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -49,12 +48,8 @@ class User extends BaseService {
     return response;
   }
 
-  Future<Map<String, dynamic>> homeServiceAPIFunction(body, url) async {
-    try {
-      return await homeServiceBaseAPI(body, url);
-    } catch (e) {
-      return {"error": e};
-    }
+  Future<http.StreamedResponse> homeServiceAPIFunction(body, url) async {
+    return await homeServiceBaseAPI(body, url);
   }
 
   Future<http.StreamedResponse> checkResetPasswordEmailAPI(body, url) async {
@@ -84,14 +79,8 @@ class User extends BaseService {
     }
   }
 
-  Future<Map<String, dynamic>> businessHour(url, conf) async {
-    try {
-      final response = await businessHourResponse(url, conf);
-
-      return response;
-    } catch (e) {
-      return {"error": e};
-    }
+  Future<http.StreamedResponse> businessHour(url, conf) async {
+    return await businessHourResponse(url, conf);
   }
 
   Future<Map<String, dynamic>> registerService(url, conf) async {
@@ -111,28 +100,12 @@ class User extends BaseService {
     }
   }
 
-  Future<bool> uploadImage(filePath, data, url) async {
-    final response = await patchWithImage(filePath, data, url);
-    if (response.statusCode == 202) {
-      return true;
-    } else {
-      return false;
-    }
+  Future<http.StreamedResponse> uploadImage(filePath, data, url) async {
+    return await patchWithImage(filePath, data, url);
   }
 
-  Future<Map<String, dynamic>> addService(body, url) async {
-    final response = await addServiceAPi(body, url);
-    final res = http.Response.fromStream(response).then((res) {
-      if (res.statusCode == 202) {
-        return {
-          'successful': true,
-          'res': json.decode(res.body),
-        };
-      } else {
-        throw Exception(response.statusCode.toString());
-      }
-    });
-    return res;
+  Future<http.StreamedResponse> addService(body, url) async {
+    return await addServiceAPi(body, url);
   }
 
   Future<http.StreamedResponse> register(url, conf) async {
@@ -140,30 +113,13 @@ class User extends BaseService {
     return response;
   }
 
-  Future<Map<String, dynamic>> idVerificationController(
+  Future<http.StreamedResponse> idVerificationController(
       filePath, body, url) async {
-    if (body['id_name'] == "Select Id type") {
-      return {"resCode": 406};
-    } else {
-      final response = await idVerification(filePath, url, body);
-      final resData = http.Response.fromStream(response).then((value) {
-        if (value.statusCode == 202) {
-          return {"resCode": value.statusCode, "msg": value.reasonPhrase};
-        } else {
-          throw Exception("${value.reasonPhrase}");
-        }
-      });
-      return resData;
-    }
+    return await idVerification(filePath, url, body);
   }
 
-  Future<bool> validateAddressController(body, url) async {
-    final response = await verifyAddredss(body, url);
-    if (response.statusCode == 202) {
-      return true;
-    } else {
-      return false;
-    }
+  Future<http.StreamedResponse> validateAddressController(body, url) async {
+    return await verifyAddredss(body, url);
   }
 
   Future<bool> publishProfileController(body, url) async {
@@ -175,13 +131,8 @@ class User extends BaseService {
     }
   }
 
-  Future<Map<String, dynamic>> locateUser(body, url) async {
-    print(body);
-    try {
-      return await locateUserService(body, url);
-    } catch (e) {
-      return {"error": "$e"};
-    }
+  Future<http.StreamedResponse> locateUser(body, url) async {
+    return await locateUserService(body, url);
   }
 }
 

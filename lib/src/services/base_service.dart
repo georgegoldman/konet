@@ -70,7 +70,7 @@ class BaseService {
     });
   }
 
-  Future<Map<String, dynamic>> businessHourResponse(
+  Future<http.StreamedResponse> businessHourResponse(
       String url, Map<String, dynamic> body) async {
     body["_method"] = "patch";
     var headers = {'Content-Type': 'application/json'};
@@ -78,39 +78,18 @@ class BaseService {
     request.body = json.encode(body);
     request.headers.addAll(headers);
 
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 202) {
-      return http.Response.fromStream(response).then((value) {
-        return {
-          "statusCode": value.statusCode,
-          "successful": true,
-          "body": value.body
-        };
-      });
-    } else {
-      throw Exception('${response.reasonPhrase}');
-    }
+    return await request.send();
   }
 
-  Future<Map<String, dynamic>> patchWithJson(
+  Future<http.StreamedResponse> patchWithJson(
       String url, Map<String, dynamic> body) async {
-    print("getting here");
     final headers = {'Content-Type': 'application/json'};
     final request = http.Request('POST', Uri.parse(url));
     body["_method"] = "patch";
     request.body = json.encode(body);
     request.headers.addAll(headers);
 
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 202) {
-      return http.Response.fromStream(response).then((value) {
-        return {"statusCode": response.statusCode, "body": value.body};
-      });
-    } else {
-      throw Exception('${response.reasonPhrase}');
-    }
+    return await request.send();
   }
 
   Future<http.Response> delete(String url, Map<String, dynamic> conf) async {
@@ -167,37 +146,16 @@ class BaseService {
     return await request.send();
   }
 
-  Future<Map<String, dynamic>> locateUserService(body, url) async {
+  Future<http.StreamedResponse> locateUserService(body, url) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.fields.addAll(body);
 
-    http.StreamedResponse response = await request.send();
-
-    return http.Response.fromStream(response).then((value) {
-      if (value.statusCode == 202) {
-        return {
-          "statusCode": value.statusCode,
-          "body": json.encode(value.body)
-        };
-      } else {
-        return {"Error": value.reasonPhrase};
-      }
-    });
+    return await request.send();
   }
 
-  Future<Map<String, dynamic>> homeServiceBaseAPI(body, url) async {
+  Future<http.StreamedResponse> homeServiceBaseAPI(body, url) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
-    print(body);
     request.fields.addAll(body);
-    http.StreamedResponse response = await request.send();
-
-    return http.Response.fromStream(response).then((value) {
-      if (value.statusCode == 202) {
-        return {"statusCode": value.statusCode, "body": value};
-      } else {
-        print(value.body);
-        return {"Error": value.reasonPhrase};
-      }
-    });
+    return await request.send();
   }
 }

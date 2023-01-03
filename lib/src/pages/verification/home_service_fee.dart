@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:curnect/src/pages/verification/business_hours.dart';
 import 'package:curnect/src/routes/route_animation.dart';
+import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../services/user.dart';
 import '../../state_manager/add_service_manipulator.dart';
@@ -17,14 +21,15 @@ class GetHomeServiceFee extends StatefulWidget {
   State<GetHomeServiceFee> createState() => _GetHomeServiceFeeState();
 }
 
-class _GetHomeServiceFeeState extends State<GetHomeServiceFee> {
+class _GetHomeServiceFeeState extends State<GetHomeServiceFee>
+    with ErrorSnackBar {
   final _formKey = GlobalKey<FormState>();
   String _priceType = 'Enter price type';
   String _maxTraveledDist = 'Select a mile distance in miles';
   final TextEditingController _travelFeeController = TextEditingController();
   final TextEditingController _homeServiceController = TextEditingController();
   int? successful;
-  Future<Map<String, dynamic>>? _homeServiceFuction;
+  Future<void>? _homeServiceFuction;
 
   void dropdownCallack(String? selectedValue) {
     if (selectedValue is String) {
@@ -32,27 +37,39 @@ class _GetHomeServiceFeeState extends State<GetHomeServiceFee> {
     }
   }
 
-  Future<Map<String, dynamic>> homeServiceAPI() async {
-    User user = User(email: '', password: '');
-    int userId = Provider.of<AddServiceManipulator>(context, listen: false)
-        .user['user_id'];
-    Map<String, String> body = {
-      '_method': 'patch',
-      'userid': userId.toString(),
-      'pricetype': _priceType.toString(),
-      'travelfee': _travelFeeController.text.toString() == ''
-          ? "0"
-          : _travelFeeController.text.toString(),
-      'maximumtraveldistance': _maxTraveledDist.toString(),
-      'homeservicepolicy': _homeServiceController.text.toString() == ''
-          ? "null"
-          : _homeServiceController.text.toString()
-    };
+  Future<void> homeServiceAPI() async {
+    try {
+      User user = User(email: '', password: '');
+      int userId = Provider.of<AddServiceManipulator>(context, listen: false)
+          .user['user_id'];
+      Map<String, String> body = {
+        '_method': 'patch',
+        'userid': userId.toString(),
+        'pricetype': _priceType.toString(),
+        'travelfee': _travelFeeController.text.toString() == ''
+            ? "0"
+            : _travelFeeController.text.toString(),
+        'maximumtraveldistance': _maxTraveledDist.toString(),
+        'homeservicepolicy': _homeServiceController.text.toString() == ''
+            ? "null"
+            : _homeServiceController.text.toString()
+      };
 
-    Map<String, dynamic> response = await user.homeServiceAPIFunction(body,
-        'https://curnect.com/curnect-api/public/api/registerhomeservicefee');
-
-    return response;
+      http.StreamedResponse response = await user.homeServiceAPIFunction(body,
+          'https://curnect.com/curnect-api/public/api/registerhomeservicefee');
+      http.Response.fromStream(response).then((res) {
+        if (res.statusCode == 202) {
+          Navigator.of(context).push(
+              RouteAnimation(Screen: const BusinessHours()).createRoute());
+        } else {
+          sendErrorMessage(
+              'Opps', 'Something went wrong but it\'s your fault', context);
+        }
+      });
+    } on SocketException catch (_) {
+      sendErrorMessage(
+          'Network error', 'Please check your internet connection', context);
+    } catch (e) {}
   }
 
   @override
@@ -269,18 +286,7 @@ class _GetHomeServiceFeeState extends State<GetHomeServiceFee> {
                   setState(() {
                     _homeServiceFuction = homeServiceAPI();
                   });
-                  _homeServiceFuction!.then((value) {
-                    print(value);
-                    setState(() {
-                      successful = value["statusCode"];
-                    });
-                  }).whenComplete(() {
-                    if (successful == 202) {
-                      Navigator.of(context).push(
-                          RouteAnimation(Screen: const BusinessHours())
-                              .createRoute());
-                    }
-                  });
+                  _homeServiceFuction;
                 }
               : null,
           child: const Text(
