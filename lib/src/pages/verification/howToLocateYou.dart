@@ -1,19 +1,19 @@
 import 'dart:convert';
 
 import 'package:curnect/src/services/user.dart';
-import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
+import '../../common_widgets/appbar.dart';
+import '../../common_widgets/emptyLoader.dart';
+import '../../common_widgets/snackBar/ErrorMessage.dart';
+import '../../common_widgets/unauthenticatedPageHeader.dart';
 import '../../routes/route_animation.dart';
 import '../../state_manager/add_service_manipulator.dart';
 import '../../style/animation/loading_gif.dart';
-import '../../widgets/appbar.dart';
-import '../../widgets/emptyLoader.dart';
-import '../../widgets/unauthenticatedPageHeader.dart';
 import 'fetch_g_address.dart';
 
 class HowToLocateYou extends StatefulWidget {
@@ -68,25 +68,29 @@ class _HowToLocateYouState extends State<HowToLocateYou> with ErrorSnackBar {
               .preferredSize(),
           body: _body(),
           persistentFooterButtons: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // <-- Radius
-                  ),
-                  backgroundColor: Colors.black,
-                  minimumSize: const Size.fromHeight(50)),
-              //check if the validation is successful
-              onPressed: ((_homeservice) || (_myplace))
-                  ? () async {
-                      setState(() {
-                        _howtoLocateYouFuture = howTolocateYouRequest();
-                      });
-                      _howtoLocateYouFuture;
-                    }
-                  : null,
-              child: const Text(
-                'Continue',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.04),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                    ),
+                    backgroundColor: Colors.black,
+                    minimumSize: const Size.fromHeight(50)),
+                //check if the validation is successful
+                onPressed: ((_homeservice) || (_myplace))
+                    ? () async {
+                        setState(() {
+                          _howtoLocateYouFuture = howTolocateYouRequest();
+                        });
+                        _howtoLocateYouFuture;
+                      }
+                    : null,
+                child: const Text(
+                  'Continue',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                ),
               ),
             )
           ],

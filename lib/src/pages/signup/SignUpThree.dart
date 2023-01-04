@@ -3,18 +3,18 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:curnect/src/widgets/emptyLoader.dart';
-import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common_widgets/appbar.dart';
+import '../../common_widgets/emptyLoader.dart';
+import '../../common_widgets/snackBar/ErrorMessage.dart';
+import '../../common_widgets/unauthenticatedPageHeader.dart';
 import '../../services/user.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../state_manager/add_service_manipulator.dart';
 import '../../style/animation/loading_gif.dart';
-import '../../widgets/appbar.dart';
-import '../../widgets/unauthenticatedPageHeader.dart';
 import 'package:http/http.dart' as http;
 
 class SignUpFormThree extends StatefulWidget {

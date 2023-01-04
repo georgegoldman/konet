@@ -7,15 +7,15 @@ import 'package:curnect/src/pages/verification/verification.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
-import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
-import 'package:curnect/src/widgets/verificatoin/add_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
+import '../../common_widgets/appbar.dart';
+import '../../common_widgets/snackBar/ErrorMessage.dart';
+import '../../common_widgets/unauthenticatedPageHeader.dart';
+import '../../common_widgets/verificatoin/add_service.dart';
 import '../../state_manager/add_service_manipulator.dart';
-import '../../widgets/appbar.dart';
-import '../../widgets/unauthenticatedPageHeader.dart';
 
 String title =
     "In Business Profile, you may get an option to add the services you offer, along with their descriptions and prices. If your business has multiple categories, group services together into sections under the appropriate category to keep your services organized. When local customers search on Google for a service you offer, that service may be highlighted on your profile. Customers on mobile devices can also find all your services under  \"Services.\"";
@@ -51,27 +51,31 @@ class _AddServiceState extends State<AddService> with ErrorSnackBar {
             .preferredSize(),
         body: addServeicWidget(),
         persistentFooterButtons: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
-                ),
-                backgroundColor: Colors.black,
-                minimumSize: const Size.fromHeight(50)),
-            onPressed:
-                Provider.of<AddServiceManipulator>(context, listen: false)
-                        .addedService
-                        .isNotEmpty
-                    ? () async {
-                        setState(() {
-                          _adderviceFutureFunction = addServiceRequest();
-                        });
-                        _adderviceFutureFunction;
-                      }
-                    : null,
-            child: const Text(
-              'Continue',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.04),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                  ),
+                  backgroundColor: Colors.black,
+                  minimumSize: const Size.fromHeight(50)),
+              onPressed:
+                  Provider.of<AddServiceManipulator>(context, listen: false)
+                          .addedService
+                          .isNotEmpty
+                      ? () async {
+                          setState(() {
+                            _adderviceFutureFunction = addServiceRequest();
+                          });
+                          _adderviceFutureFunction;
+                        }
+                      : null,
+              child: const Text(
+                'Continue',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
             ),
           )
         ],

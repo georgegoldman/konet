@@ -3,14 +3,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:curnect/src/widgets/appbar.dart';
-import 'package:curnect/src/widgets/formFields/formFields.dart';
-import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
+import '../common_widgets/appbar.dart';
+import '../common_widgets/formFields/formFields.dart';
+import '../common_widgets/snackBar/ErrorMessage.dart';
 import '../services/user.dart';
 import '../state_manager/add_service_manipulator.dart';
 import '../style/animation/loading_gif.dart';

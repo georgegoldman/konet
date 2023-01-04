@@ -4,15 +4,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:curnect/src/customException/unsuccessfulRequestException.dart';
-import 'package:curnect/src/widgets/formFields/formFields.dart';
-import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 
+import '../../common_widgets/appbar.dart';
+import '../../common_widgets/formFields/formFields.dart';
+import '../../common_widgets/snackBar/ErrorMessage.dart';
 import '../../services/user.dart';
 import '../../style/animation/loading_gif.dart';
-import '../../widgets/appbar.dart';
 
 class EnterEmail extends StatefulWidget {
   const EnterEmail({super.key});

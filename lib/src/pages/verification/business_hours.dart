@@ -6,14 +6,14 @@ import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/state_manager/add_service_manipulator.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
-import 'package:curnect/src/widgets/emptyLoader.dart';
-import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-import '../../widgets/appbar.dart';
-import '../../widgets/unauthenticatedPageHeader.dart';
+import '../../common_widgets/appbar.dart';
+import '../../common_widgets/emptyLoader.dart';
+import '../../common_widgets/snackBar/ErrorMessage.dart';
+import '../../common_widgets/unauthenticatedPageHeader.dart';
 
 String title =
     'Business hours are the hours during the day in which business is commonly conducted. Typical business hours vary widely by country. By observing common informal standards for business hours, workers may communicate with each other more easily and find a convenient divide between work life and home life.';
@@ -122,32 +122,36 @@ class _BusinessHoursState extends State<BusinessHours> with ErrorSnackBar {
             .preferredSize(),
         body: businessHourWidget(),
         persistentFooterButtons: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
-                ),
-                backgroundColor: Colors.black,
-                minimumSize: const Size.fromHeight(50)),
-            onPressed: days['sunday']!['on'] ||
-                    days['monday']!['on'] ||
-                    days['tuesday']!['on'] ||
-                    days['wednesday']!['on'] ||
-                    days['thursday']!['on'] ||
-                    days['friday']!['on'] ||
-                    days['saturday']!['on']
-                ? () async {
-                    setState(() {
-                      _businessHour = businessHourRequest();
-                    });
-                    _businessHour;
-                    // debugPrint("this is the ouput of the program");
-                    // debugPrint(successful.toString());
-                  }
-                : null,
-            child: const Text(
-              'Continue',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.04),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                  ),
+                  backgroundColor: Colors.black,
+                  minimumSize: const Size.fromHeight(50)),
+              onPressed: days['sunday']!['on'] ||
+                      days['monday']!['on'] ||
+                      days['tuesday']!['on'] ||
+                      days['wednesday']!['on'] ||
+                      days['thursday']!['on'] ||
+                      days['friday']!['on'] ||
+                      days['saturday']!['on']
+                  ? () async {
+                      setState(() {
+                        _businessHour = businessHourRequest();
+                      });
+                      _businessHour;
+                      // debugPrint("this is the ouput of the program");
+                      // debugPrint(successful.toString());
+                    }
+                  : null,
+              child: const Text(
+                'Continue',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
             ),
           )
         ],

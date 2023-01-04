@@ -5,16 +5,16 @@ import 'package:curnect/src/pages/verification/home_service_fee.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
-import 'package:curnect/src/widgets/emptyLoader.dart';
-import 'package:curnect/src/widgets/formFields/formFields.dart';
-import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
+import '../../common_widgets/appbar.dart';
+import '../../common_widgets/emptyLoader.dart';
+import '../../common_widgets/formFields/formFields.dart';
+import '../../common_widgets/snackBar/ErrorMessage.dart';
+import '../../common_widgets/unauthenticatedPageHeader.dart';
 import '../../state_manager/add_service_manipulator.dart';
-import '../../widgets/appbar.dart';
-import '../../widgets/unauthenticatedPageHeader.dart';
 
 class ValidateAddress extends StatefulWidget {
   final Map<String, String> addresses;
@@ -50,31 +50,69 @@ class _ValidateAddressState extends State<ValidateAddress>
             .preferredSize(),
         body: validateAddressForm(),
         persistentFooterButtons: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.04),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                      ),
+                      backgroundColor: Colors.white,
+                      minimumSize: const Size.fromHeight(50)),
+                  onPressed: () {
+                    setState(() {
+                      _streetOneController.text = '';
+                      _streetTwoController.text = '';
+                      _zipController.text = '';
+                      _cityController.text = '';
+                      _stateMarkController.text = '';
+                      _countryController.text = '';
+                    });
+                  },
+                  child: const Text(
+                    'Reset',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                        color: Colors.redAccent),
+                  ),
                 ),
-                backgroundColor: Colors.black,
-                minimumSize: const Size.fromHeight(50)),
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                changeFutureBuilderState();
-                // var validatingAddressFromMap =
-                //     await validateAddressRequest();
-                // debugPrint('the truth');
-                // debugPrint(validatingAddressFromMap.toString());
-                setState(() {
-                  _validateAddress = verifyAddresss();
-                });
-                _validateAddress;
-              } else {
-                null;
-              }
-            },
-            child: const Text(
-              'Continue',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                      ),
+                      backgroundColor: Colors.black,
+                      minimumSize: const Size.fromHeight(50)),
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      changeFutureBuilderState();
+                      // var validatingAddressFromMap =
+                      //     await validateAddressRequest();
+                      // debugPrint('the truth');
+                      // debugPrint(validatingAddressFromMap.toString());
+                      setState(() {
+                        _validateAddress = verifyAddresss();
+                      });
+                      _validateAddress;
+                    } else {
+                      null;
+                    }
+                  },
+                  child: const Text(
+                    'Continue',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                  ),
+                ),
+              ],
             ),
           )
         ],
@@ -255,36 +293,6 @@ class _ValidateAddressState extends State<ValidateAddress>
             Text(
               errorMessage.toString(),
               style: const TextStyle(color: Colors.redAccent),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.01,
-                  bottom: MediaQuery.of(context).size.height * 0.01),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
-                    ),
-                    backgroundColor: Colors.white,
-                    minimumSize: const Size.fromHeight(50)),
-                onPressed: () {
-                  setState(() {
-                    _streetOneController.text = '';
-                    _streetTwoController.text = '';
-                    _zipController.text = '';
-                    _cityController.text = '';
-                    _stateMarkController.text = '';
-                    _countryController.text = '';
-                  });
-                },
-                child: const Text(
-                  'Reset',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.redAccent),
-                ),
-              ),
             ),
           ],
         )

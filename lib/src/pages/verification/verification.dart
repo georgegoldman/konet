@@ -5,18 +5,18 @@ import 'package:curnect/src/pages/verification/publish_profile.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
-import 'package:curnect/src/widgets/emptyLoader.dart';
-import 'package:curnect/src/widgets/formFields/formFields.dart';
-import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
+import '../../common_widgets/appbar.dart';
+import '../../common_widgets/emptyLoader.dart';
+import '../../common_widgets/formFields/formFields.dart';
+import '../../common_widgets/snackBar/ErrorMessage.dart';
+import '../../common_widgets/unauthenticatedPageHeader.dart';
 import '../../state_manager/add_service_manipulator.dart';
-import '../../widgets/appbar.dart';
-import '../../widgets/unauthenticatedPageHeader.dart';
 
 class Verification extends StatefulWidget {
   const Verification({super.key});
@@ -178,27 +178,31 @@ class _VerificationState extends State<Verification>
           ),
         ),
         persistentFooterButtons: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
-                ),
-                backgroundColor: Colors.black,
-                minimumSize: const Size.fromHeight(50)),
-            //check if the validation is successful
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                setState(() {
-                  _verificationFUture = verificationFunc();
-                });
-                _verificationFUture;
-              } else {
-                return;
-              }
-            },
-            child: const Text(
-              'Continue',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.04),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                  ),
+                  backgroundColor: Colors.black,
+                  minimumSize: const Size.fromHeight(50)),
+              //check if the validation is successful
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  setState(() {
+                    _verificationFUture = verificationFunc();
+                  });
+                  _verificationFUture;
+                } else {
+                  return;
+                }
+              },
+              child: const Text(
+                'Continue',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
             ),
           )
         ],

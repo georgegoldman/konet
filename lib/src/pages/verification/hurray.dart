@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../widgets/appbar.dart';
+import '../../common_widgets/appbar.dart';
 
 String title = '';
 
@@ -55,20 +55,24 @@ class Hurray extends StatelessWidget {
         )),
       ]),
       persistentFooterButtons: [
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12), // <-- Radius
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.04),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                ),
+                backgroundColor: Colors.black,
+                minimumSize: const Size.fromHeight(50)),
+            //check if the validation is successful
+            onPressed: () => debugPrint("moivng on"),
+            child: const Text(
+              'Explore',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
               ),
-              backgroundColor: Colors.black,
-              minimumSize: const Size.fromHeight(50)),
-          //check if the validation is successful
-          onPressed: () => debugPrint("moivng on"),
-          child: const Text(
-            'Explore',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20.0,
             ),
           ),
         )

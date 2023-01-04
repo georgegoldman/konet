@@ -1,13 +1,13 @@
 import 'package:curnect/src/pages/verification/hurray.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
-import 'package:curnect/src/widgets/emptyLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common_widgets/appbar.dart';
+import '../../common_widgets/emptyLoader.dart';
+import '../../common_widgets/unauthenticatedPageHeader.dart';
 import '../../state_manager/add_service_manipulator.dart';
-import '../../widgets/appbar.dart';
-import '../../widgets/unauthenticatedPageHeader.dart';
 
 class PublishProfile extends StatefulWidget {
   const PublishProfile({super.key, this.restorationId});
@@ -144,38 +144,43 @@ class _PublishProfileState extends State<PublishProfile> with RestorationMixin {
             .preferredSize(),
         body: _body(),
         persistentFooterButtons: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
-                ),
-                backgroundColor: Colors.black,
-                minimumSize: const Size.fromHeight(50)),
-            //check if the validation is successful
-            onPressed: () {
-              //
-              setState(() {
-                _publish_future = publishProfile();
-              });
-              _publish_future!.then((value) {
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.04),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                  ),
+                  backgroundColor: Colors.black,
+                  minimumSize: const Size.fromHeight(50)),
+              //check if the validation is successful
+              onPressed: () {
+                //
                 setState(() {
-                  publishDone = value;
+                  _publish_future = publishProfile();
                 });
-              }).whenComplete(() {
-                if (publishDone) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const Hurray();
-                  }));
-                } else {
-                  throw Exception("The publish proces was not successful");
-                }
-              });
-            },
-            child: const Text(
-              'Continue',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20.0,
+                _publish_future!.then((value) {
+                  setState(() {
+                    publishDone = value;
+                  });
+                }).whenComplete(() {
+                  if (publishDone) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const Hurray();
+                    }));
+                  } else {
+                    throw Exception("The publish proces was not successful");
+                  }
+                });
+              },
+              child: const Text(
+                'Continue',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                ),
               ),
             ),
           )

@@ -5,15 +5,15 @@ import 'dart:io';
 
 import 'package:curnect/src/services/base_service.dart';
 import 'package:curnect/src/services/user.dart';
-import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 import 'package:http/http.dart' as http;
 
+import '../../common_widgets/appbar.dart';
+import '../../common_widgets/snackBar/ErrorMessage.dart';
 import '../../customException/unsuccessfulRequestException.dart';
 import '../../style/animation/loading_gif.dart';
-import '../../widgets/appbar.dart';
 
 class GetYourCode extends StatefulWidget {
   final Map<String, dynamic>? userData;

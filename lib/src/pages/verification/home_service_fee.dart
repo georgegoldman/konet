@@ -3,17 +3,17 @@ import 'dart:io';
 
 import 'package:curnect/src/pages/verification/business_hours.dart';
 import 'package:curnect/src/routes/route_animation.dart';
-import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
+import '../../common_widgets/appbar.dart';
+import '../../common_widgets/emptyLoader.dart';
+import '../../common_widgets/snackBar/ErrorMessage.dart';
+import '../../common_widgets/unauthenticatedPageHeader.dart';
 import '../../services/user.dart';
 import '../../state_manager/add_service_manipulator.dart';
 import '../../style/animation/loading_gif.dart';
-import '../../widgets/appbar.dart';
-import '../../widgets/emptyLoader.dart';
-import '../../widgets/unauthenticatedPageHeader.dart';
 
 class GetHomeServiceFee extends StatefulWidget {
   const GetHomeServiceFee({super.key});
@@ -273,25 +273,29 @@ class _GetHomeServiceFeeState extends State<GetHomeServiceFee>
         ],
       )),
       persistentFooterButtons: [
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12), // <-- Radius
-              ),
-              backgroundColor: Colors.black,
-              minimumSize: const Size.fromHeight(50)),
-          onPressed: (_priceType != 'Enter price type' &&
-                  _maxTraveledDist != 'Select a mile distance')
-              ? () {
-                  setState(() {
-                    _homeServiceFuction = homeServiceAPI();
-                  });
-                  _homeServiceFuction;
-                }
-              : null,
-          child: const Text(
-            'Continue',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.04),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                ),
+                backgroundColor: Colors.black,
+                minimumSize: const Size.fromHeight(50)),
+            onPressed: (_priceType != 'Enter price type' &&
+                    _maxTraveledDist != 'Select a mile distance')
+                ? () {
+                    setState(() {
+                      _homeServiceFuction = homeServiceAPI();
+                    });
+                    _homeServiceFuction;
+                  }
+                : null,
+            child: const Text(
+              'Continue',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            ),
           ),
         )
       ],

@@ -1,14 +1,14 @@
-// ignore_for_file: file_names, empty_catches
+// ignore_for_file: file_names, empty_catches, prefer_const_constructors
 
-import 'package:curnect/src/widgets/emptyLoader.dart';
 import 'package:flutter/material.dart';
 
+import '../../common_widgets/appbar.dart';
+import '../../common_widgets/emptyLoader.dart';
+import '../../common_widgets/unauthenticatedPageHeader.dart';
 import '../../services/user.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../style/animation/loading_gif.dart';
-import '../../widgets/appbar.dart';
-import '../../widgets/unauthenticatedPageHeader.dart';
 
 class ResetPassword extends StatefulWidget {
   final String? id;

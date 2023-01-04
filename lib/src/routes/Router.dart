@@ -7,9 +7,9 @@ import 'package:curnect/src/pages/signup/SignupOne.dart';
 import 'package:curnect/src/pages/verification/select_category.dart';
 import 'package:curnect/src/style/animation/SlideInAnimation.dart';
 import 'package:curnect/src/style/onBoarding.dart';
-import 'package:curnect/src/widgets/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
+import '../common_widgets/splash_screen.dart';
 import '../pages/forgetPassword/resetPassword.dart';
 
 class Routing {

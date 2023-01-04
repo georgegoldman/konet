@@ -1,14 +1,14 @@
 // ignore_for_file: file_names
 
 import 'package:curnect/src/routes/route_animation.dart';
-import 'package:curnect/src/widgets/formFields/formFields.dart';
-import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_input_formatter/mask_input_formatter.dart';
 
-import '../../widgets/appbar.dart';
-import '../../widgets/unauthenticatedPageHeader.dart';
+import '../../common_widgets/appbar.dart';
+import '../../common_widgets/formFields/formFields.dart';
+import '../../common_widgets/snackBar/ErrorMessage.dart';
+import '../../common_widgets/unauthenticatedPageHeader.dart';
 import 'SignUpThree.dart';
 
 class SignupPageTwo extends StatefulWidget {
