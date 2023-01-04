@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:curnect/src/pages/verification/business_hours.dart';
@@ -62,8 +63,7 @@ class _GetHomeServiceFeeState extends State<GetHomeServiceFee>
           Navigator.of(context).push(
               RouteAnimation(Screen: const BusinessHours()).createRoute());
         } else {
-          sendErrorMessage(
-              'Opps', 'Something went wrong but it\'s your fault', context);
+          sendErrorMessage('Opps', json.decode(res.body)['error'], context);
         }
       });
     } on SocketException catch (_) {

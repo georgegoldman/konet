@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:curnect/src/customException/unsuccessfulRequestException.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/widgets/appbar.dart';
+import 'package:curnect/src/widgets/formFields/formFields.dart';
 import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,7 +22,8 @@ class SignupPageOne extends StatefulWidget {
   State<SignupPageOne> createState() => _SignupPageOneState();
 }
 
-class _SignupPageOneState extends State<SignupPageOne> with ErrorSnackBar {
+class _SignupPageOneState extends State<SignupPageOne>
+    with ErrorSnackBar, FormInputFields {
   final _formKey = GlobalKey<FormState>();
   bool isChecked = false;
   final TextEditingController _emailController = TextEditingController();
@@ -112,38 +114,7 @@ class _SignupPageOneState extends State<SignupPageOne> with ErrorSnackBar {
           children: <Widget>[
             FormField<String>(
               builder: (FormFieldState<String> state) {
-                return TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.done,
-                  controller: _emailController,
-                  style: const TextStyle(
-                    height: 1,
-                  ),
-                  decoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 12),
-                      labelStyle: TextStyle(color: Colors.black54),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 2, color: Color(0xFFE6B325))),
-                      label: Text("Email"),
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(
-                        Icons.email_outlined,
-                        color: Colors.black54,
-                      )),
-                  validator: (value) {
-                    if ((value == null || value.isEmpty)) {
-                      return 'Please fill in the field';
-                    } else if (!(RegExp(
-                            r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+')
-                        .hasMatch(value))) {
-                      return 'Please enter a valid email';
-                    } else {
-                      return null;
-                    }
-                  },
-                );
+                return email(_emailController);
               },
             ),
             const SizedBox(

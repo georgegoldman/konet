@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:curnect/src/services/user.dart';
@@ -48,7 +49,8 @@ class _UploadWorkspaceImageState extends State<UploadWorkspaceImage>
             Navigator.of(context)
                 .push(RouteAnimation(Screen: AddService()).createRoute());
           } else {
-            sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+            sendErrorMessage(
+                res.reasonPhrase.toString(), json.decode(res.body), context);
           }
         });
       } else {
@@ -61,7 +63,8 @@ class _UploadWorkspaceImageState extends State<UploadWorkspaceImage>
             Navigator.of(context)
                 .push(RouteAnimation(Screen: AddService()).createRoute());
           } else {
-            sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+            sendErrorMessage(
+                res.reasonPhrase.toString(), json.decode(res.body), context);
           }
         });
       }

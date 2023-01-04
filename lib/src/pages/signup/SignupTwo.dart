@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:curnect/src/routes/route_animation.dart';
+import 'package:curnect/src/widgets/formFields/formFields.dart';
 import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,8 @@ class SignupPageTwo extends StatefulWidget {
   State<SignupPageTwo> createState() => _SignupPageTwoState();
 }
 
-class _SignupPageTwoState extends State<SignupPageTwo> with ErrorSnackBar {
+class _SignupPageTwoState extends State<SignupPageTwo>
+    with ErrorSnackBar, FormInputFields {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _businessNameController = TextEditingController();
@@ -59,29 +61,8 @@ class _SignupPageTwoState extends State<SignupPageTwo> with ErrorSnackBar {
                           MediaQuery.of(context).size.height * 0.012),
                       child: FormField<String>(
                           builder: (FormFieldState<String> state) {
-                        return TextFormField(
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter full name';
-                            }
-                            return null;
-                          },
-                          controller: _fullNameController,
-                          maxLength: 100,
-                          style: const TextStyle(height: 1),
-                          decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 12),
-                              label: Text("Full name"),
-                              labelStyle: TextStyle(color: Colors.black54),
-                              border: OutlineInputBorder(),
-                              hintText: 'Kalu Ayoola Garba',
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 2.0, color: Color(0xFFE6B325)))),
-                          textInputAction: TextInputAction.done,
-                          keyboardType: TextInputType.name,
-                        );
+                        return textInput(_fullNameController, "full name", 100,
+                            'john doe', 1, TextInputType.name, true);
                       }),
                     ),
                     Padding(
@@ -92,28 +73,8 @@ class _SignupPageTwoState extends State<SignupPageTwo> with ErrorSnackBar {
                           MediaQuery.of(context).size.height * 0.025),
                       child: FormField<String>(
                           builder: (FormFieldState<String> state) {
-                        return TextFormField(
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter full name';
-                            }
-                            return null;
-                          },
-                          controller: _businessNameController,
-                          style: const TextStyle(height: 1),
-                          maxLength: 100,
-                          decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 12),
-                              label: Text("Business name"),
-                              labelStyle: TextStyle(color: Colors.black54),
-                              border: OutlineInputBorder(),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 2, color: Color(0xFFE6B325)))),
-                          textInputAction: TextInputAction.done,
-                          keyboardType: TextInputType.name,
-                        );
+                        return textInput(_businessNameController, 'business',
+                            100, 'business', 1, TextInputType.name, false);
                       }),
                     ),
                     Padding(
@@ -197,26 +158,14 @@ class _SignupPageTwoState extends State<SignupPageTwo> with ErrorSnackBar {
                           MediaQuery.of(context).size.height * 0.0),
                       child: FormField<String>(
                           builder: (FormFieldState<String> state) {
-                        return TextFormField(
-                          validator: (value) {
-                            return null;
-                          },
-                          controller: _referalCodeController,
-                          minLines: 1,
-                          style: const TextStyle(height: 1),
-                          decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 12),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 2, color: Color(0xFFE6B325))),
-                              label: Text("Referral code"),
-                              labelStyle: TextStyle(color: Colors.black54),
-                              border: OutlineInputBorder(),
-                              hintText: 'Have a referral Code? (optional)'),
-                          textInputAction: TextInputAction.done,
-                          keyboardType: TextInputType.name,
-                        );
+                        return textInput(
+                            _referalCodeController,
+                            'referral code',
+                            null,
+                            'have a referral code? (optional)',
+                            1,
+                            TextInputType.name,
+                            false);
                       }),
                     ),
                   ],

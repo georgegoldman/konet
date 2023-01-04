@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:curnect/src/customException/unsuccessfulRequestException.dart';
+import 'package:curnect/src/widgets/formFields/formFields.dart';
 import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -20,7 +21,8 @@ class EnterEmail extends StatefulWidget {
   State<EnterEmail> createState() => _EnterEmailState();
 }
 
-class _EnterEmailState extends State<EnterEmail> with ErrorSnackBar {
+class _EnterEmailState extends State<EnterEmail>
+    with ErrorSnackBar, FormInputFields {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _verifyEmailController = TextEditingController();
   Future<void>? _checkEmail;
@@ -122,39 +124,7 @@ class _EnterEmailState extends State<EnterEmail> with ErrorSnackBar {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          TextFormField(
-            controller: _verifyEmailController,
-            keyboardType: TextInputType.emailAddress,
-            onChanged: (value) {
-              setState(() {});
-              // _emailController.text = value;
-            },
-            validator: (value) {
-              if ((value == null || value.isEmpty)) {
-                return 'Please fill in the field';
-              } else if (!(RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+')
-                  .hasMatch(value))) {
-                return 'Please enter a valid email';
-              } else {
-                return null;
-              }
-            },
-            style: const TextStyle(
-              height: 1,
-            ),
-            decoration: const InputDecoration(
-              labelText: 'Email',
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
-              labelStyle: TextStyle(color: Colors.black54),
-              border: OutlineInputBorder(),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 2, color: Color(0xFFE6B325))),
-              suffix: Icon(
-                Icons.email_outlined,
-                color: Colors.black54,
-              ),
-            ),
-          ),
+          email(_verifyEmailController),
           const SizedBox(
             height: 27.0,
           ),

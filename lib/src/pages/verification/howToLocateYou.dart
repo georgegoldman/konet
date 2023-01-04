@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +49,8 @@ class _HowToLocateYouState extends State<HowToLocateYou> with ErrorSnackBar {
           Navigator.of(context).push(
               RouteAnimation(Screen: const SearchPlacesScreen()).createRoute());
         } else {
-          sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+          sendErrorMessage(
+              res.reasonPhrase.toString(), json.decode(res.body), context);
         }
       });
     } catch (e) {}

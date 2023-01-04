@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:curnect/src/pages/verification/upload_workspace_image.dart';
@@ -102,7 +103,8 @@ class _BusinessHoursState extends State<BusinessHours> with ErrorSnackBar {
               RouteAnimation(Screen: const UploadWorkspaceImage())
                   .createRoute());
         } else {
-          sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+          sendErrorMessage(res.reasonPhrase.toString(),
+              json.decode(res.body)['error'], context);
         }
       });
     } on SocketException catch (_) {

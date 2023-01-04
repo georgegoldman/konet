@@ -97,7 +97,6 @@ class _SelectCategoryState extends State<SelectCategory> with ErrorSnackBar {
       late List<Map<String, int>> businessCategoryArray = [];
       Map<String, dynamic> body = {};
       //iterate through the list of category
-      print('ok');
       for (var x in categoryMap.keys) {
         for (var element in _selected) {
           // get selectd aervices
@@ -120,7 +119,8 @@ class _SelectCategoryState extends State<SelectCategory> with ErrorSnackBar {
             Navigator.of(context).push(
                 RouteAnimation(Screen: const HowToLocateYou()).createRoute());
           } else {
-            sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+            sendErrorMessage(
+                res.reasonPhrase.toString(), json.decode(res.body), context);
           }
         });
       } else {

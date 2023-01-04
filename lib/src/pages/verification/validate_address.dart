@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:curnect/src/pages/verification/home_service_fee.dart';
@@ -5,6 +6,7 @@ import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
 import 'package:curnect/src/widgets/emptyLoader.dart';
+import 'package:curnect/src/widgets/formFields/formFields.dart';
 import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +24,8 @@ class ValidateAddress extends StatefulWidget {
   State<ValidateAddress> createState() => _ValidateAddressState();
 }
 
-class _ValidateAddressState extends State<ValidateAddress> with ErrorSnackBar {
+class _ValidateAddressState extends State<ValidateAddress>
+    with ErrorSnackBar, FormInputFields {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _streetOneController = TextEditingController();
   final TextEditingController _streetTwoController = TextEditingController();
@@ -121,7 +124,8 @@ class _ValidateAddressState extends State<ValidateAddress> with ErrorSnackBar {
           Navigator.of(context).push(
               RouteAnimation(Screen: const GetHomeServiceFee()).createRoute());
         } else {
-          sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+          sendErrorMessage(
+              res.reasonPhrase.toString(), json.decode(res.body), context);
         }
       });
     } on SocketException catch (_) {
@@ -170,29 +174,14 @@ class _ValidateAddressState extends State<ValidateAddress> with ErrorSnackBar {
                             MediaQuery.of(context).size.height * 0.03),
                         child: FormField<String>(
                             builder: (FormFieldState<String> state) {
-                          return TextFormField(
-                            controller: _streetOneController,
-                            textInputAction: TextInputAction.done,
-                            keyboardType: TextInputType.streetAddress,
-                            style: const TextStyle(
-                              height: 1,
-                            ),
-                            decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 12),
-                                label: Text("Street Address Line 1"),
-                                labelStyle: TextStyle(color: Colors.black54),
-                                border: OutlineInputBorder(),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 2.0, color: Color(0xFFE6B325)))),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a street address';
-                              }
-                              return null;
-                            },
-                          );
+                          return textInput(
+                              _streetOneController,
+                              'Street Address Line 1',
+                              null,
+                              'Street Address Line 1',
+                              1,
+                              TextInputType.streetAddress,
+                              true);
                         })),
                     Padding(
                         padding: EdgeInsets.fromLTRB(
@@ -202,23 +191,14 @@ class _ValidateAddressState extends State<ValidateAddress> with ErrorSnackBar {
                             MediaQuery.of(context).size.height * 0.03),
                         child: FormField<String>(
                             builder: (FormFieldState<String> state) {
-                          return TextField(
-                            textInputAction: TextInputAction.done,
-                            controller: _streetTwoController,
-                            keyboardType: TextInputType.streetAddress,
-                            style: const TextStyle(
-                              height: 1,
-                            ),
-                            decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 12),
-                                label: Text("Street Address Line 2"),
-                                labelStyle: TextStyle(color: Colors.black54),
-                                border: OutlineInputBorder(),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 2.0, color: Color(0xFFE6B325)))),
-                          );
+                          return textInput(
+                              _streetTwoController,
+                              'Street Address Line 2',
+                              null,
+                              'Street Address Line 2',
+                              1,
+                              TextInputType.streetAddress,
+                              false);
                         })),
                     Padding(
                         padding: EdgeInsets.fromLTRB(
@@ -228,23 +208,14 @@ class _ValidateAddressState extends State<ValidateAddress> with ErrorSnackBar {
                             MediaQuery.of(context).size.height * 0.03),
                         child: FormField<String>(
                             builder: (FormFieldState<String> state) {
-                          return TextFormField(
-                            controller: _zipController,
-                            textInputAction: TextInputAction.done,
-                            keyboardType: TextInputType.streetAddress,
-                            style: const TextStyle(
-                              height: 1,
-                            ),
-                            decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 12),
-                                label: Text("Zip code"),
-                                labelStyle: TextStyle(color: Colors.black54),
-                                border: OutlineInputBorder(),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 2.0, color: Color(0xFFE6B325)))),
-                          );
+                          return textInput(
+                              _zipController,
+                              'Zip code',
+                              null,
+                              'Zip code',
+                              1,
+                              TextInputType.streetAddress,
+                              false);
                         })),
                     Padding(
                         padding: EdgeInsets.fromLTRB(
@@ -254,29 +225,8 @@ class _ValidateAddressState extends State<ValidateAddress> with ErrorSnackBar {
                             MediaQuery.of(context).size.height * 0.03),
                         child: FormField<String>(
                             builder: (FormFieldState<String> state) {
-                          return TextFormField(
-                            controller: _cityController,
-                            textInputAction: TextInputAction.done,
-                            keyboardType: TextInputType.streetAddress,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a city';
-                              }
-                              return null;
-                            },
-                            style: const TextStyle(
-                              height: 1,
-                            ),
-                            decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 12),
-                                label: Text("City"),
-                                labelStyle: TextStyle(color: Colors.black54),
-                                border: OutlineInputBorder(),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 2.0, color: Color(0xFFE6B325)))),
-                          );
+                          return textInput(_cityController, 'City', null,
+                              'City', 1, TextInputType.streetAddress, false);
                         })),
                     Padding(
                         padding: EdgeInsets.fromLTRB(
@@ -286,29 +236,8 @@ class _ValidateAddressState extends State<ValidateAddress> with ErrorSnackBar {
                             MediaQuery.of(context).size.height * 0.03),
                         child: FormField<String>(
                             builder: (FormFieldState<String> state) {
-                          return TextFormField(
-                            controller: _stateMarkController,
-                            textInputAction: TextInputAction.done,
-                            keyboardType: TextInputType.streetAddress,
-                            style: const TextStyle(
-                              height: 1,
-                            ),
-                            decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 12),
-                                label: Text("State"),
-                                labelStyle: TextStyle(color: Colors.black54),
-                                border: OutlineInputBorder(),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 2.0, color: Color(0xFFE6B325)))),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a landmark';
-                              }
-                              return null;
-                            },
-                          );
+                          return textInput(_stateMarkController, 'State', null,
+                              'State', 1, TextInputType.streetAddress, true);
                         })),
                     Padding(
                         padding: EdgeInsets.fromLTRB(
@@ -318,29 +247,8 @@ class _ValidateAddressState extends State<ValidateAddress> with ErrorSnackBar {
                             MediaQuery.of(context).size.height * 0.01),
                         child: FormField<String>(
                             builder: (FormFieldState<String> state) {
-                          return TextFormField(
-                            controller: _countryController,
-                            textInputAction: TextInputAction.done,
-                            keyboardType: TextInputType.streetAddress,
-                            style: const TextStyle(
-                              height: 1,
-                            ),
-                            decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 12),
-                                label: Text("Country"),
-                                labelStyle: TextStyle(color: Colors.black54),
-                                border: OutlineInputBorder(),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 2.0, color: Color(0xFFE6B325)))),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a Country';
-                              }
-                              return null;
-                            },
-                          );
+                          return textInput(_countryController, 'Country', null,
+                              'Country', 1, TextInputType.streetAddress, true);
                         })),
                   ],
                 )),

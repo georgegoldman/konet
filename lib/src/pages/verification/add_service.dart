@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:curnect/src/pages/verification/verification.dart';
@@ -120,8 +121,7 @@ class _AddServiceState extends State<AddService> with ErrorSnackBar {
           Navigator.of(context)
               .push(RouteAnimation(Screen: const Verification()).createRoute());
         } else {
-          sendErrorMessage('Opps!',
-              'Something wrong occured but it is not your fault', context);
+          sendErrorMessage('Opps!', json.decode(res.body)['error'], context);
         }
       });
     } on SocketException catch (_) {

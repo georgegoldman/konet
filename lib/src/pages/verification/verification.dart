@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:curnect/src/pages/verification/publish_profile.dart';
@@ -5,6 +6,7 @@ import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/services/user.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
 import 'package:curnect/src/widgets/emptyLoader.dart';
+import 'package:curnect/src/widgets/formFields/formFields.dart';
 import 'package:curnect/src/widgets/snackBar/ErrorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -23,7 +25,8 @@ class Verification extends StatefulWidget {
   State<Verification> createState() => _VerificationState();
 }
 
-class _VerificationState extends State<Verification> with ErrorSnackBar {
+class _VerificationState extends State<Verification>
+    with ErrorSnackBar, FormInputFields {
   final _formKey = GlobalKey<FormState>();
   bool isChecked = false;
   final TextEditingController _ninController = TextEditingController();
@@ -57,7 +60,8 @@ class _VerificationState extends State<Verification> with ErrorSnackBar {
             Navigator.of(context).push(
                 RouteAnimation(Screen: const PublishProfile()).createRoute());
           } else {
-            sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+            sendErrorMessage(res.reasonPhrase.toString(),
+                json.decode(res.body)['error'], context);
           }
         });
       } else {
@@ -70,11 +74,14 @@ class _VerificationState extends State<Verification> with ErrorSnackBar {
             Navigator.of(context).push(
                 RouteAnimation(Screen: const PublishProfile()).createRoute());
           } else {
-            sendErrorMessage(res.reasonPhrase.toString(), res.body, context);
+            sendErrorMessage(res.reasonPhrase.toString(),
+                json.decode(res.body)['error'].toString(), context);
           }
         });
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -105,32 +112,8 @@ class _VerificationState extends State<Verification> with ErrorSnackBar {
                     children: <Widget>[
                       FormField<String>(
                         builder: (FormFieldState<String> state) {
-                          return TextFormField(
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.done,
-                            controller: _ninController,
-                            maxLength: 11,
-                            style: const TextStyle(height: 1),
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 12),
-                              labelStyle: TextStyle(color: Colors.black54),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 2, color: Color(0xFFE6B325))),
-                              label: Text("NIN"),
-                              border: OutlineInputBorder(),
-                            ),
-                            validator: (value) {
-                              if ((value == null || value.isEmpty)) {
-                                return 'Please fill in the field';
-                              } else if (value.length.toInt() != 11) {
-                                return "11 character required";
-                              } else {
-                                return null;
-                              }
-                            },
-                          );
+                          return textInput(_ninController, 'NIN', 11, 'NIN', 1,
+                              TextInputType.number, true);
                         },
                       ),
                       const SizedBox(
@@ -138,29 +121,14 @@ class _VerificationState extends State<Verification> with ErrorSnackBar {
                       ),
                       FormField<String>(
                         builder: (FormFieldState<String> state) {
-                          return TextFormField(
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.done,
-                            controller: _businessRegController,
-                            style: const TextStyle(height: 1),
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 12),
-                              labelStyle: TextStyle(color: Colors.black54),
-                              hintText: 'Business Reg. No',
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 2, color: Color(0xFFE6B325))),
-                              border: OutlineInputBorder(),
-                            ),
-                            // validator: (value) {
-                            //   if ((value == null || value.isEmpty)) {
-                            //     return 'Please fill in the field';
-                            //   } else {
-                            //     return null;
-                            //   }
-                            // },
-                          );
+                          return textInput(
+                              _businessRegController,
+                              'Business Reg. No',
+                              6,
+                              'Business Reg. No',
+                              1,
+                              TextInputType.text,
+                              false);
                         },
                       ),
                       const SizedBox(
