@@ -13,6 +13,9 @@ class Calender extends StatefulWidget {
 class _CalenderState extends State<Calender> with ApplicationBar {
   int _currentIndex = 0;
   final _pageController = PageController();
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
 
   @override
   void initState() {
@@ -40,7 +43,29 @@ class _CalenderState extends State<Calender> with ApplicationBar {
               child: TableCalendar(
                 firstDay: DateTime.utc(2010, 10, 16),
                 lastDay: DateTime.utc(2030, 3, 14),
-                focusedDay: DateTime.now(),
+                focusedDay: _focusedDay,
+                calendarFormat: _calendarFormat,
+                selectedDayPredicate: (day) {
+                  return isSameDay(_selectedDay, day);
+                },
+                onDaySelected: ((selectedDay, focusedDay) {
+                  if (!isSameDay(_selectedDay, selectedDay)) {
+                    setState(() {
+                      _selectedDay = selectedDay;
+                      _focusedDay = focusedDay;
+                    });
+                  }
+                }),
+                onFormatChanged: ((format) {
+                  if (_calendarFormat != format) {
+                    setState(() {
+                      _calendarFormat = format;
+                    });
+                  }
+                }),
+                onPageChanged: ((focusedDay) {
+                  _focusedDay = focusedDay;
+                }),
               ),
             ),
             Container(
