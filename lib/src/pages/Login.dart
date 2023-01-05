@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage>
           'user_id': json.decode(response.body)['success']['userId'],
           'loggedIn': response.statusCode,
         });
-        context.replace('/verify');
+        context.replace('/calendar');
       } else {
         sendErrorMessage("error", json.decode(response.body)['error'], context);
       }
