@@ -1,23 +1,31 @@
-// Copyright 2019 Aleksander Woźniak
-// SPDX-License-Identifier: Apache-2.0
-
 import 'dart:collection';
 
+import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-/// Example event class.
-class Event {
+class Event extends StatelessWidget {
+  final String name;
   final String title;
-
-  const Event(this.title);
+  final String time;
+  const Event(
+      {super.key, required this.name, required this.title, required this.time});
 
   @override
-  String toString() => title;
+  Widget build(BuildContext context) {
+    return Container();
+  }
 }
 
-/// Example events.
-///
-/// Using a [LinkedHashMap] is highly recommended if you decide to use a map.
+/// Example event class.
+// class Event  Widget {
+//   final String title;
+
+//   const Event(this.title);
+
+//   @override
+//   String toString() => title;
+// }
+
 final kEvents = LinkedHashMap<DateTime, List<Event>>(
   equals: isSameDay,
   hashCode: getHashCode,
@@ -26,11 +34,24 @@ final kEvents = LinkedHashMap<DateTime, List<Event>>(
 final _kEventSource = {
   for (var item in List.generate(50, (index) => index))
     DateTime.utc(kFirstDay.year, kFirstDay.month, item * 5): List.generate(
-        item % 4 + 1, (index) => Event('Event $item | ${index + 1}'))
+        item % 4 + 1,
+        (index) => Event(
+              title: 'Event $item | ${index + 1}',
+              name: 'John Doe',
+              time: '11:15am',
+            ))
 }..addAll({
     kToday: [
-      const Event('Today\'s Event 1'),
-      const Event('Today\'s Event 2'),
+      const Event(
+        title: 'Today\'s Event 1',
+        name: 'Jane Doe',
+        time: '8:20am',
+      ),
+      const Event(
+        title: 'Today\'s Event 2',
+        name: 'John Doe',
+        time: '6:30pm',
+      ),
     ],
   });
 

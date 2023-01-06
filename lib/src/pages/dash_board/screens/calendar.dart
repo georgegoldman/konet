@@ -72,6 +72,26 @@ class _CalendarState extends State<Calendar> {
     }
   }
 
+  void displayModalNavBar(String title, String name, String time) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext conte) {
+          return SizedBox(
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.task_alt_rounded),
+                  title: Text(
+                      'Appointment for $title booked by $name commencing at $time'),
+                )
+              ],
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -107,24 +127,36 @@ class _CalendarState extends State<Calendar> {
         const SizedBox(
           height: 8,
         ),
-        ValueListenableBuilder<List<Event>>(
-          valueListenable: _selectedEvents,
-          builder: (context, value, _) {
-            return ListView.builder(
-              itemCount: value.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 3),
-                  child: ListTile(
-                    leading: const Icon(Icons.person),
-                    title: Text('${value[index]}'),
-                    tileColor: Colors.grey[300],
-                    onTap: () => print('${value[index]}'),
-                  ),
-                );
-              },
-            );
-          },
+        Expanded(
+          child: ValueListenableBuilder<List<Event>>(
+            valueListenable: _selectedEvents,
+            builder: (context, value, _) {
+              return ListView.builder(
+                itemCount: value.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 12.0,
+                      vertical: 4.0,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 217, 217, 217)),
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: ListTile(
+                      onTap: () => displayModalNavBar(value[index].title,
+                          value[index].name, value[index].time),
+                      leading: const Icon(Icons.person),
+                      title: Text(value[index].name),
+                      subtitle: Text(value[index].title),
+                      trailing: Text(value[index].time),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
         ),
       ],
     );
