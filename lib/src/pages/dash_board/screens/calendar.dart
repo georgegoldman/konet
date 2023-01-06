@@ -76,20 +76,15 @@ class _CalendarState extends State<Calendar> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext conte) {
-          return Container(
-            decoration: const BoxDecoration(
-                borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(30.0))),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.task_alt_rounded),
-                  title: Text(
-                      'Appointment for $title booked by $name commencing at $time'),
-                )
-              ],
-            ),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.task_alt_rounded),
+                title: Text(
+                    'Appointment for $title booked by $name commencing at $time'),
+              )
+            ],
           );
         });
   }
