@@ -104,7 +104,6 @@ class _DashboardState extends State<Dashboard> with ApplicationBar {
         ),
       ),
       bottomNavigationBar: BottomNavyBar(
-        backgroundColor: Colors.black,
         selectedIndex: _currentIndex,
         onItemSelected: (index) {
           setState(() => _currentIndex = index);
@@ -114,35 +113,59 @@ class _DashboardState extends State<Dashboard> with ApplicationBar {
           BottomNavyBarItem(
             icon: const Icon(
               Icons.calendar_today,
-              color: Colors.white,
+              color: Colors.black,
             ),
-            inactiveColor: Colors.white70,
+            inactiveColor: Colors.black,
             activeColor: const Color(0xFFE6B325),
             title: const Text(
               'calendar',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.black),
             ),
           ),
           BottomNavyBarItem(
-              inactiveColor: Colors.white70,
+              inactiveColor: Colors.black,
               activeColor: const Color(0xFFE6B325),
-              icon: const Icon(Icons.card_travel),
-              title: const Text('work')),
+              icon: const Icon(
+                Icons.card_travel,
+                color: Colors.black,
+              ),
+              title: const Text(
+                'work',
+                style: TextStyle(color: Colors.black),
+              )),
           BottomNavyBarItem(
               activeColor: const Color(0xFFE6B325),
-              inactiveColor: Colors.white70,
-              icon: const Icon(Icons.messenger_outline_sharp),
-              title: const Text('chat')),
+              inactiveColor: Colors.black,
+              icon: const Icon(
+                Icons.messenger_outline_sharp,
+                color: Colors.black,
+              ),
+              title: const Text(
+                'chat',
+                style: TextStyle(color: Colors.black),
+              )),
           BottomNavyBarItem(
               activeColor: const Color(0xFFE6B325),
-              inactiveColor: Colors.white70,
-              icon: const Icon(Icons.calendar_view_day_outlined),
-              title: const Text('Service')),
+              inactiveColor: Colors.black,
+              icon: const Icon(
+                Icons.calendar_view_day_outlined,
+                color: Colors.black,
+              ),
+              title: const Text(
+                'Service',
+                style: TextStyle(color: Colors.black),
+              )),
           BottomNavyBarItem(
               activeColor: const Color(0xFFE6B325),
-              inactiveColor: Colors.white70,
-              icon: const Icon(Icons.bar_chart_rounded),
-              title: const Text('analytics'))
+              inactiveColor: Colors.black,
+              icon: const Icon(
+                Icons.bar_chart_rounded,
+                color: Colors.black,
+              ),
+              title: const Text(
+                'analytics',
+                style: TextStyle(color: Colors.black),
+              ))
         ],
         showElevation: false,
       ),

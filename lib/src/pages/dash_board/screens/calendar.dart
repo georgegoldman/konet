@@ -121,9 +121,11 @@ class _CalendarState extends State<Calendar> {
             _focusedDay = focusedDay;
           },
         ),
-        const SizedBox(
-          height: 8,
+        const ListTile(
+          leading: Icon(Icons.list),
+          title: Text("Today appointment list."),
         ),
+        const Divider(),
         Expanded(
           child: ValueListenableBuilder<List<Event>>(
             valueListenable: _selectedEvents,
@@ -144,7 +146,7 @@ class _CalendarState extends State<Calendar> {
                     child: ListTile(
                       onTap: () => displayModalNavBar(value[index].title,
                           value[index].name, value[index].time),
-                      leading: const Icon(Icons.person),
+                      leading: const Icon(Icons.account_circle),
                       title: Text(
                         value[index].name,
                         style: const TextStyle(fontWeight: FontWeight.bold),
