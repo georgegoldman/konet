@@ -1,18 +1,19 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:curnect/src/common_widgets/appBar/dashboardAppbar.dart';
+import 'package:curnect/src/pages/dash_board/screens/calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../utils/events.dart';
 
-class Calender extends StatefulWidget {
-  const Calender({super.key});
+class Dashboard extends StatefulWidget {
+  const Dashboard({super.key});
 
   @override
-  State<Calender> createState() => _CalenderState();
+  State<Dashboard> createState() => _DashboardState();
 }
 
-class _CalenderState extends State<Calender> with ApplicationBar {
+class _DashboardState extends State<Dashboard> with ApplicationBar {
   late final ValueNotifier<List<Event>> _selectedEvents;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
       .toggledOff; // Can be toggled on/off by longpressing a date
@@ -23,12 +24,6 @@ class _CalenderState extends State<Calender> with ApplicationBar {
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
-  @override
-  void initState() {
-    super.initState();
-    _selectedDay = _focusedDay;
-    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
-  }
 
   @override
   void dispose() {
@@ -92,67 +87,7 @@ class _CalenderState extends State<Calender> with ApplicationBar {
             setState(() => _currentIndex = index);
           },
           children: <Widget>[
-            Column(
-              children: [
-                TableCalendar<Event>(
-                  focusedDay: _focusedDay,
-                  firstDay: kFirstDay,
-                  lastDay: kLastDay,
-                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                  rangeStartDay: _rangeStart,
-                  rangeEndDay: _rangeEnd,
-                  calendarFormat: _calendarFormat,
-                  rangeSelectionMode: _rangeSelectionMode,
-                  eventLoader: _getEventsForDay,
-                  startingDayOfWeek: StartingDayOfWeek.monday,
-                  calendarStyle: const CalendarStyle(
-                    // Use `CalendarStyle` to customize the UI
-                    outsideDaysVisible: false,
-                  ),
-                  onDaySelected: _onDaySelected,
-                  onRangeSelected: _onRangeSelected,
-                  onFormatChanged: (format) {
-                    if (_calendarFormat != format) {
-                      setState(() {
-                        _calendarFormat = format;
-                      });
-                    }
-                  },
-                  onPageChanged: (focusedDay) {
-                    _focusedDay = focusedDay;
-                  },
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Expanded(
-                  child: ValueListenableBuilder<List<Event>>(
-                    valueListenable: _selectedEvents,
-                    builder: (context, value, _) {
-                      return ListView.builder(
-                        itemCount: value.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 12.0,
-                              vertical: 4.0,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: ListTile(
-                              onTap: () => print('${value[index]}'),
-                              title: Text('${value[index]}'),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
+            const Calendar(),
             Container(
               color: Colors.red,
             ),

@@ -10,7 +10,7 @@ import 'package:curnect/src/style/onBoarding.dart';
 import 'package:go_router/go_router.dart';
 
 import '../common_widgets/splash_screen.dart';
-import '../pages/dash_board/calender.dart';
+import '../pages/dash_board/dashboard.dart';
 import '../pages/forgetPassword/resetPassword.dart';
 
 class Routing {
@@ -84,7 +84,7 @@ class Routing {
             path: 'calendar',
             pageBuilder: (_, state) {
               return SlideInAnimation(
-                  key: state.pageKey, child: const Calender());
+                  key: state.pageKey, child: const Dashboard());
             },
           )
         ])
