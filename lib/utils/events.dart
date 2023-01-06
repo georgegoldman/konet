@@ -38,19 +38,19 @@ final _kEventSource = {
         (index) => Event(
               title: 'Event $item | ${index + 1}',
               name: 'John Doe',
-              time: '11:15am',
+              time: '11:15am - 1:00pm',
             ))
 }..addAll({
     kToday: [
       const Event(
         title: 'Today\'s Event 1',
         name: 'Jane Doe',
-        time: '8:20am',
+        time: '8:20am - 10:12am',
       ),
       const Event(
         title: 'Today\'s Event 2',
         name: 'John Doe',
-        time: '6:30pm',
+        time: '6:30pm - 11:40pm',
       ),
     ],
   });

@@ -14,7 +14,7 @@ class _CalendarState extends State<Calendar> {
   late final ValueNotifier<List<Event>> _selectedEvents;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
       .toggledOff; // Can be toggled on/off by longpressing a date
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   DateTime? _rangeStart;
@@ -145,7 +145,10 @@ class _CalendarState extends State<Calendar> {
                       onTap: () => displayModalNavBar(value[index].title,
                           value[index].name, value[index].time),
                       leading: const Icon(Icons.person),
-                      title: Text(value[index].name),
+                      title: Text(
+                        value[index].name,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       subtitle: Text(value[index].title),
                       trailing: Text(value[index].time),
                     ),
