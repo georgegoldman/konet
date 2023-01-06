@@ -146,7 +146,10 @@ class _CalendarState extends State<Calendar> {
                     child: ListTile(
                       onTap: () => displayModalNavBar(value[index].title,
                           value[index].name, value[index].time),
-                      leading: const Icon(Icons.account_circle),
+                      leading: Icon(
+                        Icons.account_circle,
+                        size: MediaQuery.of(context).size.height * 0.07,
+                      ),
                       title: Text(
                         value[index].name,
                         style: const TextStyle(fontWeight: FontWeight.bold),
