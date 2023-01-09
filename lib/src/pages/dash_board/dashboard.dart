@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:curnect/src/common_widgets/appBar/dashboardAppbar.dart';
 import 'package:curnect/src/pages/dash_board/screens/calendar.dart';
+import 'package:curnect/src/pages/dash_board/screens/service.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -88,9 +89,7 @@ class _DashboardState extends State<Dashboard> with ApplicationBar {
           },
           children: <Widget>[
             const Calendar(),
-            Container(
-              color: Colors.red,
-            ),
+            const Service(),
             Container(
               color: Colors.green,
             ),
@@ -130,7 +129,7 @@ class _DashboardState extends State<Dashboard> with ApplicationBar {
                 color: Colors.black,
               ),
               title: const Text(
-                'work',
+                'services',
                 style: TextStyle(color: Colors.black),
               )),
           BottomNavyBarItem(
