@@ -157,11 +157,11 @@ class _DashboardAddServiceState extends State<DashboardAddService>
             child: const Text('Settings'),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: Column(children: [
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(children: const [
               ListTile(
                 title: Text('Service color'),
-                trailing: const Icon(
+                trailing: Icon(
                   Icons.color_lens_rounded,
                   color: Colors.blueAccent,
                 ),
