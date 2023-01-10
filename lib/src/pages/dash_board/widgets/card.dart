@@ -44,11 +44,11 @@ class ServiceCard extends StatelessWidget {
                         ),
                         IconButton(
                           onPressed: () => print('Edit'),
-                          icon: Icon(Icons.edit_note_rounded),
+                          icon: const Icon(Icons.edit_note_rounded),
                         ),
                         IconButton(
                           onPressed: () => print('trash'),
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.delete_outline_outlined,
                             color: Colors.redAccent,
                           ),
