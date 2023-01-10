@@ -85,8 +85,8 @@ class _ServiceState extends State<Service> {
         ),
         body: const TabBarView(children: [
           ServiceCard(),
-          Icon(Icons.directions_transit),
-          Icon(Icons.directions_bike),
+          ServiceCard(),
+          ServiceCard(),
         ]),
         floatingActionButton: CircleAvatar(
           radius: 30,
