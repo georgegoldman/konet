@@ -18,14 +18,6 @@ class _DashboardAddServiceState extends State<DashboardAddService>
   String _serviceDuration = "service duration";
   int _defaultMinutes = 0;
 
-  static List<int> getMinutes() {
-    var minuteList = <int>[];
-    for (int min = 0; min <= 60; min++) {
-      minuteList.add(min);
-    }
-    return minuteList;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
