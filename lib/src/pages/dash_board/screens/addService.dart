@@ -35,7 +35,7 @@ class _DashboardAddServiceState extends State<DashboardAddService>
         foregroundColor: Colors.black,
       ),
       body: SafeArea(
-          child: Column(
+          child: ListView(
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 24),
