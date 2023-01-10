@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:curnect/src/pages/Login.dart';
+import 'package:curnect/src/pages/dash_board/screens/addService.dart';
 import 'package:curnect/src/pages/forgetPassword/enterEmail.dart';
 import 'package:curnect/src/pages/forgetPassword/enterPasscode.dart';
 import 'package:curnect/src/pages/signup/SignupOne.dart';
@@ -85,6 +86,14 @@ class Routing {
             pageBuilder: (_, state) {
               return SlideInAnimation(
                   key: state.pageKey, child: const Dashboard());
+            },
+          ),
+          GoRoute(
+            name: "dashboardaddservice",
+            path: 'dashboardaddservice',
+            pageBuilder: (_, state) {
+              return SlideInAnimation(
+                  key: state.pageKey, child: const DashboardAddService());
             },
           )
         ])
