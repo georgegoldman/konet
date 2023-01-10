@@ -1,3 +1,4 @@
+import 'package:curnect/src/pages/dash_board/widgets/card.dart';
 import 'package:flutter/material.dart';
 
 class Service extends StatefulWidget {
@@ -83,7 +84,7 @@ class _ServiceState extends State<Service> {
           elevation: 0,
         ),
         body: const TabBarView(children: [
-          Icon(Icons.directions_car),
+          ServiceCard(),
           Icon(Icons.directions_transit),
           Icon(Icons.directions_bike),
         ]),
