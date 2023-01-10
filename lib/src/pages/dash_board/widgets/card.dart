@@ -8,12 +8,13 @@ class ServiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       children: [
         Card(
           elevation: 3,
           clipBehavior: Clip.hardEdge,
           child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -38,7 +39,10 @@ class ServiceCard extends StatelessWidget {
                         ),
                         IconButton(
                           onPressed: () => print('trash'),
-                          icon: Icon(Icons.delete_outline_outlined),
+                          icon: Icon(
+                            Icons.delete_outline_outlined,
+                            color: Colors.redAccent,
+                          ),
                         ),
                       ],
                     )
