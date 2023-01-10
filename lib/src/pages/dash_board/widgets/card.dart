@@ -14,41 +14,36 @@ class ServiceCard extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           child: Padding(
             padding: EdgeInsets.all(10),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
+                Text('Hair die with cut'),
+                ElevatedButton(
+                  onPressed: () => print('you hit the elevated btn'),
+                  child: Text('Hair cut'),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Hair die with cut'),
-                    ElevatedButton(
-                      onPressed: () => print('you hit the elevated btn'),
-                      child: Text('Hair cut'),
-                    ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('NGN 3,000'),
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () => print('share'),
-                                icon: Icon(Icons.share),
-                              ),
-                              IconButton(
-                                onPressed: () => print('Edit'),
-                                icon: Icon(Icons.edit_note_rounded),
-                              ),
-                              IconButton(
-                                onPressed: () => print('trash'),
-                                icon: Icon(Icons.delete_outline_outlined),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
+                    Text('NGN 3,000'),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () => print('share'),
+                          icon: Icon(Icons.share),
+                        ),
+                        IconButton(
+                          onPressed: () => print('Edit'),
+                          icon: Icon(Icons.edit_note_rounded),
+                        ),
+                        IconButton(
+                          onPressed: () => print('trash'),
+                          icon: Icon(Icons.delete_outline_outlined),
+                        ),
+                      ],
                     )
                   ],
-                ),
+                )
               ],
             ),
           ),
