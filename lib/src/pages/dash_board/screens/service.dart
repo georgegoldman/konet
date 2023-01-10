@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
 
 class Service extends StatefulWidget {
   const Service({super.key});
@@ -17,36 +16,65 @@ class _ServiceState extends State<Service> {
         appBar: AppBar(
           backgroundColor: Colors.black12,
           bottom: PreferredSize(
-            preferredSize:
-                Size.fromHeight(MediaQuery.of(context).size.height * 0.03),
-            child: Padding(
+            preferredSize: const Size(50, 0),
+            child: Container(
               padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.05),
+                  bottom: MediaQuery.of(context).size.height * 0.01),
+              width: MediaQuery.of(context).size.width * 1,
               child: TabBar(
                   unselectedLabelColor: Colors.black,
                   indicatorSize: TabBarIndicatorSize.tab,
                   indicator: BoxDecoration(
                       borderRadius: BorderRadius.circular(40),
                       color: const Color(0xFFE6B325)),
+                  padding: const EdgeInsets.only(left: 3, right: 3),
                   tabs: [
-                    const Tab(
-                      icon: Icon(Icons.edit_off),
-                      text: 'service',
-                    ),
-                    Tab(
-                        child: TextButton.icon(
-                      onPressed: null,
-                      icon: const Icon(Icons.layers_outlined, size: 15),
-                      label: const Text('Bundle'),
-                    )),
-                    Tab(
-                      child: TextButton.icon(
-                        onPressed: null,
-                        icon: const Icon(
-                          Icons.add_to_photos_rounded,
-                          size: 15,
+                    Container(
+                      alignment: Alignment.center,
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      child: Tab(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Icon(Icons.edit_off),
+                              Text('service'),
+                            ],
+                          ),
                         ),
-                        label: const Text('addons'),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      child: Tab(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Icon(Icons.check_box_outline_blank_rounded),
+                              Text('bundle'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      child: Tab(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Icon(Icons.add),
+                              Text('addons'),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ]),
