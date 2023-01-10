@@ -11,17 +11,26 @@ class ServiceCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       children: [
         Card(
-          elevation: 3,
+          elevation: 14,
           clipBehavior: Clip.hardEdge,
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Hair die with cut'),
+                const Text(
+                  'Hair die with cut',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 ElevatedButton(
                   onPressed: () => print('you hit the elevated btn'),
-                  child: Text('Hair cut'),
+                  child: const Text('Hair cut'),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                    ),
+                    backgroundColor: Colors.blueAccent,
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
