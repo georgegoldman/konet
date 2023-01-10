@@ -143,7 +143,30 @@ class _DashboardAddServiceState extends State<DashboardAddService>
             width: 500,
             height: MediaQuery.of(context).size.width * 0.1,
             color: Colors.black12,
-            child: const Text('details'),
+            child: const Text('Details'),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 24),
+            alignment: Alignment.centerLeft,
+            width: 500,
+            height: MediaQuery.of(context).size.width * 0.1,
+            color: Colors.black12,
+            child: const Text('Settings'),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            child: Column(children: [
+              ListTile(
+                title: Text('Service color'),
+                trailing: const Icon(
+                  Icons.color_lens_rounded,
+                  color: Colors.blueAccent,
+                ),
+              )
+            ]),
           )
         ],
       )),
