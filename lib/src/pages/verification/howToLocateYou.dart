@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:curnect/src/services/user.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
