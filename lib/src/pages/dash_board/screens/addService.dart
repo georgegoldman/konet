@@ -216,7 +216,7 @@ class _DashboardAddServiceState extends State<DashboardAddService>
                   const SizedBox(
                     height: 15,
                   ),
-                  textInput(_description, 'description', null, 'optional', 2,
+                  textInput(_description, 'Option Description', null, '', 1,
                       TextInputType.multiline, true),
                 ]),
               ),

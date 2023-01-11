@@ -76,7 +76,6 @@ mixin FormInputFields<T extends StatefulWidget> on State<T> {
           hintText: hint,
           focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(width: 2.0, color: Color(0xFFE6B325)))),
-      textInputAction: TextInputAction.done,
       keyboardType: textInputType,
     );
   }
