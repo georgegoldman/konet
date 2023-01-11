@@ -226,36 +226,29 @@ class _DashboardAddServiceState extends State<DashboardAddService>
                   const SizedBox(
                     height: 15,
                   ),
-                  DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: 0, horizontal: 12),
-                          border: OutlineInputBorder(),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 2.0, color: Color(0xFFE6B325)))),
-                      isExpanded: true,
-                      items: <String>[
-                        '15m',
-                        '30m',
-                        '45m',
-                        '1hr',
-                        '1hr 30m',
-                        '2hr',
-                        '2hr 30m',
-                        '5hr',
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      hint: Text(_interval),
-                      onChanged: (value) {
-                        setState(() {
+                  FormField<String>(builder: (FormFieldState<String> state) {
+                    return DropdownButtonFormField(
+                        decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 12),
+                            border: const OutlineInputBorder(),
+                            label: Text(_interval),
+                            focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 2.0, color: Color(0xFFE6B325)))),
+                        isExpanded: true,
+                        items: <String>['10', '15', '20', '25']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        hint: const Text('15m'),
+                        onChanged: (value) {
                           _interval = value!;
                         });
-                      })
+                  })
                 ]),
               )
             ]),
