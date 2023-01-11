@@ -17,7 +17,7 @@ class _ServiceState extends State<Service> {
         appBar: AppBar(
           backgroundColor: Colors.black12,
           bottom: PreferredSize(
-            preferredSize: const Size(50, 0),
+            preferredSize: Size(50, MediaQuery.of(context).size.height * 0.03),
             child: Container(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).size.height * 0.01),
@@ -28,11 +28,14 @@ class _ServiceState extends State<Service> {
                   indicator: BoxDecoration(
                       borderRadius: BorderRadius.circular(40),
                       color: const Color(0xFFE6B325)),
-                  padding: const EdgeInsets.only(left: 3, right: 3),
+                  padding: const EdgeInsets.only(
+                    left: 3,
+                    right: 3,
+                  ),
                   tabs: [
                     Container(
                       alignment: Alignment.center,
-                      height: MediaQuery.of(context).size.height * 0.07,
+                      // height: MediaQuery.of(context).size.height * 0.07,
                       child: Tab(
                         child: Padding(
                           padding: const EdgeInsets.only(top: 2),
@@ -83,10 +86,14 @@ class _ServiceState extends State<Service> {
           ),
           elevation: 0,
         ),
-        body: const TabBarView(children: [
-          ServiceCard(),
-          Icon(Icons.directions_transit),
-          Icon(Icons.directions_bike),
+        body: TabBarView(children: [
+          Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.height * 0.01),
+            child: const ServiceCard(),
+          ),
+          const Icon(Icons.directions_transit),
+          const Icon(Icons.directions_bike),
         ]),
       ),
     );
