@@ -180,6 +180,7 @@ class _DashboardAddServiceState extends State<DashboardAddService>
                               onPressed: () {
                                 setState(() {
                                   currentColor = pickerColor;
+                                  print(currentColor);
                                   Navigator.of(context).pop();
                                 });
                               },
@@ -189,7 +190,10 @@ class _DashboardAddServiceState extends State<DashboardAddService>
                           ],
                         );
                       }),
-                  icon: const Icon(Icons.circle),
+                  icon: Icon(
+                    Icons.circle,
+                    color: pickerColor,
+                  ),
                 ),
               )
             ]),
