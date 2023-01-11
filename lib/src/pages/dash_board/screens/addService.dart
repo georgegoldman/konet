@@ -151,7 +151,7 @@ class _DashboardAddServiceState extends State<DashboardAddService>
             borderRadius: BorderRadius.circular(18),
             border: Border.all(color: Colors.black12),
           ),
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: const <Widget>[
