@@ -1,5 +1,6 @@
 import 'package:curnect/src/common_widgets/formFields/formFields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class DashboardAddService extends StatefulWidget {
   const DashboardAddService({super.key});
@@ -17,6 +18,15 @@ class _DashboardAddServiceState extends State<DashboardAddService>
   String _priceType = "Price Type";
   String _serviceDuration = "service duration";
   int _defaultMinutes = 0;
+
+  Color pickerColor = Color(0xff443a49);
+  Color currentColor = Color(0xff443a49);
+
+  void changeColor(Color color) {
+    setState(() {
+      pickerColor = color;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,12 +160,36 @@ class _DashboardAddServiceState extends State<DashboardAddService>
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(children: const [
+            child: Column(children: [
               ListTile(
-                title: Text('Service color'),
-                trailing: Icon(
-                  Icons.color_lens_rounded,
-                  color: Colors.blueAccent,
+                title: const Text('Service color'),
+                trailing: IconButton(
+                  onPressed: () => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Pick a color!'),
+                          content: SingleChildScrollView(
+                            child: ColorPicker(
+                              pickerColor: pickerColor,
+                              onColorChanged: changeColor,
+                            ),
+                          ),
+                          actions: <Widget>[
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                setState(() {
+                                  currentColor = pickerColor;
+                                  Navigator.of(context).pop();
+                                });
+                              },
+                              icon: const Icon(Icons.check),
+                              label: const Text('OK'),
+                            )
+                          ],
+                        );
+                      }),
+                  icon: const Icon(Icons.circle),
                 ),
               )
             ]),
