@@ -17,7 +17,7 @@ class _DashboardAddServiceState extends State<DashboardAddService>
   final TextEditingController _servicePrice = TextEditingController();
   String _priceType = "Price Type";
   String _serviceDuration = "service duration";
-  String _interval = 'interval';
+  String _interval = '15m';
   int _defaultMinutes = 0;
   final _formKey = GlobalKey<FormState>();
 
@@ -219,7 +219,7 @@ class _DashboardAddServiceState extends State<DashboardAddService>
                         _mobileService = value;
                       });
                     },
-                    title: Text('Mobile service'),
+                    title: const Text('Mobile service'),
                     controlAffinity: ListTileControlAffinity.trailing,
                     value: _mobileService,
                   ),
@@ -228,27 +228,37 @@ class _DashboardAddServiceState extends State<DashboardAddService>
                   ),
                   FormField<String>(builder: (FormFieldState<String> state) {
                     return DropdownButtonFormField(
-                        decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
+                        decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
                                 vertical: 0, horizontal: 12),
-                            border: const OutlineInputBorder(),
-                            label: Text(_interval),
-                            focusedBorder: const OutlineInputBorder(
+                            border: OutlineInputBorder(),
+                            label: Text('interval'),
+                            focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 2.0, color: Color(0xFFE6B325)))),
                         isExpanded: true,
-                        items: <String>['10', '15', '20', '25']
-                            .map<DropdownMenuItem<String>>((String value) {
+                        items: <String>[
+                          '15m',
+                          '30m',
+                          '45min',
+                          '1h',
+                          '1h-30m',
+                          '2h',
+                          '2h-30m',
+                          '5h',
+                        ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
                           );
                         }).toList(),
-                        hint: const Text('15m'),
                         onChanged: (value) {
                           _interval = value!;
                         });
-                  })
+                  }),
+                  const SizedBox(
+                    height: 25,
+                  )
                 ]),
               )
             ]),
