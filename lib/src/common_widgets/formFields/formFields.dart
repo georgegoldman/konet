@@ -72,10 +72,12 @@ mixin FormInputFields<T extends StatefulWidget> on State<T> {
               const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
           label: Text(label),
           labelStyle: const TextStyle(color: Colors.black54),
-          border: const OutlineInputBorder(),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(7)),
           hintText: hint,
-          focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(width: 2.0, color: Color(0xFFE6B325)))),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(7),
+            borderSide: const BorderSide(width: 2.0, color: Color(0xFFE6B325)),
+          )),
       keyboardType: textInputType,
     );
   }

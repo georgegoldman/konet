@@ -28,11 +28,14 @@ class _DashBoardDropDownFormFieldState
           decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
-              border: const OutlineInputBorder(),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(7)),
               label: Text(widget.label),
-              focusedBorder: const OutlineInputBorder(
-                  borderSide:
-                      BorderSide(width: 2.0, color: Color(0xFFE6B325)))),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(7),
+                borderSide:
+                    const BorderSide(width: 2.0, color: Color(0xFFE6B325)),
+              )),
           isExpanded: true,
           items: widget.items.map<DropdownMenuItem<dynamic>>((dynamic value) {
             return DropdownMenuItem<dynamic>(
