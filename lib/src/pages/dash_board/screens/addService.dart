@@ -21,6 +21,8 @@ class _DashboardAddServiceState extends State<DashboardAddService>
 
   Color pickerColor = Color(0xff443a49);
   Color currentColor = Color(0xff443a49);
+  bool _bookOnline = false;
+  bool _mobileService = false;
 
   void changeColor(Color color) {
     setState(() {
@@ -196,6 +198,56 @@ class _DashboardAddServiceState extends State<DashboardAddService>
                   ),
                 ),
               )
+              SwitchListTile(
+                onChanged: (value) {
+                  setState(() {
+                    _bookOnline = value;
+                  });
+                },
+                title: Text('Allow clients to book online'),
+                controlAffinity: ListTileControlAffinity.trailing,
+              ),
+              SwitchListTile(
+                onChanged: (value) {
+                  setState(() {
+                    _mobileService = value;
+                  });
+                },
+                title: Text('Mobile service'),
+                controlAffinity: ListTileControlAffinity.trailing,
+              ),
+              const SizedBox(
+            height: 15,
+          ),
+          DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 2.0, color: Color(0xFFE6B325)))),
+                  isExpanded: true,
+                  items: <String>[
+                    '15min','30min',
+                    '45min',
+                    '1hr',
+                    '1hr 30min',
+                    '2hr',
+                    '2hr 30min',
+                    '5hr',
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  hint: Text(_serviceDuration),
+                  onChanged: (value) {
+                    setState(() {
+                      _priceType = value!;
+                    });
+                  })
             ]),
           )
         ],
