@@ -1,4 +1,5 @@
 import 'package:curnect/src/common_widgets/formFields/formFields.dart';
+import 'package:curnect/src/pages/dash_board/screens/chat/screens/chatRoom.dart';
 import 'package:flutter/material.dart';
 
 class ChatBaseClass extends StatefulWidget {
@@ -12,42 +13,52 @@ class _ChatBaseClassState extends State<ChatBaseClass> with FormInputFields {
   final TextEditingController _searchController = TextEditingController();
   List<Map<String, String>> chatHistory = [
     {
+      "clientName": "Doyinsola michale",
       "image":
           "https://images.pexels.com/photos/6109504/pexels-photo-6109504.jpeg?auto=compress&cs=tinysrgb&w=400",
     },
     {
+      "clientName": "Yusuf Yusuf",
       "image":
           "https://images.pexels.com/photos/6109280/pexels-photo-6109280.jpeg?auto=compress&cs=tinysrgb&w=400",
     },
     {
+      "clientName": "Yusuf Micheal",
       "image":
           "https://images.pexels.com/photos/6109280/pexels-photo-6109280.jpeg?auto=compress&cs=tinysrgb&w=400",
     },
     {
+      "clientName": "Osas Junior",
       "image":
           "https://images.pexels.com/photos/7561910/pexels-photo-7561910.jpeg?auto=compress&cs=tinysrgb&w=400"
     },
     {
+      "clientName": "Thomson Bukola",
       "image":
           "https://images.pexels.com/photos/9409753/pexels-photo-9409753.jpeg?auto=compress&cs=tinysrgb&w=400"
     },
     {
+      "clientName": "Jide chinedu",
       "image":
           "https://images.pexels.com/photos/10415856/pexels-photo-10415856.jpeg?auto=compress&cs=tinysrgb&w=400"
     },
     {
+      "clientName": "Mmuojeku Ifunanya",
       "image":
           "https://images.pexels.com/photos/10083753/pexels-photo-10083753.jpeg?auto=compress&cs=tinysrgb&w=400"
     },
     {
+      "clientName": "Abraham Stephen",
       "image":
           "https://images.pexels.com/photos/6599705/pexels-photo-6599705.jpeg?auto=compress&cs=tinysrgb&w=400"
     },
     {
+      "clientName": "Theriza Patricia",
       "image":
           "https://images.pexels.com/photos/11696003/pexels-photo-11696003.jpeg?auto=compress&cs=tinysrgb&w=400"
     },
     {
+      "clientName": "Onyedikachh John",
       "image":
           "https://images.pexels.com/photos/14965546/pexels-photo-14965546.jpeg?auto=compress&cs=tinysrgb&w=400"
     },
@@ -158,13 +169,21 @@ class _ChatBaseClassState extends State<ChatBaseClass> with FormInputFields {
                       SizedBox(
                         height: 10,
                       ),
-                      Icon(
-                        Icons.circle,
-                        color: Colors.greenAccent,
+                      SizedBox(
+                        height: 30,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.black,
+                          child: Text('11'),
+                        ),
                       ),
                     ],
                   ),
-                  onTap: () => print('hi'),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ChatRoom(
+                                clientName: chatHistory[index]['clientName']!,
+                              ))),
                 ),
                 const Divider(),
               ],
