@@ -1,8 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:curnect/src/pages/Login.dart';
-import 'package:curnect/src/pages/dash_board/screens/addBundle.dart';
-import 'package:curnect/src/pages/dash_board/screens/addService.dart';
+import 'package:curnect/src/pages/dash_board/screens/service/widgets/addBundle.dart';
 import 'package:curnect/src/pages/forgetPassword/enterEmail.dart';
 import 'package:curnect/src/pages/forgetPassword/enterPasscode.dart';
 import 'package:curnect/src/pages/signup/SignupOne.dart';
@@ -13,7 +12,8 @@ import 'package:go_router/go_router.dart';
 
 import '../common_widgets/splash_screen.dart';
 import '../pages/dash_board/dashboard.dart';
-import '../pages/dash_board/screens/addAddOns.dart';
+import '../pages/dash_board/screens/service/widgets/addAddOns.dart';
+import '../pages/dash_board/screens/service/widgets/addService.dart';
 import '../pages/forgetPassword/resetPassword.dart';
 
 class Routing {

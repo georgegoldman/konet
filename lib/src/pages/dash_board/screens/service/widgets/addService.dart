@@ -7,7 +7,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../widgets/dashBoardForm/dropdownFormDash.dart';
+import '../../../widgets/dashBoardForm/dropdownFormDash.dart';
 
 class DashboardAddService extends StatefulWidget {
   const DashboardAddService({super.key});

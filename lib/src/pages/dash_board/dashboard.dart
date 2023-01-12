@@ -1,7 +1,8 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:curnect/src/common_widgets/appBar/dashboardAppbar.dart';
-import 'package:curnect/src/pages/dash_board/screens/calendar.dart';
-import 'package:curnect/src/pages/dash_board/screens/service.dart';
+import 'package:curnect/src/pages/dash_board/screens/calendar/calendar.dart';
+import 'package:curnect/src/pages/dash_board/screens/chat/chat.dart';
+import 'package:curnect/src/pages/dash_board/screens/service/service.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -14,7 +15,7 @@ class Dashboard extends StatefulWidget {
   State<Dashboard> createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard> with ApplicationBar {
+class _DashboardState extends State<Dashboard> {
   late final ValueNotifier<List<Event>> _selectedEvents;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
       .toggledOff; // Can be toggled on/off by longpressing a date
@@ -80,7 +81,6 @@ class _DashboardState extends State<Dashboard> with ApplicationBar {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: dashboardAppbar(),
       body: SizedBox.expand(
         child: PageView(
           controller: _pageController,
@@ -90,9 +90,7 @@ class _DashboardState extends State<Dashboard> with ApplicationBar {
           children: <Widget>[
             const Calendar(),
             const Service(),
-            Container(
-              color: Colors.green,
-            ),
+            const ChatBaseClass(),
             Container(
               color: Colors.blue,
             ),

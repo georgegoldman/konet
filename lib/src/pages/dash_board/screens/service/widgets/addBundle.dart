@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../common_widgets/formFields/formFields.dart';
-import '../widgets/dashBoardForm/dropdownFormDash.dart';
-import '../widgets/getWidget.dart';
+import '../../../../../common_widgets/formFields/formFields.dart';
+import '../../../widgets/dashBoardForm/dropdownFormDash.dart';
+import '../../../widgets/getWidget.dart';
 
 class AddBundle extends StatefulWidget {
   const AddBundle({super.key});

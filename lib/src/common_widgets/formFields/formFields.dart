@@ -81,4 +81,41 @@ mixin FormInputFields<T extends StatefulWidget> on State<T> {
       keyboardType: textInputType,
     );
   }
+
+  TextFormField searchField(
+      TextEditingController controller,
+      String label,
+      dynamic maxLength,
+      String hint,
+      int maxLines,
+      TextInputType textInputType,
+      bool requiredField) {
+    return TextFormField(
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          if (requiredField) {
+            return 'It is required';
+          }
+        }
+        return null;
+      },
+      controller: controller,
+      maxLength: maxLength,
+      maxLines: maxLines,
+      style: const TextStyle(height: 1),
+      decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+          label: Text(label),
+          labelStyle: const TextStyle(color: Colors.black54),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(27)),
+          hintText: hint,
+          prefixIcon: const Icon(Icons.search),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(27),
+            borderSide: const BorderSide(width: 2.0, color: Color(0xFFE6B325)),
+          )),
+      keyboardType: textInputType,
+    );
+  }
 }
