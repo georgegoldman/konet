@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:go_router/go_router.dart';
 
 class ServiceCard extends StatelessWidget {
-  const ServiceCard({super.key});
+  final String navigationEndPoint;
+  const ServiceCard({super.key, required this.navigationEndPoint});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +72,7 @@ class ServiceCard extends StatelessWidget {
             Icons.add,
             color: Colors.white,
           ),
-          onPressed: () => context.push('/dashboardaddservice'),
+          onPressed: () => context.push('/$navigationEndPoint'),
         ),
       ),
     );

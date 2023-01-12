@@ -90,10 +90,24 @@ class _ServiceState extends State<Service> {
           Padding(
             padding: EdgeInsets.symmetric(
                 vertical: MediaQuery.of(context).size.height * 0.01),
-            child: const ServiceCard(),
+            child: const ServiceCard(
+              navigationEndPoint: 'dashboardaddservice',
+            ),
           ),
-          const Icon(Icons.directions_transit),
-          const Icon(Icons.directions_bike),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.height * 0.01),
+            child: const ServiceCard(
+              navigationEndPoint: 'dashboardaddbunle',
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.height * 0.01),
+            child: const ServiceCard(
+              navigationEndPoint: 'dashboardaddbunle',
+            ),
+          ),
         ]),
       ),
     );
