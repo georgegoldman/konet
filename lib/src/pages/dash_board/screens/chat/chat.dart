@@ -20,9 +20,9 @@ class _ChatBaseClassState extends State<ChatBaseClass> with FormInputFields {
       ),
       body: SafeArea(
           child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        padding: const EdgeInsets.symmetric(vertical: 24),
         children: <Widget>[
-          Column(
+          Padding(padding: EdgeInsets.symmetric(horizontal: 24), child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
@@ -61,7 +61,7 @@ class _ChatBaseClassState extends State<ChatBaseClass> with FormInputFields {
                     ],
                   )
                 ],
-              ),
+              ),),
               const SizedBox(
                 height: 20,
               ),
@@ -69,14 +69,18 @@ class _ChatBaseClassState extends State<ChatBaseClass> with FormInputFields {
                   TextInputType.text, false)
             ],
           ),
+          SizedBox(
+            height: 15,
+          ),
           Column(
             children: <Widget>[
               ListTile(
                 leading: Container(
-                  width: 100,
+                  width: 60,
                   height: 100,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(7),
                       image: DecorationImage(
                           image: NetworkImage(
                               'https://images.pexels.com/photos/301367/pexels-photo-301367.jpeg?auto=compress&cs=tinysrgb&w=400'),
@@ -88,10 +92,16 @@ class _ChatBaseClassState extends State<ChatBaseClass> with FormInputFields {
                 ),
                 subtitle: const Text('Am coming over for home'),
                 trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: const <Widget>[
                     Text('16:45'),
-                    Icon(Icons.circle),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Icon(
+                      Icons.circle,
+                      color: Colors.greenAccent,
+                    ),
                   ],
                 ),
                 onTap: () => print('hi'),
