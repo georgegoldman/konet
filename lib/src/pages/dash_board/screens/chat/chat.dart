@@ -14,110 +14,81 @@ class _ChatBaseClassState extends State<ChatBaseClass> with FormInputFields {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 3,
+        leading: Padding(
+          padding: const EdgeInsets.all(7),
+          child: Container(
+            decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: NetworkImage(
+                        'https://images.pexels.com/photos/301367/pexels-photo-301367.jpeg?auto=compress&cs=tinysrgb&w=400'),
+                    fit: BoxFit.fill)),
+          ),
+        ),
+        title: const Text(
+          'chat',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.black,
+            child: IconButton(
+              icon: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              onPressed: () => print('loading contacts...'),
+            ),
+          )
+        ],
+        foregroundColor: Colors.black,
         elevation: 0,
         backgroundColor: Colors.grey[300],
       ),
       body: SafeArea(
-          child: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 24),
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 100,
+          child: ListView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 0),
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              ListTile(
+                leading: Container(
+                  width: 60,
                   height: 100,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
+                  decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(7),
+                      image: const DecorationImage(
                           image: NetworkImage(
                               'https://images.pexels.com/photos/301367/pexels-photo-301367.jpeg?auto=compress&cs=tinysrgb&w=400'),
                           fit: BoxFit.fill)),
                 ),
-                const SizedBox(
-                  height: 15,
+                title: const Text(
+                  'Chiwendu Michael',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Column(
-                  children: <Widget>[
-                    const Text(
-                      'Clinton Paul',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
+                subtitle: const Text('Am coming over for home'),
+                trailing: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const <Widget>[
+                    Text('16:45'),
+                    SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const <Widget>[
-                        Text(
-                          'Brand Name:',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text('Paulo Cosmetics')
-                      ],
-                    )
+                    Icon(
+                      Icons.circle,
+                      color: Colors.greenAccent,
+                    ),
                   ],
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                searchField(_searchController, 'Search', null, '', 1,
-                    TextInputType.text, false)
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Column(
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  ListTile(
-                    leading: Container(
-                      width: 60,
-                      height: 100,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(7),
-                          image: const DecorationImage(
-                              image: NetworkImage(
-                                  'https://images.pexels.com/photos/301367/pexels-photo-301367.jpeg?auto=compress&cs=tinysrgb&w=400'),
-                              fit: BoxFit.fill)),
-                    ),
-                    title: const Text(
-                      'Chiwendu Michael',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: const Text('Am coming over for home'),
-                    trailing: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const <Widget>[
-                        Text('16:45'),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Icon(
-                          Icons.circle,
-                          color: Colors.greenAccent,
-                        ),
-                      ],
-                    ),
-                    onTap: () => print('hi'),
-                  ),
-                  Divider(),
-                ],
-              )
+                onTap: () => print('hi'),
+              ),
+              Divider(),
             ],
-          ),
-        ],
+          );
+        },
       )),
     );
   }
