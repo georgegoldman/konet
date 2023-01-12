@@ -54,6 +54,7 @@ class _AddAddonsState extends State<AddAddons>
                       const SizedBox(
                         height: 15,
                       ),
+                      textInput(_addOnAmount, 'Amount', maxLength, hint, maxLines, textInputType, requiredField)
                     ]),
                   )
                 ],
