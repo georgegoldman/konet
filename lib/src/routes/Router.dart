@@ -13,6 +13,7 @@ import 'package:go_router/go_router.dart';
 
 import '../common_widgets/splash_screen.dart';
 import '../pages/dash_board/dashboard.dart';
+import '../pages/dash_board/screens/addAddOns.dart';
 import '../pages/forgetPassword/resetPassword.dart';
 
 class Routing {
@@ -103,6 +104,14 @@ class Routing {
             pageBuilder: (_, state) {
               return SlideInAnimation(
                   key: state.pageKey, child: const AddBundle());
+            },
+          ),
+          GoRoute(
+            name: "dashboardaddaddons",
+            path: 'dashboardaddaddons',
+            pageBuilder: (_, state) {
+              return SlideInAnimation(
+                  key: state.pageKey, child: const AddAddons());
             },
           )
         ])

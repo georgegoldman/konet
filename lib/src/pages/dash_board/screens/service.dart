@@ -105,7 +105,7 @@ class _ServiceState extends State<Service> {
             padding: EdgeInsets.symmetric(
                 vertical: MediaQuery.of(context).size.height * 0.01),
             child: const ServiceCard(
-              navigationEndPoint: 'dashboardaddbunle',
+              navigationEndPoint: 'dashboardaddaddons',
             ),
           ),
         ]),
