@@ -18,9 +18,9 @@ class _ChatBaseClassState extends State<ChatBaseClass> with FormInputFields {
           "https://images.pexels.com/photos/6109504/pexels-photo-6109504.jpeg?auto=compress&cs=tinysrgb&w=400",
     },
     {
-      "clientName": "Yusuf Yusuf",
+      "clientName": "Jenifer Bill",
       "image":
-          "https://images.pexels.com/photos/6109280/pexels-photo-6109280.jpeg?auto=compress&cs=tinysrgb&w=400",
+          "https://images.pexels.com/photos/2381069/pexels-photo-2381069.jpeg?auto=compress&cs=tinysrgb&w=400",
     },
     {
       "clientName": "Yusuf Micheal",
@@ -121,9 +121,9 @@ class _ChatBaseClassState extends State<ChatBaseClass> with FormInputFields {
                           image: NetworkImage(chatHistory.first['image']!),
                           fit: BoxFit.fill)),
                 ),
-                title: const Text(
-                  'Chiwendu Michael',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                title: Text(
+                  chatHistory.first['clientName']!,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: const Text('Am coming over for home'),
                 trailing: Column(
@@ -148,18 +148,13 @@ class _ChatBaseClassState extends State<ChatBaseClass> with FormInputFields {
             return Column(
               children: [
                 ListTile(
-                  leading: Container(
-                    width: 50,
-                    height: 100,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: NetworkImage(chatHistory[index]['image']!),
-                            fit: BoxFit.fill)),
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(chatHistory[index]['image']!),
+                    maxRadius: 20,
                   ),
-                  title: const Text(
-                    'Chiwendu Michael',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  title: Text(
+                    chatHistory[index]['clientName']!,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: const Text('Am coming over for home'),
                   trailing: Column(
@@ -183,6 +178,7 @@ class _ChatBaseClassState extends State<ChatBaseClass> with FormInputFields {
                       MaterialPageRoute(
                           builder: (context) => ChatRoom(
                                 clientName: chatHistory[index]['clientName']!,
+                                clientImage: chatHistory[index]['image']!,
                               ))),
                 ),
                 const Divider(),
