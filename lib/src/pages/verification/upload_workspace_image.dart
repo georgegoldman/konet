@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:curnect/src/state_manager/add_service_manipulator.dart';
+import 'package:curnect/utils/add_service_manipulator.dart';
 import 'package:http/http.dart' as http;
 
 import '../../common_widgets/appbar.dart';

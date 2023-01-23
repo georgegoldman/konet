@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../common_widgets/appbar.dart';
 import '../../common_widgets/emptyLoader.dart';
 import '../../common_widgets/unauthenticatedPageHeader.dart';
-import '../../state_manager/add_service_manipulator.dart';
+import '../../../utils/add_service_manipulator.dart';
 
 class PublishProfile extends StatefulWidget {
   const PublishProfile({super.key, this.restorationId});

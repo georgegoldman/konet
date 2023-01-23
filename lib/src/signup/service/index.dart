@@ -6,4 +6,8 @@ class SignupService extends User {
 
   Future<void> checkUserEmail(String email, String url, BuildContext context) =>
       checkEmail(email, url, context);
+
+  Future<void> signUpUserAccount(
+          Map<String, String> body, String url, BuildContext context) =>
+      signUpRequest(body, url, context);
 }

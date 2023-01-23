@@ -14,7 +14,7 @@ import '../../common_widgets/emptyLoader.dart';
 import '../../common_widgets/formFields/formFields.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
 import '../../common_widgets/unauthenticatedPageHeader.dart';
-import '../../state_manager/add_service_manipulator.dart';
+import '../../../utils/add_service_manipulator.dart';
 
 class ValidateAddress extends StatefulWidget {
   final Map<String, String> addresses;

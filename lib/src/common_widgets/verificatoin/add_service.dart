@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../state_manager/add_service_manipulator.dart';
+import '../../../utils/add_service_manipulator.dart';
 
 class AddServicePop extends StatefulWidget {
   const AddServicePop({super.key});

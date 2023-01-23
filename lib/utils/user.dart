@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
 
 import 'dart:convert';
 import 'dart:io';
@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 
 import '../src/routes/route_animation.dart';
 import '../src/signup/screens/SignupTwo.dart';
-import '../src/state_manager/add_service_manipulator.dart';
+import 'add_service_manipulator.dart';
 
 class User extends BaseService with AppNotifier {
   User();
@@ -73,6 +73,33 @@ class User extends BaseService with AppNotifier {
       errorSnackBar(context, e.message.toString());
     } catch (e) {
       return;
+    }
+  }
+
+  Future<void> signUpRequest(
+      Map<String, String> body, String url, BuildContext context) async {
+    try {
+      var response = await postForFormDate(
+        body,
+        url,
+      );
+
+      http.Response.fromStream(response).then((res) {
+        if (res.statusCode == 201) {
+          Provider.of<AddServiceManipulator>(context, listen: false).loginUser({
+            'user_token': json.decode(res.body)['success']['token'],
+            'user_id': json.decode(res.body)['success']['token'],
+          });
+          context.replace('/verify');
+        } else {
+          errorSnackBar(context, 'The email has already been taken.');
+          return;
+        }
+      });
+    } on SocketException catch (e) {
+      errorSnackBar(context, e.message.toString());
+    } catch (e) {
+      errorSnackBar(context, 'Opps... not your fault');
     }
   }
 

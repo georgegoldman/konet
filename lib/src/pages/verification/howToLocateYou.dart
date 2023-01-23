@@ -10,7 +10,7 @@ import '../../common_widgets/emptyLoader.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
 import '../../common_widgets/unauthenticatedPageHeader.dart';
 import '../../routes/route_animation.dart';
-import '../../state_manager/add_service_manipulator.dart';
+import '../../../utils/add_service_manipulator.dart';
 import '../../common_widgets/loading_gif.dart';
 import 'fetch_g_address.dart';
 

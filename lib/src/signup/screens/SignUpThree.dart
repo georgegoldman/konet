@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:curnect/src/signup/service/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,7 @@ import '../../common_widgets/unauthenticatedPageHeader.dart';
 import '../../../utils/user.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../state_manager/add_service_manipulator.dart';
+import '../../../utils/add_service_manipulator.dart';
 import '../../common_widgets/loading_gif.dart';
 import 'package:http/http.dart' as http;
 
@@ -38,6 +39,7 @@ class _SignUpFormThreeState extends State<SignUpFormThree> with ErrorSnackBar {
   late String _password;
   double _strength = 0;
   Future<dynamic>? _register;
+  final SignupService _service = SignupService();
 
   RegExp numReg = RegExp(r".*[0-9].*");
   RegExp letterReg = RegExp(r".*[A-Za-z].*");
@@ -121,7 +123,10 @@ class _SignUpFormThreeState extends State<SignUpFormThree> with ErrorSnackBar {
                   (_confirmPasswordController.text ==
                       _passwordController.text)) {
                 setState(() {
-                  _register = registerRequest();
+                  _register = _service.signUpUserAccount(
+                      _getUserDetail(),
+                      'https://curnect.com/curnect-api/public/api/registerpartone',
+                      context);
                 });
                 _register;
               }
@@ -156,7 +161,7 @@ class _SignUpFormThreeState extends State<SignUpFormThree> with ErrorSnackBar {
     });
   }
 
-  Map<String, String> getUserDetail() {
+  Map<String, String> _getUserDetail() {
     return {
       "email": widget.aboutYouFields["email"].toString(),
       "full_name": widget.aboutYouFields["fullName"].toString(),
@@ -166,32 +171,6 @@ class _SignUpFormThreeState extends State<SignUpFormThree> with ErrorSnackBar {
       "password": _confirmPasswordController.text.toString(),
       "token": ''
     };
-  }
-
-  Future<void> registerRequest() async {
-    debugPrint(getUserDetail().toString());
-    try {
-      var response = await user.register(
-          "https://curnect.com/curnect-api/public/api/registerpartone",
-          getUserDetail());
-
-      http.Response.fromStream(response).then((res) {
-        if (res.statusCode == 201) {
-          Provider.of<AddServiceManipulator>(context, listen: false).loginUser({
-            'user_token': json.decode(res.body)['success']['token'],
-            'user_id': json.decode(res.body)['success']['token'],
-          });
-          context.replace('/verify');
-        } else {
-          sendErrorMessage(
-              'Sever', 'The email has already been taken.', context);
-        }
-      });
-    } on SocketException catch (_) {
-      sendErrorMessage('Network failure', 'Pleasecheck your internet', context);
-    } catch (e) {
-      print(e);
-    }
   }
 
   Widget registerForm() {
