@@ -1,12 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
-import '../../state_manager/add_service_manipulator.dart';
+import 'package:curnect/utils/user.dart';
+import 'package:flutter/material.dart';
 
-class SigninService with AppNotifier {
+class SigninService extends User {
   SigninService();
 
-  Future<void> loginRequest(
-      String email, String password, BuildContext context) async {
-    // final userToken = getUserToken();
-  }
+  Future<void> signInUser(
+          String email, String password, BuildContext context) =>
+      signInRequest(email, password, context);
 }

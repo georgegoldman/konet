@@ -1,19 +1,13 @@
 // ignore_for_file: file_names, use_build_context_synchronously
 
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:curnect/src/signin/service/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../common_widgets/appbar.dart';
 import '../../common_widgets/formFields/formFields.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../../utils/user.dart';
-import '../../state_manager/add_service_manipulator.dart';
 import '../../style/animation/loading_gif.dart';
 
 class LoginPage extends StatefulWidget {
@@ -34,7 +28,6 @@ class _LoginPageState extends State<LoginPage>
   final TextEditingController _passwordController = TextEditingController();
   bool _isHidden = true;
   bool showMessageError = false;
-  User user = User(email: '', password: '', logIn: false);
   Future<void>? _login;
   final SigninService _service = SigninService();
 
@@ -116,9 +109,6 @@ class _LoginPageState extends State<LoginPage>
             TextFormField(
               controller: _passwordController,
               onChanged: (value) {
-                setState(() {
-                  user.password = value;
-                });
                 // _passwordController.text = value;
               },
               validator: (value) {
@@ -188,7 +178,7 @@ class _LoginPageState extends State<LoginPage>
                     backgroundColor: Colors.black,
                     minimumSize: const Size.fromHeight(50)),
                 onPressed: (_emailController.text.isNotEmpty &&
-                        user.password.isNotEmpty)
+                        _passwordController.text.isNotEmpty)
                     ? () async {
                         if (_formKey.currentState!.validate()) {
                           // ScaffoldMessenger.of(context).showSnackBar(
@@ -196,7 +186,7 @@ class _LoginPageState extends State<LoginPage>
 
                         }
                         setState(() {
-                          _login = _service.loginRequest(
+                          _login = _service.signInUser(
                               _emailController.text.toString(),
                               _passwordController.text.toString(),
                               context);

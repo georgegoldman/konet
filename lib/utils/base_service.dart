@@ -6,21 +6,42 @@ import 'package:http/http.dart' as http;
 class BaseService {
   BaseService();
 
-  /// send a get request
-  /// @param url Request URL
-  /// @param conf Request configuration settings
-  /// @returns {Promise.<*>}
-  Future<http.Response> get(String url, Map<String, dynamic> conf) async {
-    var getUrl = Uri.parse(url);
-    return await http
-        .get(getUrl, headers: {HttpHeaders.authorizationHeader: conf['token']});
+  Future<http.StreamedResponse> postForFormDate(
+      Map<String, String> body, String url) async {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.fields.addAll(body);
+
+    return await request.send();
   }
 
-  ///send a post request
-  ///@param url Request url
-  ///@param body Request body
-  ///@param conf Request configuration settings.
-  ///@returns {Promise.<*>}
+  Future<http.StreamedResponse> patchForFormDate(
+      Map<String, String> body, String url) async {
+    body['_method'] = 'patch';
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.fields.addAll(body);
+
+    return await request.send();
+  }
+
+  Future<http.StreamedResponse> patchWithImage(filePath, url, body) async {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.fields.addAll(body);
+    request.files
+        .add(await http.MultipartFile.fromPath(body['image_id'], filePath));
+
+    return await request.send();
+  }
+
+  Future<http.StreamedResponse> patch(
+      String url, Map<String, dynamic> body) async {
+    Map<String, String> headers = {'Content-Type': 'application/json'};
+
+    http.Request request = http.Request('POST', Uri.parse(url));
+    request.body = json.encode({body});
+    request.headers.addAll(headers);
+    return await request.send();
+  }
+
   Future<http.Response> post(String url, Map<String, dynamic> conf) async {
     var getUrl = Uri.parse(url);
     return await http.post(getUrl,
@@ -30,11 +51,11 @@ class BaseService {
         body: conf);
   }
 
-  Future<http.Response> patch(String url, dynamic conf) async {
-    var getUri = Uri.parse(url);
-    return await http.patch(getUri,
-        headers: {HttpHeaders.authorizationHeader: conf['token']}, body: conf);
-  }
+  // Future<http.Response> patch(String url, dynamic conf) async {
+  //   var getUri = Uri.parse(url);
+  //   return await http.patch(getUri,
+  //       headers: {HttpHeaders.authorizationHeader: conf['token']}, body: conf);
+  // }
 
   Future<http.StreamedResponse> checkResetPasswordEmail(body, url) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
@@ -98,13 +119,13 @@ class BaseService {
         .put(getUri, headers: {HttpHeaders.authorizationHeader: conf['token']});
   }
 
-  Future<http.StreamedResponse> patchWithImage(filePath, data, url) async {
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.fields.addAll((data));
-    request.files
-        .add(await http.MultipartFile.fromPath('business_image', filePath));
-    return await request.send();
-  }
+  // Future<http.StreamedResponse> patchWithImage(filePath, data, url) async {
+  //   var request = http.MultipartRequest('POST', Uri.parse(url));
+  //   request.fields.addAll((data));
+  //   request.files
+  //       .add(await http.MultipartFile.fromPath('business_image', filePath));
+  //   return await request.send();
+  // }
 
   Future<http.StreamedResponse> addServiceAPi(body, url) async {
     var headers = {'Content-Type': 'application/json'};

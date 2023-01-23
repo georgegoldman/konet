@@ -13,41 +13,41 @@ import 'package:provider/provider.dart';
 import '../src/state_manager/add_service_manipulator.dart';
 
 class User extends BaseService with AppNotifier {
-  late String email;
-  late String password;
-  late String? fullName;
-  late String? businessName;
-  late String? phone;
-  late String? referralCode;
-  late String? token;
-  late bool? logIn;
-  late int? id;
   User();
 
-  void login(String email, String password, BuildContext context) async {
+  Future<void> signInRequest(
+      String email, String password, BuildContext context) async {
     try {
-      final response = await post(
-          'https://curnect.com/curnect-api/public/api/login',
-          {"email": email, "password": password, "token": ''});
-
-      if (response.statusCode == 200) {
-        Provider.of<AddServiceManipulator>(context, listen: false).loginUser({
-          'user_token': json.decode(response.body)['token'],
-          'user_id': json.decode(response.body)['success']['userId'],
-          'loggedIn': response.statusCode,
-        });
-        context.replace('/calendar');
-      } else {
-        errorSnackBar(context, json.decode(response.body)['error'].toString());
-      }
+      final response = await postForFormDate(
+        {"email": email, "password": password, "token": ''},
+        'https://curnect.com/curnect-api/public/api/login',
+      );
+      http.Response.fromStream(response).then((res) {
+        if (response.statusCode == 200) {
+          Provider.of<AddServiceManipulator>(context, listen: false).loginUser({
+            'user_token': json.decode(res.body)['token'],
+            'user_id': json.decode(res.body)['success']['userId'],
+            'loggedIn': response.statusCode,
+          });
+          context.replace('/calendar');
+        } else {
+          errorSnackBar(context, json.decode(res.body)['error'].toString());
+          return;
+        }
+      });
     } on SocketException catch (e) {
       errorSnackBar(context, e.message.toString());
+      return;
     } on NoSuchMethodError catch (e) {
       errorSnackBar(context, e.toString());
+      return;
     } catch (e) {
-      print(e);
+      errorSnackBar(context, 'Opps something went wrong but not your fault');
+      return;
     }
   }
+
+  Future<void> signOutUser() async {}
 
   Future<Response> login(url, conf) async {
     final response = await this.post(url, conf);
