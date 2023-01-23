@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:curnect/src/services/base_service.dart';
-import 'package:curnect/src/services/user.dart';
+import 'package:curnect/utils/user.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';

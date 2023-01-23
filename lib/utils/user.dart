@@ -1,10 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:curnect/src/services/base_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
-class User extends BaseService {
+import 'package:curnect/src/common_widgets/appNotifier/index.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../src/state_manager/add_service_manipulator.dart';
+
+class User extends BaseService with AppNotifier {
   late String email;
   late String password;
   late String? fullName;
@@ -14,27 +22,31 @@ class User extends BaseService {
   late String? token;
   late bool? logIn;
   late int? id;
-  User(
-      {required this.email,
-      required this.password,
-      this.fullName,
-      this.businessName,
-      this.phone,
-      this.referralCode,
-      this.logIn,
-      this.id,
-      this.token});
+  User();
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      token: json['success']['token'].toString(),
-      email: json['email'].toString(),
-      password: json['password'].toString(),
-      fullName: json['full_name'].toString(),
-      businessName: json['business_name'].toString(),
-      phone: json['phone_number'].toString(),
-      id: json['success']['userId'],
-    );
+  void login(String email, String password, BuildContext context) async {
+    try {
+      final response = await user.login(
+          'https://curnect.com/curnect-api/public/api/login',
+          {"email": email, "password": password, "token": ''});
+
+      if (response.statusCode == 200) {
+        Provider.of<AddServiceManipulator>(context, listen: false).loginUser({
+          'user_token': json.decode(response.body)['token'],
+          'user_id': json.decode(response.body)['success']['userId'],
+          'loggedIn': response.statusCode,
+        });
+        context.replace('/calendar');
+      } else {
+        errorSnackBar(context, json.decode(response.body)['error'].toString());
+      }
+    } on SocketException catch (e) {
+      errorSnackBar(context, e.message.toString());
+    } on NoSuchMethodError catch (e) {
+      errorSnackBar(context, e.toString());
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<Response> login(url, conf) async {

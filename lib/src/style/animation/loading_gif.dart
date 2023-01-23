@@ -2,6 +2,8 @@
 // ignore: implementation_imports
 // ignore_for_file: implementation_imports
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -36,23 +38,22 @@ class _LoadingPageGifState extends State<LoadingPageGif>
         alignment: Alignment.center,
         color: const Color.fromARGB(120, 0, 0, 0),
         child: Center(
+            child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+          child: Container(
+            decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
             child: Lottie.asset(
-          'assets/images/curnect_load_anim.json',
-          controller: _loadingPage,
-          onLoaded: (composite) {
-            _loadingPage
-              ..duration = composite.duration
-              ..forward();
-          },
-          height: 120,
-          width: 120,
-        )
-            // child: GifImage(
-            //   controller: _loadingPage,
-            //   image: const AssetImage('assets/images/curnect_loading_anim_w1.gif'),
-            //   height: 100,
-            //   width: 100,
-            // ),
-            ));
+              'assets/images/curnect_load_anim.json',
+              controller: _loadingPage,
+              onLoaded: (composite) {
+                _loadingPage
+                  ..duration = composite.duration
+                  ..forward();
+              },
+              height: 120,
+              width: 120,
+            ),
+          ),
+        )));
   }
 }

@@ -3,17 +3,18 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:curnect/src/signin/service/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
-import '../common_widgets/appbar.dart';
-import '../common_widgets/formFields/formFields.dart';
-import '../common_widgets/snackBar/ErrorMessage.dart';
-import '../services/user.dart';
-import '../state_manager/add_service_manipulator.dart';
-import '../style/animation/loading_gif.dart';
+import '../../common_widgets/appbar.dart';
+import '../../common_widgets/formFields/formFields.dart';
+import '../../common_widgets/snackBar/ErrorMessage.dart';
+import '../../../utils/user.dart';
+import '../../state_manager/add_service_manipulator.dart';
+import '../../style/animation/loading_gif.dart';
 
 class LoginPage extends StatefulWidget {
   final bool onLoginPage = true;
@@ -35,57 +36,12 @@ class _LoginPageState extends State<LoginPage>
   bool showMessageError = false;
   User user = User(email: '', password: '', logIn: false);
   Future<void>? _login;
+  final SigninService _service = SigninService();
 
   void _togglePasswordView() {
     setState(() {
       _isHidden = !_isHidden;
     });
-  }
-
-  Future<void> loginRequest() async {
-    // final userToken = getUserToken();
-
-    try {
-      final response =
-          await user.login('https://curnect.com/curnect-api/public/api/login', {
-        "email": _emailController.text.toString(),
-        "password": _passwordController.text.toString(),
-        "token": ''
-      });
-
-      if (response.statusCode == 200) {
-        Provider.of<AddServiceManipulator>(context, listen: false).loginUser({
-          'user_token': json.decode(response.body)['token'],
-          'user_id': json.decode(response.body)['success']['userId'],
-          'loggedIn': response.statusCode,
-        });
-        context.replace('/calendar');
-      } else {
-        sendErrorMessage("error", json.decode(response.body)['error'], context);
-      }
-    } on SocketException catch (_) {
-      sendErrorMessage(
-          "Network failure", "Please check your internet connection", context);
-    } on NoSuchMethodError catch (_) {
-      sendErrorMessage("error", 'please check your email', context);
-    } catch (e) {
-      print(e);
-    }
-
-    // debugPrint(Provider.of<AddServiceManipulator>(context, listen: false)
-    //     .user['user_id']
-    //     .toString());
-    // debugPrint(response['loggedIn'].toString());
-  }
-
-  void addUserToken(userToken) {
-    Provider.of<AddServiceManipulator>(context, listen: false)
-        .loginUser(userToken);
-  }
-
-  String getUserToken() {
-    var user = Provider.of<AddServiceManipulator>(context).getUserToken();
-    return user['token'].toString();
   }
 
   @override
@@ -240,7 +196,10 @@ class _LoginPageState extends State<LoginPage>
 
                         }
                         setState(() {
-                          _login = loginRequest();
+                          _login = _service.loginRequest(
+                              _emailController.text.toString(),
+                              _passwordController.text.toString(),
+                              context);
                         });
                         _login;
                       }

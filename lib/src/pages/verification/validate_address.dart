@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:curnect/src/pages/verification/home_service_fee.dart';
 import 'package:curnect/src/routes/route_animation.dart';
-import 'package:curnect/src/services/user.dart';
+import 'package:curnect/utils/user.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

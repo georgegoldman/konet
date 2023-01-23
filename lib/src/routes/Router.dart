@@ -1,6 +1,6 @@
 // ignore_for_file: file_names
 
-import 'package:curnect/src/pages/Login.dart';
+import 'package:curnect/src/signin/screens/index.dart';
 import 'package:curnect/src/pages/dash_board/screens/service/widgets/addBundle.dart';
 import 'package:curnect/src/pages/forgetPassword/enterEmail.dart';
 import 'package:curnect/src/pages/forgetPassword/enterPasscode.dart';

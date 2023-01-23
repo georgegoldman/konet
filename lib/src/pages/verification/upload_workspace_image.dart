@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:curnect/src/services/user.dart';
+import 'package:curnect/utils/user.dart';
 import 'package:curnect/src/pages/verification/add_service.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/style/animation/loading_gif.dart';
