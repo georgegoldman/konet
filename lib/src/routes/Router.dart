@@ -4,7 +4,7 @@ import 'package:curnect/src/signin/screens/index.dart';
 import 'package:curnect/src/pages/dash_board/screens/service/widgets/addBundle.dart';
 import 'package:curnect/src/pages/forgetPassword/enterEmail.dart';
 import 'package:curnect/src/pages/forgetPassword/enterPasscode.dart';
-import 'package:curnect/src/pages/signup/SignupOne.dart';
+import 'package:curnect/src/signup/screens/SignupOne.dart';
 import 'package:curnect/src/pages/verification/select_category.dart';
 import 'package:curnect/src/style/animation/SlideInAnimation.dart';
 import 'package:curnect/src/style/onBoarding.dart';

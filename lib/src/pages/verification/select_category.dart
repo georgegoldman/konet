@@ -15,7 +15,7 @@ import '../../common_widgets/appbar.dart';
 import '../../common_widgets/emptyLoader.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
 import '../../common_widgets/unauthenticatedPageHeader.dart';
-import '../../style/animation/loading_gif.dart';
+import '../../common_widgets/loading_gif.dart';
 import 'howToLocateYou.dart';
 
 String title =

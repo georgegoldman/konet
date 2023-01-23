@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 
 import '../../common_widgets/appbar.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../style/animation/loading_gif.dart';
+import '../../common_widgets/loading_gif.dart';
 
 class GetYourCode extends StatefulWidget {
   final Map<String, dynamic>? userData;

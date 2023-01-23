@@ -12,7 +12,7 @@ import '../../common_widgets/appbar.dart';
 import '../../common_widgets/formFields/formFields.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
 import '../../../utils/user.dart';
-import '../../style/animation/loading_gif.dart';
+import '../../common_widgets/loading_gif.dart';
 
 class EnterEmail extends StatefulWidget {
   const EnterEmail({super.key});

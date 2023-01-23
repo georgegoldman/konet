@@ -13,7 +13,7 @@ import '../../common_widgets/snackBar/ErrorMessage.dart';
 import '../../common_widgets/unauthenticatedPageHeader.dart';
 import '../../../utils/user.dart';
 import '../../state_manager/add_service_manipulator.dart';
-import '../../style/animation/loading_gif.dart';
+import '../../common_widgets/loading_gif.dart';
 
 class GetHomeServiceFee extends StatefulWidget {
   const GetHomeServiceFee({super.key});

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -10,6 +12,8 @@ import 'package:curnect/src/common_widgets/appNotifier/index.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../src/routes/route_animation.dart';
+import '../src/signup/screens/SignupTwo.dart';
 import '../src/state_manager/add_service_manipulator.dart';
 
 class User extends BaseService with AppNotifier {
@@ -30,6 +34,7 @@ class User extends BaseService with AppNotifier {
             'loggedIn': response.statusCode,
           });
           context.replace('/calendar');
+          return;
         } else {
           errorSnackBar(context, json.decode(res.body)['error'].toString());
           return;
@@ -47,6 +52,30 @@ class User extends BaseService with AppNotifier {
     }
   }
 
+  Future<void> checkEmail(
+      String email, String url, BuildContext context) async {
+    try {
+      final response = await postForFormDate(
+        {'email': email},
+        'https://curnect.com/curnect-api/public/api/checkemail',
+      );
+      if (response.statusCode == 200) {
+        context.replace('/signin');
+        return;
+      } else {
+        Navigator.of(context).push(RouteAnimation(
+            Screen: SignupPageTwo(
+          email: email,
+        )).createRoute());
+        return;
+      }
+    } on SocketException catch (e) {
+      errorSnackBar(context, e.message.toString());
+    } catch (e) {
+      return;
+    }
+  }
+
   Future<void> signOutUser() async {}
 
   Future<Response> login(url, conf) async {
@@ -54,11 +83,11 @@ class User extends BaseService with AppNotifier {
     return response;
   }
 
-  Future<Response> checkEmail(url, conf) async {
-    final response = await this.post(url, conf);
+  // Future<Response> checkEmail(url, conf) async {
+  //   final response = await this.post(url, conf);
 
-    return response;
-  }
+  //   return response;
+  // }
 
   Future<http.StreamedResponse> homeServiceAPIFunction(body, url) async {
     return await homeServiceBaseAPI(body, url);

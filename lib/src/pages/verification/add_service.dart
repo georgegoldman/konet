@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:curnect/src/pages/verification/verification.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/utils/user.dart';
-import 'package:curnect/src/style/animation/loading_gif.dart';
+import 'package:curnect/src/common_widgets/loading_gif.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;

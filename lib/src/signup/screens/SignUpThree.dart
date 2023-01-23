@@ -14,7 +14,7 @@ import '../../../utils/user.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../state_manager/add_service_manipulator.dart';
-import '../../style/animation/loading_gif.dart';
+import '../../common_widgets/loading_gif.dart';
 import 'package:http/http.dart' as http;
 
 class SignUpFormThree extends StatefulWidget {
@@ -35,8 +35,6 @@ class _SignUpFormThreeState extends State<SignUpFormThree> with ErrorSnackBar {
   bool _isHiddenForPassword = true;
   // ignore: non_constant_identifier_names
   Map<String, dynamic>? sign_done;
-  User user =
-      User(businessName: '', email: '', fullName: '', password: '', phone: '');
   late String _password;
   double _strength = 0;
   Future<dynamic>? _register;

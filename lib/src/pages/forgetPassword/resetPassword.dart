@@ -8,7 +8,7 @@ import '../../common_widgets/unauthenticatedPageHeader.dart';
 import '../../../utils/user.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../style/animation/loading_gif.dart';
+import '../../common_widgets/loading_gif.dart';
 
 class ResetPassword extends StatefulWidget {
   final String? id;

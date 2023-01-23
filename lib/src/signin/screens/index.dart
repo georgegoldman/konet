@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, use_build_context_synchronously
 
 import 'package:curnect/src/signin/service/index.dart';
+import 'package:curnect/src/signin/widgets/forgetPassword.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -8,7 +9,8 @@ import 'package:go_router/go_router.dart';
 import '../../common_widgets/appbar.dart';
 import '../../common_widgets/formFields/formFields.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../style/animation/loading_gif.dart';
+import '../../common_widgets/loading_gif.dart';
+import '../widgets/socialMediaSignIn.dart';
 
 class LoginPage extends StatefulWidget {
   final bool onLoginPage = true;
@@ -200,36 +202,8 @@ class _LoginPageState extends State<LoginPage>
                 ),
               ),
             ),
-            Center(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: () =>
-                      debugPrint('you just hit the google login button'),
-                  icon: SvgPicture.asset(
-                    'assets/images/google_login_icon.svg',
-                  ),
-                ),
-                IconButton(
-                  onPressed: () =>
-                      debugPrint('you just hit the apple login button'),
-                  icon: SvgPicture.asset(
-                    'assets/images/apple_login_icon.svg',
-                  ),
-                ),
-              ],
-            )),
-            TextButton(
-              child: const Text(
-                'Forgot Password?',
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87),
-              ),
-              onPressed: () => context.replace('/resetenteremail'),
-            ),
+            const SocialMediaSignIn(),
+            const ForgetPassword(),
             TextButton(
               child: const Text('Not a member Sign up',
                   style: TextStyle(color: Color(0xFFE6B325), fontSize: 12)),

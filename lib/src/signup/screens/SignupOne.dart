@@ -1,9 +1,6 @@
 // ignore_for_file: file_names, use_build_context_synchronously
 
-import 'dart:io';
-
-import 'package:curnect/src/customException/unsuccessfulRequestException.dart';
-import 'package:curnect/utils/user.dart';
+import 'package:curnect/src/signup/service/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -11,9 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../common_widgets/appbar.dart';
 import '../../common_widgets/formFields/formFields.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../routes/route_animation.dart';
-import '../../style/animation/loading_gif.dart';
-import 'SignupTwo.dart';
+import '../../common_widgets/loading_gif.dart';
 
 class SignupPageOne extends StatefulWidget {
   const SignupPageOne({Key? key}) : super(key: key);
@@ -29,6 +24,7 @@ class _SignupPageOneState extends State<SignupPageOne>
   final TextEditingController _emailController = TextEditingController();
   Future<void>? _checkEmail;
   int? connectionDone;
+  final SignupService _service = SignupService();
 
   @override
   Widget build(BuildContext context) {
@@ -83,27 +79,6 @@ class _SignupPageOneState extends State<SignupPageOne>
             }
           })
     ]);
-  }
-
-  Future<void> checkEmail() async {
-    try {
-      var user = User(email: _emailController.text, password: '', token: '');
-      final response = await user.checkEmail(
-          'https://curnect.com/curnect-api/public/api/checkemail',
-          {'email': user.email, 'token': ''});
-      if (response.statusCode == 200) {
-        context.replace('/signin');
-      } else {
-        Navigator.of(context).push(RouteAnimation(
-            Screen: SignupPageTwo(
-          email: _emailController.text,
-        )).createRoute());
-      }
-    } on SocketException catch (_) {
-      sendErrorMessage('Network failure', 'Pleasecheck your internet', context);
-    } catch (e) {
-      return;
-    }
   }
 
   Widget emailForm() {
@@ -191,7 +166,10 @@ class _SignupPageOneState extends State<SignupPageOne>
                     ? () async {
                         if (_formKey.currentState!.validate()) {
                           setState(() {
-                            _checkEmail = checkEmail();
+                            _checkEmail = _service.checkUserEmail(
+                                _emailController.text.toString(),
+                                'https://curnect.com/curnect-api/public/api/checkemail',
+                                context);
                           });
                           _checkEmail;
                         }
