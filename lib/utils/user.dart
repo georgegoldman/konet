@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:curnect/src/services/base_service.dart';
+import 'package:curnect/utils/base_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -26,7 +26,7 @@ class User extends BaseService with AppNotifier {
 
   void login(String email, String password, BuildContext context) async {
     try {
-      final response = await user.login(
+      final response = await post(
           'https://curnect.com/curnect-api/public/api/login',
           {"email": email, "password": password, "token": ''});
 

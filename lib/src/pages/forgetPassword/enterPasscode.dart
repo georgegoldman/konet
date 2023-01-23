@@ -1,9 +1,8 @@
 // ignore_for_file: file_names
 
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:curnect/src/services/base_service.dart';
+import 'package:curnect/utils/base_service.dart';
 import 'package:curnect/utils/user.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,7 +11,6 @@ import 'package:http/http.dart' as http;
 
 import '../../common_widgets/appbar.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../customException/unsuccessfulRequestException.dart';
 import '../../style/animation/loading_gif.dart';
 
 class GetYourCode extends StatefulWidget {
