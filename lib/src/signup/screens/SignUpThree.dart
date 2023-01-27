@@ -31,7 +31,7 @@ class _SignUpFormThreeState extends State<SignUpFormThree> with ErrorSnackBar {
   late String _password;
   double _strength = 0;
   Future<dynamic>? _register;
-  final SignupService _service = SignupService();
+  SignupService? _service;
 
   RegExp numReg = RegExp(r".*[0-9].*");
   RegExp letterReg = RegExp(r".*[A-Za-z].*");
@@ -41,6 +41,12 @@ class _SignUpFormThreeState extends State<SignUpFormThree> with ErrorSnackBar {
       ']');
 
   String notSuccessfullMessage = '';
+
+  @override
+  void initState() {
+    _service = SignupService(context: context);
+    super.initState();
+  }
 
   void _checkPassword(String value) {
     _password = value.trim();
@@ -114,10 +120,8 @@ class _SignUpFormThreeState extends State<SignUpFormThree> with ErrorSnackBar {
             if (_formKey.currentState!.validate() &&
                 (_confirmPasswordController.text == _passwordController.text)) {
               setState(() {
-                _register = _service.signUpUserAccount(
-                    _getUserDetail(),
-                    'https://curnect.com/curnect-api/public/api/registerpartone',
-                    context);
+                _register = _service?.signUpUserAccount(_getUserDetail(),
+                    'https://curnect.com/curnect-api/public/api/registerpartone');
               });
               _register;
             }

@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:curnect/src/customException/unsuccessfulRequestException.dart';
+import 'package:curnect/src/forget_password/service/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
@@ -28,6 +28,13 @@ class _EnterEmailState extends State<EnterEmail>
   Future<void>? _checkEmail;
   int? connectionDone;
   String? userId;
+  ResetPasswordService? resetPasswordService;
+
+  @override
+  void initState() {
+    resetPasswordService = ResetPasswordService(context: context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,31 +98,6 @@ class _EnterEmailState extends State<EnterEmail>
             }
           })
     ]);
-  }
-
-  Future<void> checkEmail() async {
-    try {
-      var user =
-          User(email: _verifyEmailController.text, password: '', token: '');
-      final response = await user.checkResetPasswordEmailAPI(
-          {'email': user.email.toString()},
-          'https://curnect.com/curnect-api/public/api/checkforgetemail');
-      http.Response.fromStream(response).then((res) {
-        if (res.statusCode == 200) {
-          context.push('/getyourcode', extra: {
-            "email": _verifyEmailController.text.toString(),
-            "userId": json.decode(res.body)["userid"]
-          });
-        } else {
-          sendErrorMessage('❕', 'check email', context);
-        }
-      });
-    } on SocketException catch (_) {
-      sendErrorMessage(
-          '❕Network Error', 'Please check your internet connection', context);
-    } catch (e) {
-      print(e);
-    }
   }
 
   Widget enterEmailForm() {

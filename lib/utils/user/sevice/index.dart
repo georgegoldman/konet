@@ -17,10 +17,13 @@ import '../../../src/signup/screens/SignupTwo.dart';
 import '../../state/add_service_manipulator.dart';
 
 class User extends BaseService with AppNotifier {
-  User();
+  BuildContext context;
+  User({required this.context});
 
   Future<void> signInRequest(
-      String email, String password, BuildContext context) async {
+    String email,
+    String password,
+  ) async {
     try {
       final response = await postForFormDate(
         {"email": email, "password": password, "token": ''},
@@ -53,7 +56,9 @@ class User extends BaseService with AppNotifier {
   }
 
   Future<void> checkEmail(
-      String email, String url, BuildContext context) async {
+    String email,
+    String url,
+  ) async {
     try {
       final response = await postForFormDate(
         {'email': email},
@@ -73,6 +78,29 @@ class User extends BaseService with AppNotifier {
       errorSnackBar(context, e.message.toString());
     } catch (e) {
       return;
+    }
+  }
+
+  Future<void> checkResetPasswordEmailAPI(
+    Map<String, String> body,
+  ) async {
+    try {
+      final response = await postForFormDate(
+          body, 'https://curnect.com/curnect-api/public/api/checkforgetemail');
+      http.Response.fromStream(response).then((res) {
+        if (res.statusCode == 200) {
+          context.push('/getyourcode', extra: {
+            "email": _verifyEmailController.text.toString(),
+            "userId": json.decode(res.body)["userid"]
+          });
+        } else {
+          errorSnackBar(context, 'check email');
+        }
+      });
+    } on SocketException catch (e) {
+      errorSnackBar(context, e.message);
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -118,10 +146,6 @@ class User extends BaseService with AppNotifier {
 
   Future<http.StreamedResponse> homeServiceAPIFunction(body, url) async {
     return await homeServiceBaseAPI(body, url);
-  }
-
-  Future<http.StreamedResponse> checkResetPasswordEmailAPI(body, url) async {
-    return await checkResetPasswordEmail(body, url);
   }
 
   Future<http.StreamedResponse> checkResetPasswordPincodeAPI(body, url) async {

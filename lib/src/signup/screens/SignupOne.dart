@@ -24,7 +24,13 @@ class _SignupPageOneState extends State<SignupPageOne>
   final TextEditingController _emailController = TextEditingController();
   Future<void>? _checkEmail;
   int? connectionDone;
-  final SignupService _service = SignupService();
+  SignupService? _service;
+
+  @override
+  void initState() {
+    _service = SignupService(context: context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,10 +172,9 @@ class _SignupPageOneState extends State<SignupPageOne>
                     ? () async {
                         if (_formKey.currentState!.validate()) {
                           setState(() {
-                            _checkEmail = _service.checkUserEmail(
+                            _checkEmail = _service?.checkUserEmail(
                                 _emailController.text.toString(),
-                                'https://curnect.com/curnect-api/public/api/checkemail',
-                                context);
+                                'https://curnect.com/curnect-api/public/api/checkemail');
                           });
                           _checkEmail;
                         }

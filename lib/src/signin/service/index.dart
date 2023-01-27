@@ -4,9 +4,13 @@ import 'package:curnect/utils/user/sevice/index.dart';
 import 'package:flutter/material.dart';
 
 class SigninService extends User {
-  SigninService();
+  @override
+  final BuildContext context;
+  SigninService({required this.context}) : super(context: context);
 
   Future<void> signInUser(
-          String email, String password, BuildContext context) =>
-      signInRequest(email, password, context);
+    String email,
+    String password,
+  ) =>
+      signInRequest(email, password);
 }

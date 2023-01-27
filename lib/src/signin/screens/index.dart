@@ -31,12 +31,18 @@ class _LoginPageState extends State<LoginPage>
   bool _isHidden = true;
   bool showMessageError = false;
   Future<void>? _login;
-  final SigninService _service = SigninService();
+  SigninService? _service;
 
   void _togglePasswordView() {
     setState(() {
       _isHidden = !_isHidden;
     });
+  }
+
+  @override
+  void initState() {
+    _service = SigninService(context: context);
+    super.initState();
   }
 
   @override
@@ -188,10 +194,10 @@ class _LoginPageState extends State<LoginPage>
 
                         }
                         setState(() {
-                          _login = _service.signInUser(
-                              _emailController.text.toString(),
-                              _passwordController.text.toString(),
-                              context);
+                          _login = _service?.signInUser(
+                            _emailController.text.toString(),
+                            _passwordController.text.toString(),
+                          );
                         });
                         _login;
                       }
