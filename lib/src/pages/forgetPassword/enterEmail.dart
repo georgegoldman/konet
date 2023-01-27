@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import '../../common_widgets/appbar.dart';
 import '../../common_widgets/formFields/formFields.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../../utils/user.dart';
+import '../../../utils/user/sevice/index.dart';
 import '../../common_widgets/loading_gif.dart';
 
 class EnterEmail extends StatefulWidget {

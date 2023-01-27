@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../common_widgets/appbar.dart';
 import '../../common_widgets/emptyLoader.dart';
 import '../../common_widgets/unauthenticatedPageHeader.dart';
-import '../../../utils/user.dart';
+import '../../../utils/user/sevice/index.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../common_widgets/loading_gif.dart';

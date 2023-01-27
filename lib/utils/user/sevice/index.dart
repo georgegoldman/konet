@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:curnect/utils/base_service.dart';
+import 'package:curnect/utils/backend_service_api/base_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -12,9 +12,9 @@ import 'package:curnect/src/common_widgets/appNotifier/index.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../src/routes/route_animation.dart';
-import '../src/signup/screens/SignupTwo.dart';
-import 'add_service_manipulator.dart';
+import '../../../src/routes/route_animation.dart';
+import '../../../src/signup/screens/SignupTwo.dart';
+import '../../state/add_service_manipulator.dart';
 
 class User extends BaseService with AppNotifier {
   User();

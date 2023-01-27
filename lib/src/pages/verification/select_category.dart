@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:curnect/src/routes/route_animation.dart';
-import 'package:curnect/utils/user.dart';
-import 'package:curnect/utils/add_service_manipulator.dart';
+import 'package:curnect/utils/user/sevice/index.dart';
+import 'package:curnect/utils/state/add_service_manipulator.dart';
 import 'package:flutter/material.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:provider/provider.dart';

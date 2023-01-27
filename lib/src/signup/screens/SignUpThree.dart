@@ -11,10 +11,10 @@ import '../../common_widgets/appbar.dart';
 import '../../common_widgets/emptyLoader.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
 import '../../common_widgets/unauthenticatedPageHeader.dart';
-import '../../../utils/user.dart';
+import '../../../utils/user/sevice/index.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../utils/add_service_manipulator.dart';
+import '../../../utils/state/add_service_manipulator.dart';
 import '../../common_widgets/loading_gif.dart';
 import 'package:http/http.dart' as http;
 

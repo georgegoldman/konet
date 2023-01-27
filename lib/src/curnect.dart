@@ -1,5 +1,5 @@
 import 'package:curnect/src/routes/Router.dart';
-import 'package:curnect/utils/add_service_manipulator.dart';
+import 'package:curnect/utils/state/add_service_manipulator.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';

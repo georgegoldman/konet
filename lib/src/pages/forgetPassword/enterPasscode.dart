@@ -2,8 +2,8 @@
 
 import 'dart:io';
 
-import 'package:curnect/utils/base_service.dart';
-import 'package:curnect/utils/user.dart';
+import 'package:curnect/utils/backend_service_api/base_service.dart';
+import 'package:curnect/utils/user/sevice/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
