@@ -5,12 +5,12 @@ import 'package:curnect/src/dash_board/screens/service/widgets/addBundle.dart';
 import 'package:curnect/src/forget_password/screens/enterEmail.dart';
 import 'package:curnect/src/forget_password/screens/enterPasscode.dart';
 import 'package:curnect/src/signup/screens/SignupOne.dart';
-import 'package:curnect/src/pages/verification/select_category.dart';
+import 'package:curnect/src/preregistration/select_category.dart';
 import 'package:curnect/src/style/animation/SlideInAnimation.dart';
 import 'package:curnect/src/style/onBoarding.dart';
 import 'package:go_router/go_router.dart';
 
-import '../common_widgets/splash_screen.dart';
+import '../../utils/common_widgets/splash_screen.dart';
 import '../dash_board/index.dart';
 import '../dash_board/screens/service/widgets/addAddOns.dart';
 import '../dash_board/screens/service/widgets/addService.dart';

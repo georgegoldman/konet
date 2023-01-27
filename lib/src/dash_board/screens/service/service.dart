@@ -1,7 +1,7 @@
 import 'package:curnect/src/dash_board/widgets/card.dart';
 import 'package:flutter/material.dart';
 
-import '../../../common_widgets/appBar/dashboardAppbar.dart';
+import '../../../../utils/common_widgets/appBar/dashboardAppbar.dart';
 
 class Service extends StatefulWidget {
   const Service({super.key});

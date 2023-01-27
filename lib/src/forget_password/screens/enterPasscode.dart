@@ -4,9 +4,9 @@ import 'package:curnect/src/forget_password/service/index.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
-import '../../common_widgets/appbar.dart';
-import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../common_widgets/loading_gif.dart';
+import '../../../utils/common_widgets/appbar.dart';
+import '../../../utils/common_widgets/snackBar/ErrorMessage.dart';
+import '../../../utils/common_widgets/loading_gif.dart';
 
 class GetYourCode extends StatefulWidget {
   final Map<String, dynamic>? userData;

@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:curnect/src/pages/verification/upload_workspace_image.dart';
+import 'package:curnect/src/preregistration/upload_workspace_image.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/utils/user/sevice/index.dart';
 import 'package:curnect/utils/state/add_service_manipulator.dart';
-import 'package:curnect/src/common_widgets/loading_gif.dart';
+import 'package:curnect/utils/common_widgets/loading_gif.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-import '../../common_widgets/appbar.dart';
-import '../../common_widgets/emptyLoader.dart';
-import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../common_widgets/unauthenticatedPageHeader.dart';
+import '../../utils/common_widgets/appbar.dart';
+import '../../utils/common_widgets/emptyLoader.dart';
+import '../../utils/common_widgets/snackBar/ErrorMessage.dart';
+import '../../utils/common_widgets/unauthenticatedPageHeader.dart';
 
 String title =
     'Business hours are the hours during the day in which business is commonly conducted. Typical business hours vary widely by country. By observing common informal standards for business hours, workers may communicate with each other more easily and find a convenient divide between work life and home life.';

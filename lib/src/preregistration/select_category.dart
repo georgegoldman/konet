@@ -11,11 +11,11 @@ import 'package:multiselect/multiselect.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-import '../../common_widgets/appbar.dart';
-import '../../common_widgets/emptyLoader.dart';
-import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../common_widgets/unauthenticatedPageHeader.dart';
-import '../../common_widgets/loading_gif.dart';
+import '../../utils/common_widgets/appbar.dart';
+import '../../utils/common_widgets/emptyLoader.dart';
+import '../../utils/common_widgets/snackBar/ErrorMessage.dart';
+import '../../utils/common_widgets/unauthenticatedPageHeader.dart';
+import '../../utils/common_widgets/loading_gif.dart';
 import 'howToLocateYou.dart';
 
 String title =

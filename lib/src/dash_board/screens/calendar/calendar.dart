@@ -1,4 +1,4 @@
-import 'package:curnect/src/common_widgets/appBar/dashboardAppbar.dart';
+import 'package:curnect/utils/common_widgets/appBar/dashboardAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 

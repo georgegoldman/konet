@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../common_widgets/appbar.dart';
-import '../../common_widgets/formFields/formFields.dart';
-import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../common_widgets/loading_gif.dart';
+import '../../../utils/common_widgets/appbar.dart';
+import '../../../utils/common_widgets/formFields/formFields.dart';
+import '../../../utils/common_widgets/snackBar/ErrorMessage.dart';
+import '../../../utils/common_widgets/loading_gif.dart';
 
 class SignupPageOne extends StatefulWidget {
   const SignupPageOne({Key? key}) : super(key: key);

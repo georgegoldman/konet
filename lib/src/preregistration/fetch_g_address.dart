@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:curnect/src/pages/verification/validate_address.dart';
+import 'package:curnect/src/preregistration/validate_address.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
@@ -8,9 +8,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 
-import '../../common_widgets/appbar.dart';
-import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../common_widgets/unauthenticatedPageHeader.dart';
+import '../../utils/common_widgets/appbar.dart';
+import '../../utils/common_widgets/snackBar/ErrorMessage.dart';
+import '../../utils/common_widgets/unauthenticatedPageHeader.dart';
 
 String title =
     'What is a Fetch shipping address? You can think of your Fetch shipping address as a P.O. box that delivers directly to you! Your Fetch shipping address is our facility address that includes your apartment\'s unique Fetch code identifier.';

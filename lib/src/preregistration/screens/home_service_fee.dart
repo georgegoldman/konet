@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:curnect/src/pages/verification/business_hours.dart';
+import 'package:curnect/src/preregistration/business_hours.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-import '../../common_widgets/appbar.dart';
-import '../../common_widgets/emptyLoader.dart';
-import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../common_widgets/unauthenticatedPageHeader.dart';
-import '../../../utils/user/sevice/index.dart';
-import '../../../utils/state/add_service_manipulator.dart';
-import '../../common_widgets/loading_gif.dart';
+import '../common_widgets/appbar.dart';
+import '../common_widgets/emptyLoader.dart';
+import '../common_widgets/snackBar/ErrorMessage.dart';
+import '../common_widgets/unauthenticatedPageHeader.dart';
+import '../../utils/user/sevice/index.dart';
+import '../../utils/state/add_service_manipulator.dart';
+import '../common_widgets/loading_gif.dart';
 
 class GetHomeServiceFee extends StatefulWidget {
   const GetHomeServiceFee({super.key});

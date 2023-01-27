@@ -6,10 +6,10 @@ import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_input_formatter/mask_input_formatter.dart';
 
-import '../../common_widgets/appbar.dart';
-import '../../common_widgets/formFields/formFields.dart';
-import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../common_widgets/unauthenticatedPageHeader.dart';
+import '../../../utils/common_widgets/appbar.dart';
+import '../../../utils/common_widgets/formFields/formFields.dart';
+import '../../../utils/common_widgets/snackBar/ErrorMessage.dart';
+import '../../../utils/common_widgets/unauthenticatedPageHeader.dart';
 import 'SignUpThree.dart';
 
 class SignupPageTwo extends StatefulWidget {

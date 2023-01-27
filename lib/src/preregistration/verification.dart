@@ -1,22 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:curnect/src/pages/verification/publish_profile.dart';
+import 'package:curnect/src/preregistration/publish_profile.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/utils/user/sevice/index.dart';
-import 'package:curnect/src/common_widgets/loading_gif.dart';
+import 'package:curnect/utils/common_widgets/loading_gif.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-import '../../common_widgets/appbar.dart';
-import '../../common_widgets/emptyLoader.dart';
-import '../../common_widgets/formFields/formFields.dart';
-import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../common_widgets/unauthenticatedPageHeader.dart';
-import '../../../utils/state/add_service_manipulator.dart';
+import '../../utils/common_widgets/appbar.dart';
+import '../../utils/common_widgets/emptyLoader.dart';
+import '../../utils/common_widgets/formFields/formFields.dart';
+import '../../utils/common_widgets/snackBar/ErrorMessage.dart';
+import '../../utils/common_widgets/unauthenticatedPageHeader.dart';
+import '../../utils/state/add_service_manipulator.dart';
 
 class Verification extends StatefulWidget {
   const Verification({super.key});

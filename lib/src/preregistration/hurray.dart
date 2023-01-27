@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common_widgets/appbar.dart';
+import '../../utils/common_widgets/appbar.dart';
 
 String title = '';
 

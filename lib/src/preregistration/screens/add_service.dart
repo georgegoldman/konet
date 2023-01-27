@@ -3,19 +3,19 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:curnect/src/pages/verification/verification.dart';
+import 'package:curnect/src/preregistration/verification.dart';
 import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/utils/user/sevice/index.dart';
-import 'package:curnect/src/common_widgets/loading_gif.dart';
+import 'package:curnect/utils/common_widgets/loading_gif.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-import '../../common_widgets/appbar.dart';
-import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../common_widgets/unauthenticatedPageHeader.dart';
-import '../../common_widgets/verificatoin/add_service.dart';
-import '../../../utils/state/add_service_manipulator.dart';
+import '../common_widgets/appbar.dart';
+import '../common_widgets/snackBar/ErrorMessage.dart';
+import '../common_widgets/unauthenticatedPageHeader.dart';
+import '../common_widgets/verificatoin/add_service.dart';
+import '../../utils/state/add_service_manipulator.dart';
 
 String title =
     "In Business Profile, you may get an option to add the services you offer, along with their descriptions and prices. If your business has multiple categories, group services together into sections under the appropriate category to keep your services organized. When local customers search on Google for a service you offer, that service may be highlighted on your profile. Customers on mobile devices can also find all your services under  \"Services.\"";

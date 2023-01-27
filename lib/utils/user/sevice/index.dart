@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
-import 'package:curnect/src/common_widgets/appNotifier/index.dart';
+import 'package:curnect/utils/common_widgets/appNotifier/index.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
