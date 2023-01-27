@@ -1,22 +1,14 @@
 // ignore_for_file: file_names, empty_catches
 
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:curnect/src/signup/service/index.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../common_widgets/appbar.dart';
 import '../../common_widgets/emptyLoader.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
 import '../../common_widgets/unauthenticatedPageHeader.dart';
-import '../../../utils/user/sevice/index.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../utils/state/add_service_manipulator.dart';
 import '../../common_widgets/loading_gif.dart';
-import 'package:http/http.dart' as http;
 
 class SignUpFormThree extends StatefulWidget {
   final Map<String, String> aboutYouFields;
@@ -109,34 +101,32 @@ class _SignUpFormThreeState extends State<SignUpFormThree> with ErrorSnackBar {
             registerForm(),
           ],
         )),
-        persistentFooterButtons: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
-                ),
-                backgroundColor: Colors.black,
-                minimumSize: const Size.fromHeight(50)),
-            onPressed: () async {
-              _strength < 1 / 2 ? null : () {};
-              if (_formKey.currentState!.validate() &&
-                  (_confirmPasswordController.text ==
-                      _passwordController.text)) {
-                setState(() {
-                  _register = _service.signUpUserAccount(
-                      _getUserDetail(),
-                      'https://curnect.com/curnect-api/public/api/registerpartone',
-                      context);
-                });
-                _register;
-              }
-            },
-            child: const Text(
-              'Continue',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-            ),
-          )
-        ],
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12), // <-- Radius
+              ),
+              backgroundColor: Colors.black,
+              minimumSize: const Size.fromHeight(50)),
+          onPressed: () async {
+            _strength < 1 / 2 ? null : () {};
+            if (_formKey.currentState!.validate() &&
+                (_confirmPasswordController.text == _passwordController.text)) {
+              setState(() {
+                _register = _service.signUpUserAccount(
+                    _getUserDetail(),
+                    'https://curnect.com/curnect-api/public/api/registerpartone',
+                    context);
+              });
+              _register;
+            }
+          },
+          child: const Text(
+            'Continue',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          ),
+        ),
       ),
       FutureBuilder(
           future: _register,

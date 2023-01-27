@@ -210,16 +210,6 @@ class _SignupPageOneState extends State<SignupPageOne>
                                 _emailController.text.isNotEmpty) &&
                             RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+')
                                 .hasMatch(_emailController.text)) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const <Widget>[
-                              Flexible(
-                                  child: Text(
-                                "You need to accept the terms of service and Privacy Policy",
-                              ))
-                            ],
-                          )));
                         } else {
                           return null;
                         }

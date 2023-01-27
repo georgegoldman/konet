@@ -28,7 +28,6 @@ class _SignupPageTwoState extends State<SignupPageTwo>
   final TextEditingController _referalCodeController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final countryPicker = const FlCountryCodePicker();
-  final SignupService _service = SignupService();
   CountryCode countryCode =
       const CountryCode(code: "NG", dialCode: "+234", name: "Nigeria");
 
@@ -176,38 +175,37 @@ class _SignupPageTwoState extends State<SignupPageTwo>
           ],
         ),
       ),
-      persistentFooterButtons: [
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12), // <-- Radius
-              ),
-              backgroundColor: Colors.black,
-              minimumSize: const Size.fromHeight(50)),
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              Navigator.of(context).push(RouteAnimation(
-                  Screen: SignUpFormThree(
-                aboutYouFields: {
-                  "email": widget.email,
-                  "fullName": _fullNameController.text,
-                  "businesName": _businessNameController.text,
-                  "phone":
-                      "${countryCode.dialCode}${_phoneController.text.replaceAll('-', '')}",
-                  "referralCode": _referalCodeController.text
-                },
-              )).createRoute());
-            } else {
-              fieldValidationErrorMessage(
-                  'Please fill in the required fields', context);
-            }
-          },
-          child: const Text(
-            'Continue',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-          ),
-        )
-      ],
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12), // <-- Radius
+            ),
+            backgroundColor: Colors.black,
+            minimumSize: const Size.fromHeight(50)),
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            Navigator.of(context).push(RouteAnimation(
+                Screen: SignUpFormThree(
+              aboutYouFields: {
+                "email": widget.email,
+                "fullName": _fullNameController.text,
+                "businesName": _businessNameController.text,
+                "phone":
+                    "${countryCode.dialCode}${_phoneController.text.replaceAll('-', '')}",
+                "referralCode": _referalCodeController.text
+              },
+            )).createRoute());
+          } else {
+            fieldValidationErrorMessage(
+                'Please fill in the required fields', context);
+          }
+        },
+        child: const Text(
+          'Continue',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        ),
+      ),
     );
   }
 }
