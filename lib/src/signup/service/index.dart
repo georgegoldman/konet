@@ -1,10 +1,9 @@
-// ignore_for_file: overridden_fields
+// ignore_for_file: annotate_overrides, overridden_fields
 
 import 'package:curnect/utils/user/sevice/index.dart';
 import 'package:flutter/cupertino.dart';
 
-class SignupService extends User {
-  @override
+class SignupService extends UserService {
   final BuildContext context;
   SignupService({required this.context}) : super(context: context);
 

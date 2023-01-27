@@ -1,9 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:curnect/src/signin/screens/index.dart';
-import 'package:curnect/src/pages/dash_board/screens/service/widgets/addBundle.dart';
-import 'package:curnect/src/pages/forgetPassword/enterEmail.dart';
-import 'package:curnect/src/pages/forgetPassword/enterPasscode.dart';
+import 'package:curnect/src/dash_board/screens/service/widgets/addBundle.dart';
+import 'package:curnect/src/forget_password/screens/enterEmail.dart';
+import 'package:curnect/src/forget_password/screens/enterPasscode.dart';
 import 'package:curnect/src/signup/screens/SignupOne.dart';
 import 'package:curnect/src/pages/verification/select_category.dart';
 import 'package:curnect/src/style/animation/SlideInAnimation.dart';
@@ -11,10 +11,10 @@ import 'package:curnect/src/style/onBoarding.dart';
 import 'package:go_router/go_router.dart';
 
 import '../common_widgets/splash_screen.dart';
-import '../pages/dash_board/dashboard.dart';
-import '../pages/dash_board/screens/service/widgets/addAddOns.dart';
-import '../pages/dash_board/screens/service/widgets/addService.dart';
-import '../pages/forgetPassword/resetPassword.dart';
+import '../dash_board/index.dart';
+import '../dash_board/screens/service/widgets/addAddOns.dart';
+import '../dash_board/screens/service/widgets/addService.dart';
+import '../forget_password/screens/resetPassword.dart';
 
 class Routing {
   final GoRouter router = GoRouter(routes: <GoRoute>[

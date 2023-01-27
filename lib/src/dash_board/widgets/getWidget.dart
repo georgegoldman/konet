@@ -1,4 +1,4 @@
-import 'package:curnect/src/pages/dash_board/widgets/dashBoardForm/dropdownFormDash.dart';
+import 'package:curnect/src/dash_board/widgets/dashBoardForm/dropdownFormDash.dart';
 import 'package:flutter/material.dart';
 
 mixin DashBoardWidgets {

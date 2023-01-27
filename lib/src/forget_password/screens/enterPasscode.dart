@@ -1,13 +1,8 @@
 // ignore_for_file: file_names
 
-import 'dart:io';
-
-import 'package:curnect/utils/backend_service_api/base_service.dart';
-import 'package:curnect/utils/user/sevice/index.dart';
+import 'package:curnect/src/forget_password/service/index.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
-import 'package:http/http.dart' as http;
 
 import '../../common_widgets/appbar.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
@@ -26,44 +21,12 @@ class _GetYourCodeState extends State<GetYourCode> with ErrorSnackBar {
   Future<void>? _sendCodeFuture;
   String? pinCode;
   int? successCode;
+  ResetPasswordService? _resetPasswordService;
 
-  Future<void> pinCodeAPI() async {
-    try {
-      var user = User(email: '', password: '', token: '');
-      var response = await user.checkResetPasswordPincodeAPI({
-        "_method": "patch",
-        "userid": widget.userData!["userId"].toString(),
-        "token": pinCode!.toString()
-      }, 'https://curnect.com/curnect-api/public/api/checktoken');
-
-      http.Response.fromStream(response).then((res) {
-        if (res.statusCode == 202) {
-          context.push('/resetpasword',
-              extra: {"userId": widget.userData!["userId"].toString()});
-        } else {
-          print('hi');
-          switch (res.statusCode) {
-            case 401:
-              sendErrorMessage('Pin Error', 'Please check your pin', context);
-              break;
-            case 500:
-              sendErrorMessage('Error',
-                  "An Error occured but it is not your fault", context);
-              break;
-            default:
-              sendErrorMessage('Pin Error', 'Please check your pin', context);
-              break;
-          }
-          ;
-        }
-      });
-    } on SocketException catch (_) {
-      sendErrorMessage(
-          'Network Error', "Please check your internet connection", context);
-    } catch (e) {
-      sendErrorMessage(
-          'Error', "An Error occured but it is not your fault", context);
-    }
+  @override
+  void initState() {
+    _resetPasswordService = ResetPasswordService(context: context);
+    super.initState();
   }
 
   @override
@@ -107,11 +70,8 @@ class _GetYourCodeState extends State<GetYourCode> with ErrorSnackBar {
                           'Resend Code',
                           style: TextStyle(fontSize: 17),
                         ),
-                        onPressed: () async {
-                          var response = await BaseService().ResetPincode({
-                            'email': widget.userData!["email"].toString()
-                          }, 'https://curnect.com/curnect-api/public/api/checkforgetemail');
-                        }),
+                        onPressed: () async => await _resetPasswordService
+                            ?.resetPin(widget.userData!["email"].toString())),
                   ),
                   // TextButton(
                   //     onPressed: () => context.pop(),
@@ -189,7 +149,10 @@ class _GetYourCodeState extends State<GetYourCode> with ErrorSnackBar {
       onCompleted: (pin) async {
         setState(() {
           pinCode = pin;
-          _sendCodeFuture = pinCodeAPI();
+          _sendCodeFuture = _resetPasswordService?.pinCodeReset({
+            "userid": widget.userData!["userId"].toString(),
+            "token": pinCode!.toString()
+          });
         });
 
         _sendCodeFuture;

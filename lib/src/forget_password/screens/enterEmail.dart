@@ -1,17 +1,12 @@
 // ignore_for_file: file_names
 
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:curnect/src/forget_password/service/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 
 import '../../common_widgets/appbar.dart';
 import '../../common_widgets/formFields/formFields.dart';
 import '../../common_widgets/snackBar/ErrorMessage.dart';
-import '../../../utils/user/sevice/index.dart';
 import '../../common_widgets/loading_gif.dart';
 
 class EnterEmail extends StatefulWidget {
@@ -28,11 +23,11 @@ class _EnterEmailState extends State<EnterEmail>
   Future<void>? _checkEmail;
   int? connectionDone;
   String? userId;
-  ResetPasswordService? resetPasswordService;
+  ResetPasswordService? _resetPasswordService;
 
   @override
   void initState() {
-    resetPasswordService = ResetPasswordService(context: context);
+    _resetPasswordService = ResetPasswordService(context: context);
     super.initState();
   }
 
@@ -124,7 +119,8 @@ class _EnterEmailState extends State<EnterEmail>
                   ? () async {
                       if (_formKey.currentState!.validate()) {}
                       setState(() {
-                        _checkEmail = checkEmail();
+                        _checkEmail = _resetPasswordService?.checkResetEmail(
+                            {'email': _verifyEmailController.text.toString()});
                       });
                       _checkEmail;
                     }

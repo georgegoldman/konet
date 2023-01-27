@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:curnect/src/common_widgets/formFields/formFields.dart';
-import 'package:curnect/src/pages/dash_board/widgets/getWidget.dart';
+import 'package:curnect/src/dash_board/widgets/getWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:image_cropper/image_cropper.dart';

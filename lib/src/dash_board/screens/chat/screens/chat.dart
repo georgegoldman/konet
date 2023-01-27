@@ -1,5 +1,5 @@
 import 'package:curnect/src/common_widgets/formFields/formFields.dart';
-import 'package:curnect/src/pages/dash_board/screens/chat/screens/chatRoom.dart';
+import 'package:curnect/src/dash_board/screens/chat/screens/chatRoom.dart';
 import 'package:flutter/material.dart';
 
 class ChatBaseClass extends StatefulWidget {

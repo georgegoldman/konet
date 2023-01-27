@@ -1,6 +1,7 @@
-// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names, avoid_print
 
 import 'dart:convert';
+import 'dart:html';
 import 'dart:io';
 
 import 'package:curnect/utils/backend_service_api/base_service.dart';
@@ -16,9 +17,9 @@ import '../../../src/routes/route_animation.dart';
 import '../../../src/signup/screens/SignupTwo.dart';
 import '../../state/add_service_manipulator.dart';
 
-class User extends BaseService with AppNotifier {
+class UserService extends BaseService with AppNotifier {
   BuildContext context;
-  User({required this.context});
+  UserService({required this.context});
 
   Future<void> signInRequest(
     String email,
@@ -82,15 +83,15 @@ class User extends BaseService with AppNotifier {
   }
 
   Future<void> checkResetPasswordEmailAPI(
-    Map<String, String> body,
+    String email,
   ) async {
     try {
-      final response = await postForFormDate(
-          body, 'https://curnect.com/curnect-api/public/api/checkforgetemail');
+      final response = await postForFormDate({"email": email},
+          'https://curnect.com/curnect-api/public/api/checkforgetemail');
       http.Response.fromStream(response).then((res) {
         if (res.statusCode == 200) {
           context.push('/getyourcode', extra: {
-            "email": _verifyEmailController.text.toString(),
+            "email": email,
             "userId": json.decode(res.body)["userid"]
           });
         } else {
@@ -101,6 +102,68 @@ class User extends BaseService with AppNotifier {
       errorSnackBar(context, e.message);
     } catch (e) {
       print(e);
+      return;
+    }
+  }
+
+  Future<void> resetPin(String email) async {
+    try {
+      await postForFormDate({'email': email},
+          'https://curnect.com/curnect-api/public/api/checkforgetemail');
+      successSnackBar(context, 'Pin reset successful');
+      return;
+    } catch (e) {
+      print(e.toString());
+      return;
+    }
+  }
+
+  Future<void> ResetTonewPasswordAPI(body) async {
+    var response = await patchForFormDate(
+        body, "https://curnect.com/curnect-api/public/api/changepassword");
+
+    return http.Response.fromStream(response).then((value) {
+      if (value.statusCode == 202) {
+        context.pop();
+        context.pop();
+        context.replace('/signin');
+        return;
+      } else {
+        errorSnackBar(context, value.reasonPhrase.toString());
+        return;
+      }
+    });
+  }
+
+  Future<void> pinCodeAPIService(Map<String, String> body) async {
+    try {
+      var response = await patchForFormDate(
+          body, 'https://curnect.com/curnect-api/public/api/checktoken');
+
+      http.Response.fromStream(response).then((res) {
+        if (res.statusCode == 202) {
+          context.push('/resetpasword', extra: {"userId": body["userid"]});
+        } else {
+          switch (res.statusCode) {
+            case 401:
+              errorSnackBar(context, 'Please check your pin');
+              return;
+            case 500:
+              errorSnackBar(
+                  context, "An Error occured but it is not your fault");
+              return;
+            default:
+              errorSnackBar(context, 'Please check your pin');
+              return;
+          }
+        }
+      });
+    } on SocketException catch (e) {
+      errorSnackBar(context, e.message.toString());
+      return;
+    } catch (e) {
+      print(e.toString());
+      return;
     }
   }
 
@@ -150,14 +213,6 @@ class User extends BaseService with AppNotifier {
 
   Future<http.StreamedResponse> checkResetPasswordPincodeAPI(body, url) async {
     return await ResetPincode(body, url);
-  }
-
-  Future<Map<String, dynamic>> resetToNewPassword(body, url) async {
-    try {
-      return await ResetTonewPasswordAPI(body, url);
-    } catch (e) {
-      return {"error": e};
-    }
   }
 
   Future<bool> validateAddress(url, conf) async {

@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import '../../common_widgets/appbar.dart';
 import '../../common_widgets/emptyLoader.dart';
 import '../../common_widgets/unauthenticatedPageHeader.dart';
-import '../../../utils/user/sevice/index.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../common_widgets/loading_gif.dart';
+import '../service/index.dart';
 
 class ResetPassword extends StatefulWidget {
   final String? id;
@@ -28,11 +27,10 @@ class _ResetPasswordState extends State<ResetPassword> {
   bool _isHiddenForPassword = true;
   // ignore: non_constant_identifier_names
   int? sign_done;
-  User user =
-      User(businessName: '', email: '', fullName: '', password: '', phone: '');
   late String _password;
   double _strength = 0;
   Future<dynamic>? _register;
+  ResetPasswordService? _resetPasswordService;
 
   RegExp numReg = RegExp(r".*[0-9].*");
   RegExp letterReg = RegExp(r".*[A-Za-z].*");
@@ -42,6 +40,12 @@ class _ResetPasswordState extends State<ResetPassword> {
       ']');
 
   String notSuccessfullMessage = '';
+
+  @override
+  void initState() {
+    _resetPasswordService = ResetPasswordService(context: context);
+    super.initState();
+  }
 
   void _checkPassword(String value) {
     _password = value.trim();
@@ -117,24 +121,13 @@ class _ResetPasswordState extends State<ResetPassword> {
                     (_confirmPasswordController.text ==
                         _passwordController.text)) {
                   setState(() {
-                    _register = registerRequest();
-                  });
-                  _register!.then((value) {
-                    setState(() {
-                      sign_done = value["statusCode"];
+                    _register = _resetPasswordService?.ResetTonewPasswordAPI({
+                      'userid': widget.id.toString(),
+                      'password': _confirmPasswordController.text.toString(),
                     });
-                  }).whenComplete(() {
-                    if (sign_done == 202) {
-                      context.pop();
-                      context.pop();
-                      context.replace('/signin');
-                    } else {
-                      setState(() {
-                        notSuccessfullMessage =
-                            'The email has already been taken.';
-                      });
-                    }
+                    _register;
                   });
+
                   // context.go('/verify');
                 }
               },
@@ -174,25 +167,6 @@ class _ResetPasswordState extends State<ResetPassword> {
       "password": _confirmPasswordController.text.toString(),
       "token": ''
     };
-  }
-
-  Future<Map<String, dynamic>> registerRequest() async {
-    try {
-      var response = await user.resetToNewPassword(
-        {
-          '_method': 'patch',
-          'userid': widget.id.toString(),
-          'password': _confirmPasswordController.text.toString(),
-        },
-        "https://curnect.com/curnect-api/public/api/changepassword",
-      );
-
-      // ignore: use_build_context_synchronously
-
-      return response;
-    } catch (e) {
-      return {"statusCode": 401, 'error': e};
-    }
   }
 
   Widget registerForm() {

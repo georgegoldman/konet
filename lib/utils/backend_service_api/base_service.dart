@@ -71,26 +71,6 @@ class BaseService {
     return await request.send();
   }
 
-  Future<Map<String, dynamic>> ResetTonewPasswordAPI(body, url) async {
-    print("body");
-    print(body);
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.fields.addAll(body);
-
-    http.StreamedResponse response = await request.send();
-    return http.Response.fromStream(response).then((value) {
-      print(value.body);
-      if (value.statusCode == 202) {
-        return {
-          "statusCode": value.statusCode,
-          "userId": json.decode(value.body)
-        };
-      } else {
-        return {"error": value.reasonPhrase};
-      }
-    });
-  }
-
   Future<http.StreamedResponse> businessHourResponse(
       String url, Map<String, dynamic> body) async {
     body["_method"] = "patch";

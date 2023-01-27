@@ -1,12 +1,11 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-import 'package:curnect/src/common_widgets/appBar/dashboardAppbar.dart';
-import 'package:curnect/src/pages/dash_board/screens/calendar/calendar.dart';
-import 'package:curnect/src/pages/dash_board/screens/chat/screens/chat.dart';
-import 'package:curnect/src/pages/dash_board/screens/service/service.dart';
+import 'package:curnect/src/dash_board/screens/calendar/calendar.dart';
+import 'package:curnect/src/dash_board/screens/chat/screens/chat.dart';
+import 'package:curnect/src/dash_board/screens/service/service.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../utils/events.dart';
+import '../../utils/events.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});

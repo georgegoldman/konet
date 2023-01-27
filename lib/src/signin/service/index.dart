@@ -1,10 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, overridden_fields, annotate_overrides
 
 import 'package:curnect/utils/user/sevice/index.dart';
 import 'package:flutter/material.dart';
 
-class SigninService extends User {
-  @override
+class SigninService extends UserService {
   final BuildContext context;
   SigninService({required this.context}) : super(context: context);
 
