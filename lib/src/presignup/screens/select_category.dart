@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:multiselect/multiselect.dart';
 
 import '../../utils/common_widgets/appbar.dart';
@@ -32,6 +33,7 @@ class _SelectCategoryState extends State<SelectCategory> {
   Future<void>? _selectCategory;
   int? successful;
   SelectCategoryService? _selectCategoryService;
+  bool _keyboardOpen = false;
   Map<String, int> categoryMap = {
     "Dietician": 1,
     "Makeup Artist": 2,
@@ -83,6 +85,10 @@ class _SelectCategoryState extends State<SelectCategory> {
   @override
   void initState() {
     _selectCategoryService = SelectCategoryService(context: context);
+    var keyboardVisibilityController = KeyboardVisibilityController();
+    keyboardVisibilityController.onChange.listen((bool visible) {
+      setState(() => _keyboardOpen = visible);
+    });
     super.initState();
   }
 
@@ -93,34 +99,36 @@ class _SelectCategoryState extends State<SelectCategory> {
         appBar: UnauthenticatedAppBar(context: context, screeenInfo: title)
             .preferredSize(),
         body: selectCategoryWidget(),
-        persistentFooterButtons: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // <-- Radius
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: _keyboardOpen
+            ? const SizedBox()
+            : Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 7),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                      ),
+                      backgroundColor: Colors.black,
+                      minimumSize: const Size.fromHeight(50)),
+                  onPressed: () async {
+                    setState(() {
+                      _selectCategory =
+                          _selectCategoryService?.selectCategoryRequest(
+                        categoryMap,
+                        _selected,
+                      );
+                    });
+                    _selectCategory;
+                  },
+                  child: const Text(
+                    'Continue',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
                   ),
-                  backgroundColor: Colors.black,
-                  minimumSize: const Size.fromHeight(50)),
-              onPressed: () async {
-                setState(() {
-                  _selectCategory =
-                      _selectCategoryService?.selectCategoryRequest(
-                    categoryMap,
-                    _selected,
-                  );
-                });
-                _selectCategory;
-              },
-              child: const Text(
-                'Continue',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                ),
               ),
-            ),
-          )
-        ],
       ),
       FutureBuilder(
         future: _selectCategory,

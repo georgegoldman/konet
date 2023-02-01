@@ -23,6 +23,7 @@ class SelectCategoryService extends BaseService with AppNotifier {
       String userId = Provider.of<AddServiceManipulator>(context, listen: false)
           .user['user_id']
           .toString();
+      print(userId);
       late List<Map<String, int>> businessCategoryArray = [];
       Map<String, dynamic> body = {};
       //iterate through the list of category

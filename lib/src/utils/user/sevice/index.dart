@@ -177,7 +177,7 @@ class UserService extends BaseService with AppNotifier {
         if (res.statusCode == 201) {
           Provider.of<AddServiceManipulator>(context, listen: false).loginUser({
             'user_token': json.decode(res.body)['success']['token'],
-            'user_id': json.decode(res.body)['success']['token'],
+            'user_id': json.decode(res.body)['success']['userId'],
           });
           context.replace('/verify');
         } else {
