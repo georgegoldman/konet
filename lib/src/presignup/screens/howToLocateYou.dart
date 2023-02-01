@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import '../../utils/common_widgets/appbar.dart';
 import '../../utils/common_widgets/emptyLoader.dart';
@@ -20,10 +21,15 @@ class _HowToLocateYouState extends State<HowToLocateYou> {
   bool _homeservice = false;
   int? successful;
   HowToLocateService? _howToLocateService;
+  bool _keyboardOpen = false;
 
   @override
   void initState() {
     _howToLocateService = HowToLocateService(context: context);
+    var keyboardVisibilityController = KeyboardVisibilityController();
+    keyboardVisibilityController.onChange.listen((bool visible) {
+      setState(() => _keyboardOpen = visible);
+    });
     super.initState();
   }
 
@@ -38,40 +44,44 @@ class _HowToLocateYouState extends State<HowToLocateYou> {
                       "Verify customer IDs with AI-powered biometric recognition service. Ensure quality identity verification with iDenfy's team that manually reviews every audit.")
               .preferredSize(),
           body: _body(),
-          persistentFooterButtons: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.04),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: _keyboardOpen
+              ? const SizedBox()
+              : Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 7),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                        backgroundColor: Colors.black,
+                        minimumSize: const Size.fromHeight(50)),
+                    //check if the validation is successful
+                    onPressed: ((_homeservice) || (_myplace))
+                        ? () async {
+                            setState(() {
+                              _howtoLocateYouFuture =
+                                  _howToLocateService?.howTolocateYouRequest({
+                                'myplace': _myplace == false
+                                    ? 0.toString()
+                                    : 1.toString(),
+                                'homeservice': _homeservice == false
+                                    ? 0.toString()
+                                    : 1.toString()
+                              });
+                            });
+                            _howtoLocateYouFuture;
+                          }
+                        : null,
+                    child: const Text(
+                      'Continue',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
                     ),
-                    backgroundColor: Colors.black,
-                    minimumSize: const Size.fromHeight(50)),
-                //check if the validation is successful
-                onPressed: ((_homeservice) || (_myplace))
-                    ? () async {
-                        setState(() {
-                          _howtoLocateYouFuture =
-                              _howToLocateService?.howTolocateYouRequest({
-                            'myplace':
-                                _myplace == false ? 0.toString() : 1.toString(),
-                            'homeservice': _homeservice == false
-                                ? 0.toString()
-                                : 1.toString()
-                          });
-                        });
-                        _howtoLocateYouFuture;
-                      }
-                    : null,
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                  ),
                 ),
-              ),
-            )
-          ],
         ),
         FutureBuilder(
           future: _howtoLocateYouFuture,

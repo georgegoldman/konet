@@ -4,6 +4,7 @@ import 'package:curnect/src/routes/route_animation.dart';
 import 'package:curnect/src/utils/common_widgets/appNotifier/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
@@ -34,6 +35,16 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen>
   Map<String, String> address = {};
   String unformattedAddres = "";
   bool navEnable = false;
+  bool _keyboardOpen = false;
+
+  @override
+  void initState() {
+    var keyboardVisibilityController = KeyboardVisibilityController();
+    keyboardVisibilityController.onChange.listen((bool visible) {
+      setState(() => _keyboardOpen = visible);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,38 +173,38 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen>
               ),
             ]),
           ])),
-      persistentFooterButtons: [
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.04),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: _keyboardOpen
+          ? const SizedBox()
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 7),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                    ),
+                    backgroundColor: Colors.black,
+                    minimumSize: const Size.fromHeight(50)),
+                onPressed: navEnable
+                    ? () {
+                        setState(() {
+                          navEnable = !navEnable;
+                          // Provider.of<AddServiceManipulator>(context,
+                          //         listen: false)
+                          //     .createLocation(address);
+                        });
+                        Navigator.of(context).push(RouteAnimation(
+                            Screen: ValidateAddress(
+                          addresses: address,
+                        )).createRoute());
+                      }
+                    : null,
+                child: const Text(
+                  'Continue',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
                 ),
-                backgroundColor: Colors.black,
-                minimumSize: const Size.fromHeight(50)),
-            onPressed: navEnable
-                ? () {
-                    setState(() {
-                      navEnable = !navEnable;
-                      // Provider.of<AddServiceManipulator>(context,
-                      //         listen: false)
-                      //     .createLocation(address);
-                    });
-                    Navigator.of(context).push(RouteAnimation(
-                        Screen: ValidateAddress(
-                      addresses: address,
-                    )).createRoute());
-                  }
-                : null,
-            child: const Text(
-              'Continue',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
             ),
-          ),
-        )
-      ],
     );
   }
 }
