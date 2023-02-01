@@ -2,6 +2,7 @@
 
 import 'package:curnect/src/signup/service/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import '../../utils/common_widgets/appbar.dart';
 import '../../utils/common_widgets/emptyLoader.dart';
@@ -40,10 +41,15 @@ class _SignUpFormThreeState extends State<SignUpFormThree> with ErrorSnackBar {
       ']');
 
   String notSuccessfullMessage = '';
+  bool _keyboardOpen = false;
 
   @override
   void initState() {
     _service = SignupService(context: context);
+    var keyboardVisibilityController = KeyboardVisibilityController();
+    keyboardVisibilityController.onChange.listen((bool visible) {
+      setState(() => _keyboardOpen = visible);
+    });
     super.initState();
   }
 
@@ -107,29 +113,38 @@ class _SignUpFormThreeState extends State<SignUpFormThree> with ErrorSnackBar {
           ],
         )),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12), // <-- Radius
+        floatingActionButton: _keyboardOpen
+            ? const SizedBox()
+            : Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 7, horizontal: 24),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                      ),
+                      backgroundColor: Colors.black,
+                      minimumSize: const Size.fromHeight(50)),
+                  onPressed: () async {
+                    _strength < 1 / 2 ? null : () {};
+                    if (_formKey.currentState!.validate() &&
+                        (_confirmPasswordController.text ==
+                            _passwordController.text)) {
+                      setState(() {
+                        _register = _service?.signUpUserAccount(
+                            _getUserDetail(),
+                            'https://curnect.com/curnect-api/public/api/registerpartone');
+                      });
+                      _register;
+                    }
+                  },
+                  child: const Text(
+                    'Continue',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                  ),
+                ),
               ),
-              backgroundColor: Colors.black,
-              minimumSize: const Size.fromHeight(50)),
-          onPressed: () async {
-            _strength < 1 / 2 ? null : () {};
-            if (_formKey.currentState!.validate() &&
-                (_confirmPasswordController.text == _passwordController.text)) {
-              setState(() {
-                _register = _service?.signUpUserAccount(_getUserDetail(),
-                    'https://curnect.com/curnect-api/public/api/registerpartone');
-              });
-              _register;
-            }
-          },
-          child: const Text(
-            'Continue',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-          ),
-        ),
       ),
       FutureBuilder(
           future: _register,
