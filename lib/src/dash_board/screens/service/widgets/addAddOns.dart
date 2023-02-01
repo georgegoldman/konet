@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../utils/common_widgets/formFields/formFields.dart';
+import '../../../../utils/common_widgets/formFields/formFields.dart';
 import '../../../widgets/getWidget.dart';
 
 class AddAddons extends StatefulWidget {

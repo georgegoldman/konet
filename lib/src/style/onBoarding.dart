@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../utils/common_widgets/onboarding_screens/intro_screens1.dart';
-import '../../utils/common_widgets/onboarding_screens/intro_screens2.dart';
-import '../../utils/common_widgets/onboarding_screens/intro_screens3.dart';
+import '../utils/common_widgets/onboarding_screens/intro_screens1.dart';
+import '../utils/common_widgets/onboarding_screens/intro_screens2.dart';
+import '../utils/common_widgets/onboarding_screens/intro_screens3.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});

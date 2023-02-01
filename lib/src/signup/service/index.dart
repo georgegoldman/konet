@@ -1,6 +1,6 @@
 // ignore_for_file: annotate_overrides, overridden_fields
 
-import 'package:curnect/utils/user/sevice/index.dart';
+import 'package:curnect/src/utils/user/sevice/index.dart';
 import 'package:flutter/cupertino.dart';
 
 class SignupService extends UserService {

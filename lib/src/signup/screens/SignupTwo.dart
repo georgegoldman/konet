@@ -1,15 +1,15 @@
 // ignore_for_file: file_names
 
 import 'package:curnect/src/routes/route_animation.dart';
-import 'package:curnect/src/signup/service/index.dart';
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:mask_input_formatter/mask_input_formatter.dart';
 
-import '../../../utils/common_widgets/appbar.dart';
-import '../../../utils/common_widgets/formFields/formFields.dart';
-import '../../../utils/common_widgets/snackBar/ErrorMessage.dart';
-import '../../../utils/common_widgets/unauthenticatedPageHeader.dart';
+import '../../utils/common_widgets/appbar.dart';
+import '../../utils/common_widgets/formFields/formFields.dart';
+import '../../utils/common_widgets/snackBar/ErrorMessage.dart';
+import '../../utils/common_widgets/unauthenticatedPageHeader.dart';
 import 'SignUpThree.dart';
 
 class SignupPageTwo extends StatefulWidget {
@@ -30,6 +30,16 @@ class _SignupPageTwoState extends State<SignupPageTwo>
   final countryPicker = const FlCountryCodePicker();
   CountryCode countryCode =
       const CountryCode(code: "NG", dialCode: "+234", name: "Nigeria");
+  bool keyboardOpen = false;
+
+  @override
+  void initState() {
+    var keyboardVisibilityController = KeyboardVisibilityController();
+    keyboardVisibilityController.onChange.listen((bool visible) {
+      setState(() => keyboardOpen = visible);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -176,36 +186,44 @@ class _SignupPageTwoState extends State<SignupPageTwo>
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12), // <-- Radius
+      floatingActionButton: keyboardOpen
+          ? const SizedBox()
+          : Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 7,
+              ),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                    ),
+                    backgroundColor: Colors.black,
+                    minimumSize: const Size.fromHeight(50)),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.of(context).push(RouteAnimation(
+                        Screen: SignUpFormThree(
+                      aboutYouFields: {
+                        "email": widget.email,
+                        "fullName": _fullNameController.text,
+                        "businesName": _businessNameController.text,
+                        "phone":
+                            "${countryCode.dialCode}${_phoneController.text.replaceAll('-', '')}",
+                        "referralCode": _referalCodeController.text
+                      },
+                    )).createRoute());
+                  } else {
+                    fieldValidationErrorMessage(
+                        'Please fill in the required fields', context);
+                  }
+                },
+                child: const Text(
+                  'Continue',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                ),
+              ),
             ),
-            backgroundColor: Colors.black,
-            minimumSize: const Size.fromHeight(50)),
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            Navigator.of(context).push(RouteAnimation(
-                Screen: SignUpFormThree(
-              aboutYouFields: {
-                "email": widget.email,
-                "fullName": _fullNameController.text,
-                "businesName": _businessNameController.text,
-                "phone":
-                    "${countryCode.dialCode}${_phoneController.text.replaceAll('-', '')}",
-                "referralCode": _referalCodeController.text
-              },
-            )).createRoute());
-          } else {
-            fieldValidationErrorMessage(
-                'Please fill in the required fields', context);
-          }
-        },
-        child: const Text(
-          'Continue',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-        ),
-      ),
     );
   }
 }

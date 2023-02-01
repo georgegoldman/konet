@@ -1,8 +1,8 @@
-import 'package:curnect/utils/common_widgets/appBar/dashboardAppbar.dart';
+import 'package:curnect/src/utils/common_widgets/appBar/dashboardAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../../utils/events.dart';
+import '../../../utils/events.dart';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});

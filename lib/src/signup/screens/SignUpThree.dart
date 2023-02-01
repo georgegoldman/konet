@@ -3,12 +3,11 @@
 import 'package:curnect/src/signup/service/index.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utils/common_widgets/appbar.dart';
-import '../../../utils/common_widgets/emptyLoader.dart';
-import '../../../utils/common_widgets/snackBar/ErrorMessage.dart';
-import '../../../utils/common_widgets/unauthenticatedPageHeader.dart';
-
-import '../../../utils/common_widgets/loading_gif.dart';
+import '../../utils/common_widgets/appbar.dart';
+import '../../utils/common_widgets/emptyLoader.dart';
+import '../../utils/common_widgets/loading_gif.dart';
+import '../../utils/common_widgets/snackBar/ErrorMessage.dart';
+import '../../utils/common_widgets/unauthenticatedPageHeader.dart';
 
 class SignUpFormThree extends StatefulWidget {
   final Map<String, String> aboutYouFields;

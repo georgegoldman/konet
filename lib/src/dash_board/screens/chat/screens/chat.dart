@@ -1,4 +1,4 @@
-import 'package:curnect/utils/common_widgets/formFields/formFields.dart';
+import 'package:curnect/src/utils/common_widgets/formFields/formFields.dart';
 import 'package:curnect/src/dash_board/screens/chat/screens/chatRoom.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,6 @@ class ChatBaseClass extends StatefulWidget {
 }
 
 class _ChatBaseClassState extends State<ChatBaseClass> with FormInputFields {
-  final TextEditingController _searchController = TextEditingController();
   List<Map<String, String>> chatHistory = [
     {
       "clientName": "Doyinsola michale",
@@ -84,7 +83,7 @@ class _ChatBaseClassState extends State<ChatBaseClass> with FormInputFields {
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 7),
+            padding: const EdgeInsets.symmetric(vertical: 7),
             child: CircleAvatar(
               radius: 30,
               backgroundColor: Colors.transparent,

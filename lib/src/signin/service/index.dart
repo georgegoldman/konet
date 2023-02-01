@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, overridden_fields, annotate_overrides
 
-import 'package:curnect/utils/user/sevice/index.dart';
+import 'package:curnect/src/utils/user/sevice/index.dart';
 import 'package:flutter/material.dart';
 
 class SigninService extends UserService {

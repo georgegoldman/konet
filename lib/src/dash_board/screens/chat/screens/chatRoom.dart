@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:curnect/models/chatMessageModel.dart';
+import 'package:curnect/src/models/chatMessageModel.dart';
 import 'package:flutter/material.dart';
 
 class ChatRoom extends StatefulWidget {

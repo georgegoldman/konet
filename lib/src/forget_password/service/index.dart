@@ -1,6 +1,6 @@
 // ignore_for_file: overridden_fields
 
-import 'package:curnect/utils/user/sevice/index.dart';
+import 'package:curnect/src/utils/user/sevice/index.dart';
 import 'package:flutter/cupertino.dart';
 
 class ResetPasswordService extends UserService {
@@ -8,7 +8,8 @@ class ResetPasswordService extends UserService {
   final BuildContext context;
   ResetPasswordService({required this.context}) : super(context: context);
 
-  Future<void> checkResetEmail(email) => checkResetPasswordEmailAPI(email);
+  Future<void> checkResetEmail(String email) =>
+      checkResetPasswordEmailAPI(email);
 
   Future<void> pinCodeReset(Map<String, String> body) =>
       pinCodeAPIService(body);

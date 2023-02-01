@@ -4,10 +4,10 @@ import 'package:curnect/src/forget_password/service/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../utils/common_widgets/appbar.dart';
-import '../../../utils/common_widgets/formFields/formFields.dart';
-import '../../../utils/common_widgets/snackBar/ErrorMessage.dart';
-import '../../../utils/common_widgets/loading_gif.dart';
+import '../../utils/common_widgets/appbar.dart';
+import '../../utils/common_widgets/formFields/formFields.dart';
+import '../../utils/common_widgets/snackBar/ErrorMessage.dart';
+import '../../utils/common_widgets/loading_gif.dart';
 
 class EnterEmail extends StatefulWidget {
   const EnterEmail({super.key});
@@ -120,7 +120,7 @@ class _EnterEmailState extends State<EnterEmail>
                       if (_formKey.currentState!.validate()) {}
                       setState(() {
                         _checkEmail = _resetPasswordService?.checkResetEmail(
-                            {'email': _verifyEmailController.text.toString()});
+                            _verifyEmailController.text.toString());
                       });
                       _checkEmail;
                     }

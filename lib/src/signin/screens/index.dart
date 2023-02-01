@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../utils/common_widgets/appbar.dart';
-import '../../../utils/common_widgets/formFields/formFields.dart';
-import '../../../utils/common_widgets/snackBar/ErrorMessage.dart';
-import '../../../utils/common_widgets/loading_gif.dart';
+import '../../utils/common_widgets/appbar.dart';
+import '../../utils/common_widgets/formFields/formFields.dart';
+import '../../utils/common_widgets/snackBar/ErrorMessage.dart';
+import '../../utils/common_widgets/loading_gif.dart';
 import '../widgets/socialMediaSignIn.dart';
 
 class LoginPage extends StatefulWidget {
