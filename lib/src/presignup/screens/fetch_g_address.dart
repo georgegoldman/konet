@@ -198,7 +198,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen>
                           addresses: address,
                         )).createRoute());
                       }
-                    : null,
+                    : () => print('hi'),
                 child: const Text(
                   'Continue',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
